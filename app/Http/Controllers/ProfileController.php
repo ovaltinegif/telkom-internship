@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\StudentProfile;
 
 class ProfileController extends Controller
 {
@@ -33,6 +34,17 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+        //simpan data tambahan ke tabel student_profiles
+        $request->user()->studentProfile()->updateOrCreate(
+        ['user_id' => $request->user()->id],
+        [
+            'nim' => $request->nim,
+            'university' => $request->university,
+            'major' => $request->major,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+        ]
+    );
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

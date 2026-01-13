@@ -46,6 +46,38 @@
                 </div>
             @endif
         </div>
+                {{-- Input NIM --}}
+        <div>
+            <x-input-label for="nim" :value="__('NIM')" />
+            <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full" :value="old('nim', $user->studentProfile->nim ?? '')" required />
+            <x-input-error class="mt-2" :messages="$errors->get('nim')" />
+        </div>
+
+        {{-- Input Universitas --}}
+        <div class="mt-4">
+            <x-input-label for="university" :value="__('Asal Kampus')" />
+            <x-text-input id="university" name="university" type="text" class="mt-1 block w-full" :value="old('university', $user->studentProfile->university ?? '')" required />
+            <x-input-error class="mt-2" :messages="$errors->get('university')" />
+        </div>
+
+        {{-- Input Jurusan --}}
+        <div class="mt-4">
+            <x-input-label for="major" :value="__('Jurusan')" />
+            <x-text-input id="major" name="major" type="text" class="mt-1 block w-full" :value="old('major', $user->studentProfile->major ?? '')" required />
+            <x-input-error class="mt-2" :messages="$errors->get('major')" />
+        </div>
+
+        {{-- Input No HP --}}
+        <div class="mt-4">
+            <x-input-label for="phone_number" :value="__('Nomor HP / WhatsApp')" />
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->studentProfile->phone_number ?? '')" />
+        </div>
+
+        {{-- Input Alamat --}}
+        <div class="mt-4">
+            <x-input-label for="address" :value="__('Alamat Domisili')" />
+            <textarea id="address" name="address" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full" rows="3">{{ old('address', $user->studentProfile->address ?? '') }}</textarea>
+        </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
