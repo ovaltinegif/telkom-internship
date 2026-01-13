@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('internship_id')->constrained()->onDelete('cascade');
+            $table->date('date');
+            $table->time('check_in_time')->nullable();
+            $table->time('check_out_time')->nullable();
+            
+            // Koordinat GPS untuk validasi lokasi (Penting buat Telkom!)
+            $table->decimal('check_in_lat', 10, 7)->nullable();
+            $table->decimal('check_in_long', 10, 7)->nullable();
+    
+            // Status kehadiran
+            $table->enum('status', ['present', 'sick', 'permit', 'alpha'])->default('present');
+            $table->text('note')->nullable(); // Alasan jika sakit/izin
             $table->timestamps();
         });
     }

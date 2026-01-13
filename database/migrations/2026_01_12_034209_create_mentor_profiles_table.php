@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('mentor_profiles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // Relasi ke divisi (Bisa null kalau belum diassign)
+            $table->foreignId('division_id')->nullable()->constrained('divisions'); 
+            $table->string('nik')->unique(); // NIK Karyawan Telkom
+            $table->string('position');      // Jabatan (Misal: Officer 3 Digital)
+            $table->string('phone_number')->nullable();
             $table->timestamps();
         });
     }

@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('daily_logbooks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('internship_id')->constrained()->onDelete('cascade');
+            $table->date('date');
+            $table->text('activity'); // Deskripsi kegiatan hari ini
+            $table->string('evidence')->nullable(); // Foto bukti kegiatan
+            // Status approval dari mentor
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->text('mentor_note')->nullable(); // Komentar mentor
             $table->timestamps();
         });
     }

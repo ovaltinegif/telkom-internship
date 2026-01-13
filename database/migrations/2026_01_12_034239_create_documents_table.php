@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('internship_id')->constrained()->onDelete('cascade');
+            $table->string('name'); 
+            $table->enum('type', ['pakta_integritas', 'cv', 'transkrip', 'laporan_akhir']);
+            $table->string('file_path');
+            $table->boolean('is_verified')->default(false);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
