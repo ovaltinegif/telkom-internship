@@ -22,7 +22,7 @@ class AttendanceController extends Controller
 
         // Cek apakah hari ini sudah absen?
         $existingAttendance = Attendance::where('internship_id', $internship->id)
-            ->where('date', Carbon::today())
+            ->whereDate('date', Carbon::today())
             ->first();
 
         if ($existingAttendance) {
@@ -48,7 +48,7 @@ class AttendanceController extends Controller
 
         // Cari absen hari ini yang belum di-checkout
         $attendance = Attendance::where('internship_id', $internship->id)
-            ->where('date', Carbon::today())
+            ->whereDate('date', Carbon::today())
             ->first();
 
         if (!$attendance) {

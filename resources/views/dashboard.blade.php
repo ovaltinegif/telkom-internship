@@ -41,7 +41,7 @@
                                         @csrf
                                         <input type="hidden" name="latitude" id="lat_in">
                                         <input type="hidden" name="longitude" id="long_in">
-                                        <button type="submit" onclick="getLocation('checkInForm')" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition">
+                                        <button type="button" onclick="confirmCheckIn()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition">
                                             📍 CHECK IN (DATANG)
                                         </button>
                                     </form>
@@ -52,9 +52,9 @@
                                         <span class="text-green-600 font-semibold">
                                             Masuk: {{ $todayAttendance->check_in_time }}
                                         </span>
-                                        <form action="{{ route('attendance.checkOut') }}" method="POST">
+                                        <form action="{{ route('attendance.checkOut') }}" method="POST" id="checkOutForm">
                                             @csrf
-                                            <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition">
+                                            <button type="button" onclick="confirmCheckOut()" class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition">
                                                 👋 CHECK OUT (PULANG)
                                             </button>
                                         </form>
@@ -65,13 +65,90 @@
                                     <div class="text-right">
                                         <span class="block text-green-600 font-bold">✅ Hadir</span>
                                         <span class="text-sm text-gray-500">
-                                            {{ $todayAttendance->check_in_time }} - {{ $todayAttendance->check_out_time }}
+                                       {{ $todayAttendance->check_in_time }} 
+                                       {{ $todayAttendance->check_out_time }}
                                         </span>
                                     </div>
                                 @endif
                             </div>
                         </div>
                     </div>
+                    {{-- ini Script SweetAlert2 --}}
+                    <script>
+                    // 1. Fungsi Konfirmasi CHECK-IN
+                    function confirmCheckIn() {
+                        Swal.fire({
+                            title: 'Siap untuk Check-In?',
+                            text: "Pastikan kamu sudah berada di lokasi kantor!",
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#16a34a', // Warna Hijau Tailwind
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya, Check In!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Tampilkan loading biar user tau sistem sedang bekerja
+                                Swal.fire({
+                                    title: 'Mengambil Lokasi...',
+                                    text: 'Mohon tunggu sebentar',
+                                    allowOutsideClick: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
+                                });
+                                
+                                // Jalankan fungsi ambil lokasi
+                                getLocationAndSubmit();
+                            }
+                        });
+                    }
+
+                    // 2. Fungsi Ambil Lokasi & Submit Otomatis
+                    function getLocationAndSubmit() {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(
+                                // Jika Sukses
+                                function(position) {
+                                    document.getElementById('lat_in').value = position.coords.latitude;
+                                    document.getElementById('long_in').value = position.coords.longitude;
+                                    
+                                    // Submit form secara manual setelah koordinat terisi
+                                    document.getElementById('checkInForm').submit();
+                                },
+                                // Jika Gagal/Ditolak
+                                function(error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal',
+                                        text: 'Gagal mengambil lokasi. Pastikan GPS aktif dan izin diberikan.',
+                                    });
+                                }
+                            );
+                        } else { 
+                            Swal.fire('Error', 'Browser kamu tidak mendukung Geolocation.', 'error');
+                        }
+                    }
+
+                    // 3. Fungsi Konfirmasi CHECK-OUT
+                    function confirmCheckOut() {
+                        Swal.fire({
+                            title: 'Mau pulang sekarang?',
+                            text: "Pastikan pekerjaan hari ini sudah selesai ya!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#dc2626', // Warna Merah Tailwind
+                            cancelButtonColor: '#6b7280',
+                            confirmButtonText: 'Ya, Check Out',
+                            cancelButtonText: 'Masih lembur'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('checkOutForm').submit();
+                            }
+                        });
+                    }
+                </script>
+                {{-- End Script SweetAlert2 --}}
                     {{-- Script GPS Sederhana --}}
                     <script>
                         function getLocation(formId) {

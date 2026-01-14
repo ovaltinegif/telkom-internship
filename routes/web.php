@@ -27,7 +27,7 @@ Route::get('/dashboard', function () {
     $logbooks = DailyLogbook::where('internship_id', $internship->id)->latest()->get();
 
     $todayAttendance = Attendance::where('internship_id', $internship->id)
-        ->where('date', Carbon::today())
+        ->whereDate('date', Carbon::today())
         ->first();
 
     return view('dashboard',compact('logbooks', 'todayAttendance'));
