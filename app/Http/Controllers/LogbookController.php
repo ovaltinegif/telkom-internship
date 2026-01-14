@@ -27,8 +27,8 @@ class LogbookController extends Controller
         $request->validate([
             'date' => 'required|date',
             'activity' => 'required|string',
-            'evidence' => 'nullable|file|mimes:jpg,png,pdf,jpeg|max:2048', // Maksimal 2MB
-        ]);
+            'evidence' => 'nullable|file|mimes:jpg,png,pdf,jpeg|max:5120', // Maksimal 5MB
+        ]); 
 
         // 2. Cari Data Internship milik User yang sedang login
         // Asumsinya 1 user mahasiswa punya 1 data internship
