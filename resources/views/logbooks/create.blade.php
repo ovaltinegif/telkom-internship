@@ -11,9 +11,8 @@
                 <div class="p-6 text-gray-900">
                     
                     {{-- Form Start --}}
-                    <form action="{{ route('logbooks.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('logbooks.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="logbookForm">
                         @csrf
-
                         {{-- Input Tanggal --}}
                         <div>
                             <x-input-label for="date" :value="__('Tanggal Kegiatan')" />
@@ -43,7 +42,7 @@
 
                         {{-- Tombol Submit --}}
                         <div class="flex items-center gap-4">
-                            <x-primary-button>{{ __('Simpan Logbook') }}</x-primary-button>
+                            <x-primary-button type="button" onclick="confirmSaveLogbook()">{{ __('Simpan Logbook') }}</x-primary-button>
                         </div>
                     </form>
                     {{-- Form End --}}
@@ -52,4 +51,42 @@
             </div>
         </div>
     </div>
+    
+<script>
+        function confirmSaveLogbook() {
+            // Ambil form
+            const form = document.getElementById('logbookForm');
+            
+            // Cek apakah inputan sudah diisi semua (sesuai atribut required)
+            if (form.reportValidity()) {
+                
+                // Tampilkan Popup SweetAlert
+                Swal.fire({
+                    title: 'Simpan Logbook?',
+                    text: "Pastikan data yang kamu isi sudah benar ya.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Simpan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Tampilkan Loading
+                        Swal.fire({
+                            title: 'Menyimpan...',
+                            text: 'Mohon tunggu sebentar',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        
+                        // Submit Form
+                        form.submit();
+                    }
+                });
+            }
+        }
+    </script>
 </x-app-layout>

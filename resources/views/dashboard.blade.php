@@ -42,7 +42,7 @@
                                         <input type="hidden" name="latitude" id="lat_in">
                                         <input type="hidden" name="longitude" id="long_in">
                                         <button type="button" onclick="confirmCheckIn()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 transition">
-                                            📍 CHECK IN (DATANG)
+                                            📍 CHECK IN 
                                         </button>
                                     </form>
 
@@ -55,7 +55,7 @@
                                         <form action="{{ route('attendance.checkOut') }}" method="POST" id="checkOutForm">
                                             @csrf
                                             <button type="button" onclick="confirmCheckOut()" class="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition">
-                                                👋 CHECK OUT (PULANG)
+                                                👋 CHECK OUT 
                                             </button>
                                         </form>
                                     </div>
