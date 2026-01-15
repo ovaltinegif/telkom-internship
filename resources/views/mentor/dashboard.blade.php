@@ -16,7 +16,9 @@
                         <div class="p-4 border rounded-lg shadow-sm bg-indigo-50 hover:bg-indigo-100 transition">
                             <h4 class="font-bold text-indigo-700">👥 Data Mahasiswa</h4>
                             <p class="text-sm text-gray-600 mt-1">Lihat daftar mahasiswa yang Anda bimbing.</p>
-                            <button class="mt-3 px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">Lihat Mahasiswa</button>
+                            <a href="{{ route('mentor.students.index') }}" class="inline-block mt-3 px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
+                                Lihat Mahasiswa
+                            </a>
                         </div>
 
                         <div class="p-4 border rounded-lg shadow-sm bg-green-50 hover:bg-green-100 transition">
@@ -31,7 +33,6 @@
                             <button class="mt-3 px-4 py-2 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700">Input Nilai</button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

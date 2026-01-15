@@ -10,6 +10,7 @@ use App\Http\Controllers\InternshipController;
 use App\Http\Controllers\AttendanceController;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use App\Http\Controllers\MentorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,11 +60,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
 }); 
 
-// Group Route Khusus Mentor (BARU)
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/mentor/dashboard', function () {
-        return view('mentor.dashboard');
-    })->name('mentor.dashboard');
+    // Group Route Khusus Mentor (Dashboard Mentor)
+    Route::middleware(['auth', 'verified'])->group(function () {
+        // Dashboard Mentor
+        Route::get('/mentor/dashboard', function () {
+            return view('mentor.dashboard');
+        })->name('mentor.dashboard');
+
+        // Data Mahasiswa Bimbingan
+        Route::get('/mentor/my-students', [MentorController::class, 'myStudents'])->name('mentor.students.index');
 });
 
 require __DIR__.'/auth.php';
