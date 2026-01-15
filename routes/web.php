@@ -11,11 +11,17 @@ use App\Http\Controllers\AttendanceController;
 use App\Models\Attendance;
 use Carbon\Carbon;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Route Dashboard Mahasiswa
 Route::get('/dashboard', function () {
     $internship = Internship::where('student_id', Auth::id())->first();
 
@@ -30,23 +36,34 @@ Route::get('/dashboard', function () {
         ->whereDate('date', Carbon::today())
         ->first();
 
-    return view('dashboard',compact('logbooks', 'todayAttendance'));
+    return view('dashboard', compact('logbooks', 'todayAttendance'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Group Route untuk Mahasiswa (Logbook, Profile, dll)
 Route::middleware('auth')->group(function () {
-    //route logbook
+    // route logbook
     Route::get('/logbooks/create', [LogbookController::class, 'create'])->name('logbooks.create');
     Route::post('/logbooks', [LogbookController::class, 'store'])->name('logbooks.store');
-    //route profile
+    
+    // route profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    //route internship
+    
+    // route internship
     Route::get('/setup-internship', [InternshipController::class, 'create'])->name('internships.create');
     Route::post('/setup-internship', [InternshipController::class, 'store'])->name('internships.store');
-    //route attendance atau absen
+    
+    // route attendance atau absen
     Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
     Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
+}); 
+
+// Group Route Khusus Mentor (BARU)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/mentor/dashboard', function () {
+        return view('mentor.dashboard');
+    })->name('mentor.dashboard');
 });
 
 require __DIR__.'/auth.php';

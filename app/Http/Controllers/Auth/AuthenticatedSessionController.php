@@ -28,6 +28,20 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = $request->user();
+
+        //cek role dan redirect ke dashboard sesuai role
+        if ($user->hasrole('mentor')) {
+            return redirect()->intended(route('mentor.dashboard', absolute: false));
+        }
+        return redirect()->intended(route('dashboard', absolute: false));
+
+        //admin nanti ditambah sendiri
+        if ($user->hasrole('admin')) {
+           // return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
+
+        //default arahkan ke dashboard mahasiswa
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

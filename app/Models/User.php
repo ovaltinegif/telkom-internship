@@ -54,4 +54,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(StudentProfile::class);
     }   
+    public function hasrole($role)
+    {
+        return $this->role === $role;
+    }
+
+    public function isMentor()
+    {
+        return $this->mentorprofile !== 'null';
+    }
 }
