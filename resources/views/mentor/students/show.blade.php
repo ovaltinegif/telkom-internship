@@ -16,24 +16,45 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex justify-between items-center">
-                <div>
-                    <p class="text-sm text-gray-500">Universitas</p>
-                    <p class="font-bold">{{ $internship->student->studentProfile->university ?? '-' }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Divisi</p>
-                    <p class="font-bold text-indigo-600">{{ $internship->division->name }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Total Logbook</p>
-                    <p class="font-bold">{{ $internship->dailyLogbooks->count() }}</p>
+            {{-- UPDATE: Header Profile Mahasiswa (Lebih rapi & ada tombol nilai) --}}
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    {{-- Info Mahasiswa --}}
+                    <div class="flex gap-8">
+                        <div>
+                            <p class="text-sm text-gray-500">Universitas</p>
+                            <p class="font-bold">{{ $internship->student->studentProfile->university ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Divisi</p>
+                            <p class="font-bold text-indigo-600">{{ $internship->division->name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Total Logbook</p>
+                            <p class="font-bold">{{ $internship->dailyLogbooks->count() }}</p>
+                        </div>
+                    </div>
+
+                    {{-- TOMBOL PENILAIAN BARU DISINI --}}
+                    <div>
+                        {{-- Cek apakah mahasiswa ini sudah dinilai atau belum --}}
+                        @if($internship->evaluation)
+                             <span class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg font-bold text-sm border border-green-200">
+                                ✅ Nilai Akhir: {{ $internship->evaluations->final_score }}
+                            </span>
+                        @else
+                            <a href="{{ route('mentor.evaluations.create', $internship->student_id) }}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-lg transition shadow-sm gap-2">
+                                📝 Input Nilai Akhir
+                            </a>
+                        @endif
+                    </div>
                 </div>
             </div>
 
+            {{-- Bagian Logbook --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-bold mb-4">📝 Logbook Harian</h3>
+                    <h3 id="logbook-section" class="text-lg font-bold mb-4 scroll-mt-20">📝 Logbook Harian</h3>
                     
                     <div class="overflow-x-auto">
                         <table class="min-w-full text-sm text-left text-gray-500">
@@ -76,8 +97,6 @@
                                     </td>
                                     
                                     <td class="px-6 py-4 text-center">
-                                        
-                                        {{-- Cek jika status masih Pending, tampilkan tombol --}}
                                         @if($logbook->status == 'pending')
                                             <form action="{{ route('mentor.logbook.update', $logbook->id) }}" method="POST" class="flex flex-col gap-2">
                                                 @csrf
@@ -95,7 +114,6 @@
                                                 </div>
                                             </form>
                                         @else
-                                            {{-- JIKA SUDAH DINILAI: Tampilkan Badge Saja (LEBIH BERSIH) --}}
                                             <div class="flex justify-center">
                                                 <span class="bg-gray-100 text-gray-500 text-xs font-bold px-3 py-1 rounded-full border border-gray-200 uppercase tracking-wider">
                                                     ✔ Sudah Diverifikasi
@@ -129,15 +147,24 @@
                 showConfirmButton: false
             });
         @endif
+        
+        // 2. Cek Session Error (Misal: Sudah dinilai)
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ session('error') }}',
+            });
+        @endif
 
-        // 2. Event Listener untuk Tombol Terima/Tolak
+        // 3. Event Listener Tombol Terima/Tolak 
         document.addEventListener('DOMContentLoaded', function () {
             const buttons = document.querySelectorAll('.btn-action');
 
             buttons.forEach(button => {
                 button.addEventListener('click', function () {
                     const form = this.closest('form');
-                    const status = this.getAttribute('data-status'); // ambil data-status (approved/rejected)
+                    const status = this.getAttribute('data-status'); 
                     const isApproved = status === 'approved';
 
                     Swal.fire({
@@ -153,14 +180,11 @@
                         cancelButtonText: 'Batal'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Karena tombol type="button" tidak mengirim value, saya buat input hidden manual
                             let input = document.createElement('input');
                             input.type = 'hidden';
                             input.name = 'status';
                             input.value = status;
                             form.appendChild(input);
-                            
-                            // Submit form
                             form.submit();
                         }
                     });

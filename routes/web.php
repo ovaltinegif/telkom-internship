@@ -63,21 +63,25 @@ Route::middleware('auth')->group(function () {
 }); 
 
     // Group Route Khusus Mentor (Dashboard Mentor)
-    Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
-        // Dashboard Mentor
-        Route::get('/dashboard', function () {
-            return view('mentor.dashboard');
-        })->name('mentor.dashboard');
+Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
+    // Dashboard Mentor
+    Route::get('/dashboard', function () {
+        $pendingLogbooks = \App\Models\DailyLogbook::where('status', 'pending')->count();
+        return view('mentor.dashboard', compact('pendingLogbooks'));
+    })->name('mentor.dashboard');   
 
-        // List Mahasiswa
-        Route::get('/my-students', [MentorController::class, 'myStudents'])->name('mentor.students.index');
-        
-        // --- TAMBAHAN BARU ---
-        // Detail Mahasiswa (Logbook & Absen)
-        Route::get('/student/{id}', [MentorController::class, 'showStudent'])->name('mentor.students.show');
-        
-        // Action Approve/Reject Logbook
-        Route::patch('/logbook/{id}/update', [MentorController::class, 'updateLogbook'])->name('mentor.logbook.update');
+    // List Mahasiswa
+    Route::get('/my-students', [App\Http\Controllers\MentorController::class, 'myStudents'])->name('mentor.students.index');
+    
+    // Detail Mahasiswa (Logbook & Absen)
+    Route::get('/student/{id}', [App\Http\Controllers\MentorController::class, 'showStudent'])->name('mentor.students.show');
+    
+    // Action Approve/Reject Logbook
+    Route::patch('/logbook/{id}/update', [App\Http\Controllers\MentorController::class, 'updateLogbook'])->name('mentor.logbook.update');
+
+    // Fitur penilaian mahasiswa oleh mentor
+    Route::get('/evaluation/{studentId}/create', [App\Http\Controllers\EvaluationController::class, 'create'])->name('mentor.evaluations.create');
+    Route::post('/evaluation', [App\Http\Controllers\EvaluationController::class, 'store'])->name('mentor.evaluations.store');
 });
 
     // --- START DEBUG ROUTE ---
