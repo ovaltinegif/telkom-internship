@@ -11,6 +11,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Models\Attendance;
 use Carbon\Carbon;
 use App\Http\Controllers\MentorController;
+use App\Models\User;
+use App\Models\Division;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,14 +63,36 @@ Route::middleware('auth')->group(function () {
 }); 
 
     // Group Route Khusus Mentor (Dashboard Mentor)
-    Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
         // Dashboard Mentor
-        Route::get('/mentor/dashboard', function () {
+        Route::get('/dashboard', function () {
             return view('mentor.dashboard');
         })->name('mentor.dashboard');
 
-        // Data Mahasiswa Bimbingan
-        Route::get('/mentor/my-students', [MentorController::class, 'myStudents'])->name('mentor.students.index');
+        // List Mahasiswa
+        Route::get('/my-students', [MentorController::class, 'myStudents'])->name('mentor.students.index');
+        
+        // --- TAMBAHAN BARU ---
+        // Detail Mahasiswa (Logbook & Absen)
+        Route::get('/student/{id}', [MentorController::class, 'showStudent'])->name('mentor.students.show');
+        
+        // Action Approve/Reject Logbook
+        Route::patch('/logbook/{id}/update', [MentorController::class, 'updateLogbook'])->name('mentor.logbook.update');
+});
+
+    // --- START DEBUG ROUTE ---
+    Route::get('/debug-db', function () {
+        // Cek user pertama dan relasi profilnya
+        $user = \App\Models\User::with('studentProfile')->first();
+        
+        // Cek data divisi
+        $divisions = \App\Models\Division::all();
+
+        return response()->json([
+            'message' => 'Cek Data Database',
+            'user_data' => $user,
+            'divisions' => $divisions
+        ]);
 });
 
 require __DIR__.'/auth.php';

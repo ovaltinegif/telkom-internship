@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Internship extends Model
 {
@@ -21,5 +22,27 @@ class Internship extends Model
     public function mentor()
     {
         return $this->belongsTo(User::class, 'mentor_id');
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }   
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    // 1. Relasi ke Logbook (One to Many)
+    public function dailyLogbooks()
+    {
+        return $this->hasMany(DailyLogbook::class);
+    }
+
+    // 2. Relasi ke Absensi (One to Many)
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
     }
 }

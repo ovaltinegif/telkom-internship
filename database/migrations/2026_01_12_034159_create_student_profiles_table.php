@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('university');    // Asal Kampus
             $table->string('major');         // Jurusan (Misal: S1 Sistem Informasi)
             $table->string('phone_number')->nullable();
+            $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->string('photo')->nullable(); // Foto Profil
             $table->timestamps();

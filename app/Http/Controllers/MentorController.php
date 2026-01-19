@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Internship;
+use App\Models\DailyLogbook;
 use Illuminate\Support\Facades\Auth;    
 
 class MentorController extends Controller
@@ -13,12 +14,52 @@ class MentorController extends Controller
      */
     public function myStudents()
     {
-        // Ambil data internship dimana mentor_id = ID user yang sedang login
-        // Kita gunakan 'with' untuk eager loading (mengambil data student & division sekaligus biar cepat)
-        $internships = Internship::with(['student', 'division'])
+        $internships = Internship::with(['student.studentProfile', 'division'])
                         ->where('mentor_id', Auth::id())
                         ->get();
 
         return view('mentor.students.index', compact('internships'));
+    }
+    public function showStudent($id)
+    {
+        // Cari data magang berdasarkan ID, pastikan mentornya benar (security check)
+        $internship = Internship::with([
+                            'student.studentProfile', 
+                            'dailyLogbooks' => function($query) {
+                                $query->latest(); // Urutkan logbook dari yang terbaru
+                            },
+                            'attendances' => function($query) {
+                                $query->latest(); // Urutkan absen dari yang terbaru
+                            }
+                        ])
+                        ->where('mentor_id', Auth::id())
+                        ->findOrFail($id);
+
+        return view('mentor.students.show', compact('internship'));
+    }
+
+    /**
+     * Menyimpan status Approval/Reject logbook.
+     */
+    public function updateLogbook(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'mentor_note' => 'nullable|string|max:255',
+        ]);
+
+        $logbook = DailyLogbook::findOrFail($id);
+
+        // Security: Pastikan logbook ini milik mahasiswa yang dibimbing mentor ini
+        if ($logbook->internship->mentor_id !== Auth::id()) {
+            abort(403, 'Anda tidak berhak menilai logbook ini.');
+        }
+
+        $logbook->update([
+            'status' => $request->status,
+            'mentor_note' => $request->mentor_note,
+        ]);
+
+        return back()->with('success', 'Status logbook berhasil diperbarui.');
     }
 }
