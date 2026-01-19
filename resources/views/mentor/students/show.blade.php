@@ -75,7 +75,6 @@
                                         @endif
                                     </td>
                                     
-                                    {{-- KOLOM AKSI DENGAN LOGIKA BARU (Tanpa Reset) --}}
                                     <td class="px-6 py-4 text-center">
                                         
                                         {{-- Cek jika status masih Pending, tampilkan tombol --}}
@@ -87,7 +86,6 @@
                                                 <input type="text" name="mentor_note" placeholder="Catatan (opsional)" class="text-xs border-gray-300 rounded px-2 py-1 w-full" value="{{ $logbook->mentor_note }}">
                                                 
                                                 <div class="flex gap-2 justify-center">
-                                                    {{-- Perhatikan: type="button" dan ada class 'btn-action' --}}
                                                     <button type="button" data-status="approved" class="btn-action bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs transition">
                                                         ✓ Terima
                                                     </button>
@@ -155,7 +153,7 @@
                         cancelButtonText: 'Batal'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Karena tombol type="button" tidak mengirim value, kita buat input hidden manual
+                            // Karena tombol type="button" tidak mengirim value, saya buat input hidden manual
                             let input = document.createElement('input');
                             input.type = 'hidden';
                             input.name = 'status';
