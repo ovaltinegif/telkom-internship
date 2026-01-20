@@ -11,6 +11,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Models\Attendance;
 use Carbon\Carbon;
 use App\Http\Controllers\MentorController;
+use App\Http\Controllers\AdminController; 
+use App\Http\Controllers\EvaluationController; 
 use App\Models\User;
 use App\Models\Division;
 
@@ -24,23 +26,38 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route Dashboard Mahasiswa
+// --- ROUTE DASHBOARD PINTAR (SOTIR ROLE) ---
 Route::get('/dashboard', function () {
-    $internship = Internship::where('student_id', Auth::id())->first();
+    $user = Auth::user();
 
-    // jika belum punya data magang, send ke halaman setup
-    if (!$internship) {
-        return redirect()->route('internships.create');
+    // 1. Cek jika User adalah ADMIN -> Lempar ke Dashboard Admin
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
     }
 
-    $logbooks = DailyLogbook::where('internship_id', $internship->id)->latest()->get();
+    // 2. Cek jika User adalah MENTOR -> Lempar ke Dashboard Mentor
+    if ($user->role === 'mentor') {
+        return redirect()->route('mentor.dashboard');
+    }
 
+    // 3. Jika MAHASISWA (Student)
+    $internship = Internship::where('student_id', $user->id)->first();
+
+    // Jika belum didaftarkan Admin, tampilkan halaman Pending
+    if (!$internship) {
+        return view('pending'); 
+    }
+
+    // Jika sudah ada data magang, tampilkan dashboard mahasiswa normal
+    $logbooks = DailyLogbook::where('internship_id', $internship->id)->latest()->get();
     $todayAttendance = Attendance::where('internship_id', $internship->id)
         ->whereDate('date', Carbon::today())
         ->first();
 
     return view('dashboard', compact('logbooks', 'todayAttendance'));
+
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 // Group Route untuk Mahasiswa (Logbook, Profile, dll)
 Route::middleware('auth')->group(function () {
@@ -53,50 +70,63 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // route internship
-    Route::get('/setup-internship', [InternshipController::class, 'create'])->name('internships.create');
-    Route::post('/setup-internship', [InternshipController::class, 'store'])->name('internships.store');
-    
     // route attendance atau absen
     Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
     Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
 }); 
 
-    // Group Route Khusus Mentor (Dashboard Mentor)
+// Group Route Khusus Mentor (Dashboard Mentor)
 Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
     // Dashboard Mentor
     Route::get('/dashboard', function () {
         $pendingLogbooks = \App\Models\DailyLogbook::where('status', 'pending')->count();
-        return view('mentor.dashboard', compact('pendingLogbooks'));
-    })->name('mentor.dashboard');   
+        
+        $internships = \App\Models\Internship::with('student')
+            ->where('mentor_id', \Illuminate\Support\Facades\Auth::id())
+            ->get();
+
+        return view('mentor.dashboard', compact('pendingLogbooks', 'internships'));
+    })->name('mentor.dashboard');  
 
     // List Mahasiswa
-    Route::get('/my-students', [App\Http\Controllers\MentorController::class, 'myStudents'])->name('mentor.students.index');
+    Route::get('/my-students', [MentorController::class, 'myStudents'])->name('mentor.students.index');
     
-    // Detail Mahasiswa (Logbook & Absen)
-    Route::get('/student/{id}', [App\Http\Controllers\MentorController::class, 'showStudent'])->name('mentor.students.show');
+    // Detail Mahasiswa
+    Route::get('/student/{id}', [MentorController::class, 'showStudent'])->name('mentor.students.show');
     
     // Action Approve/Reject Logbook
-    Route::patch('/logbook/{id}/update', [App\Http\Controllers\MentorController::class, 'updateLogbook'])->name('mentor.logbook.update');
+    Route::patch('/logbook/{id}/update', [MentorController::class, 'updateLogbook'])->name('mentor.logbook.update');
 
-    // Fitur penilaian mahasiswa oleh mentor
-    Route::get('/evaluation/{studentId}/create', [App\Http\Controllers\EvaluationController::class, 'create'])->name('mentor.evaluations.create');
-    Route::post('/evaluation', [App\Http\Controllers\EvaluationController::class, 'store'])->name('mentor.evaluations.store');
+    // Fitur penilaian mahasiswa
+    Route::get('/evaluation/{studentId}/create', [EvaluationController::class, 'create'])->name('mentor.evaluations.create');
+    Route::post('/evaluation', [EvaluationController::class, 'store'])->name('mentor.evaluations.store');
 });
 
-    // --- START DEBUG ROUTE ---
-    Route::get('/debug-db', function () {
-        // Cek user pertama dan relasi profilnya
-        $user = \App\Models\User::with('studentProfile')->first();
-        
-        // Cek data divisi
-        $divisions = \App\Models\Division::all();
+// Group Route Khusus ADMIN (Dengan Perbaikan Syntax)
+Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
+    
+    // Dashboard Admin
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])
+        ->name('admin.dashboard');
+    
+    // Fitur Setup Magang
+    Route::get('/internship/create', [AdminController::class, 'createInternship'])
+        ->name('admin.internship.create');
 
-        return response()->json([
-            'message' => 'Cek Data Database',
-            'user_data' => $user,
-            'divisions' => $divisions
-        ]);
+    Route::post('/internship', [AdminController::class, 'storeInternship'])
+        ->name('admin.internship.store');
+
+});
+
+// --- DEBUG ROUTE ---
+Route::get('/debug-db', function () {
+    $user = \App\Models\User::with('studentProfile')->first();
+    $divisions = \App\Models\Division::all();
+    return response()->json([
+        'message' => 'Cek Data Database',
+        'user_data' => $user,
+        'divisions' => $divisions
+    ]);
 });
 
 require __DIR__.'/auth.php';

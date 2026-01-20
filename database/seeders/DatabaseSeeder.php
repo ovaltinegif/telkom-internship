@@ -18,6 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // 0. Buat Akun ADMIN (Gunakan akun ini untuk Login nanti)
+        User::create([
+        'name' => 'Super Admin',
+        'email' => 'admin@telkom.co.id',
+        'password' => Hash::make('password'),
+        'role' => 'admin', // Pastikan role ini ada
+    ]);
         // 1. Buat Data Divisi
         // Kita cek dulu biar tidak duplikat, atau create baru
     $divGS = Division::create([
@@ -55,7 +62,7 @@ class DatabaseSeeder extends Seeder
         // 3. Buat Akun MAHASISWA 1
         $mhs1 = User::create([
             'name' => 'Dzaky Hamid',
-            'email' => 'dzaky@student.com',
+            'email' => 'dzaky@student.co.id',
             'password' => Hash::make('password'),
             'role' => 'student',
         ]);
@@ -73,7 +80,7 @@ class DatabaseSeeder extends Seeder
         // 4. Buat Akun MAHASISWA 2
         $mhs2 = User::create([
             'name' => 'Budi Santoso',
-            'email' => 'budi@student.com',
+            'email' => 'budi@student.co.id',
             'password' => Hash::make('password'),
             'role' => 'student',
         ]);
