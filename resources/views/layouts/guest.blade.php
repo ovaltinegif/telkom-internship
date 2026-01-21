@@ -22,7 +22,8 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            /* overflow: hidden; Removed to allow scrolling */
         }
 
         /* Header */
@@ -43,7 +44,13 @@
 
         /* Main Content */
         main {
-            flex: 1; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px;
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding-bottom: 50px;
+            min-height: 90vh; /* Ensure content is tall enough to push footer below fold */
+            justify-content: center; /* Keep login form centered vertically in the main area */
         }
         h1.page-title {
             font-family: 'Times New Roman', Times, serif; font-size: 100px; font-weight: normal;
@@ -87,42 +94,119 @@
 
         /* Footer */
         footer {
-            background-color: #fff;
-            padding: 20px 50px; /* Padding sedikit diperkecil biar ga terlalu tebal */
-            /* Ganti border keras dengan shadow halus atau border sangat tipis */
-            border-top: 1px solid #f2f2f2; 
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 40px 20px;
+            width: 100%;
             display: flex;
-            justify-content: space-between;
-            align-items: center; /* PENTING: Ubah dari flex-end ke center */
+            justify-content: center;
         }
 
-        .footer-left .logo-footer img {
-            height: 100px; /* Sedikit diperkecil agar proporsional sebagai footer */
-            opacity: 0.8; /* Sedikit transparan biar ga terlalu mencolok */
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 1100px;
+            width: 100%;
+            gap: 60px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
         }
 
-        .footer-right {
-            text-align: right;
-            font-size: 13px; /* Font diperkecil sedikit */
-            color: #888; /* Warna diubah jadi abu-abu lembut */
-            line-height: 1.5;
+        .footer-logo {
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
         }
-        
-        /* Link phone juga disamakan warnanya */
-        .footer-right a {
-            color: #888;
-            transition: color 0.3s;
+        .footer-logo:hover {
+            transform: scale(1.05);
         }
-        .footer-right a:hover {
-            color: #D6001C; /* Merah pas di-hover aja */
+        .footer-logo img {
+            height: 85px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .footer-divider {
+            width: 1px;
+            height: 120px;
+            background-color: #d1d5db; /* Neutral gray */
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+            color: #374151; /* Gray-700 */
+        }
+
+        .footer-address {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #4b5563; /* Gray-600 */
+        }
+
+        .footer-contact a {
+            color: #374151;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .footer-contact a:hover {
+            color: #dc2626; /* Telkom Red */
         }
 
         .footer-icons {
-            margin-top: 8px;
             display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            opacity: 0.7; /* Ikon juga dibuat agak soft */
+            gap: 16px;
+            margin-top: 4px;
+        }
+
+        .icon-circle {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #9ca3af;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4b5563;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: transparent;
+        }
+        .icon-circle:hover {
+            border-color: #dc2626;
+            background-color: #dc2626;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: #9ca3af; /* Gray-400 */
+            margin-top: 8px;
+            font-weight: 400;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+                text-align: center;
+            }
+            .footer-divider {
+                display: none; /* Hide vertical divider on mobile */
+            }
+            .footer-info {
+                align-items: center;
+                text-align: center;
+            }
+            .footer-logo img {
+                height: 70px;
+            }
         }
     </style>
 </head>
@@ -140,24 +224,53 @@
     </main>
 
     <footer>
-        <div class="footer-left">
-            <div class="logo-footer">
+        <div class="footer-content">
+            <!-- Logo Section -->
+            <div class="footer-logo">
                 <img src="{{ asset('images/logo-telkom.png') }}" alt="Telkom Indonesia">
             </div>
-        </div>
 
-        <div class="footer-right">
-            <p>Jl. Pahlawan No.10, Pleburan, Kec. Semarang Selatan,<br>
-            Kota Semarang, Jawa Tengah 50249.<br>
-            Phone: <a href="tel:0248302006" style="color: inherit; text-decoration: none;">(024) 8302006</a></p>
-            
-            <div class="footer-icons">
-                <span>📍</span>
-                <span>🌐</span>
-                <span>✉️</span>
+            <!-- Vertical Divider (Hidden on Mobile) -->
+            <div class="footer-divider"></div>
+
+            <!-- Info Section -->
+            <div class="footer-info">
+                <p class="footer-address">
+                    <strong>Divisi Telkom Regional IV</strong><br>
+                    Jl. Pahlawan No.10, Pleburan, Kec. Semarang Selatan,<br>
+                    Kota Semarang, Jawa Tengah 50249.
+                </p>
+                
+                <div class="footer-contact">
+                    Phone: <a>(024) 8302006</a>
+                </div>
+
+                <div class="footer-icons">
+                    <!-- Location Icon -->
+                    <a href="https://www.google.com/maps/place/TELKOM+WITEL+SEMARANG/@-7.014223,110.4328813,17z/data=!3m1!4b1!4m6!3m5!1s0x2e708c879bc849f1:0x6c1566e0b320bd25!8m2!3d-7.014223!4d110.4354562!16s%2Fg%2F11cm0cwy3t?entry=ttu&g_ep=EgoyMDI2MDExMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="icon-circle" title="Location">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 18px; height: 18px;">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                    </a>
+                    <!-- Website Icon -->
+                    <a href="https://www.telkom.co.id" target="_blank" class="icon-circle" title="Website">
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 18px; height: 18px;">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                        </svg>
+                    </a>
+                    <!-- Mail Icon -->
+                    <a href="mailto:hc.witelsju@gmail.com" class="icon-circle" title="Email">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 18px; height: 18px;">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="footer-copyright">
+                    © {{ date('Y') }} PT Telkom Indonesia (Persero) Tbk. All Rights Reserved.
+                </div>
             </div>
-            
-            <p style="margin-top: 10px; font-size: 12px; color: #666;">© {{ date('Y') }} PT Telkom Indonesia. All Rights Reserved.</p>
         </div>
     </footer>
 

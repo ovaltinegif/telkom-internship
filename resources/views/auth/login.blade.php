@@ -5,7 +5,7 @@
         <div class="red-stripe"></div>
 
         <div class="content-container">
-            <img src="{{ asset('images/char-male.png') }}" alt="Intern" class="char-img">
+            <img src="{{ asset('images/char-female.png') }}" alt="Intern Wanita" class="char-img">
 
             <div class="login-wrapper">
                 <x-auth-session-status class="mb-4 text-white" :status="session('status')" />
@@ -15,9 +15,9 @@
 
                     <div class="form-group">
                         <label for="email">Username / Email</label>
-                        <input type="email" id="email" name="email" 
-                               class="custom-input" 
-                               value="{{ old('email') }}" 
+                        <input type="email" id="email" name="email"
+                               class="custom-input"
+                               value="{{ old('email') }}"
                                required autofocus autocomplete="username">
                         
                         <x-input-error :messages="$errors->get('email')" class="mt-2 text-yellow-300 text-xs" />
@@ -25,8 +25,8 @@
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" 
-                               class="custom-input" 
+                        <input type="password" id="password" name="password"
+                               class="custom-input"
                                required autocomplete="current-password">
                         
                         <x-input-error :messages="$errors->get('password')" class="mt-2 text-yellow-300 text-xs" />
@@ -49,7 +49,7 @@
                 </form>
             </div>
 
-            <img src="{{ asset('images/char-female.png') }}" alt="Intern" class="char-img">
+            <img src="{{ asset('images/char-male.png') }}" alt="Intern Pria" class="char-img">
         </div>
     </div>
 </x-guest-layout>
