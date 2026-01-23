@@ -53,27 +53,28 @@
             justify-content: center; /* Keep login form centered vertically in the main area */
         }
         h1.page-title {
-            font-family: 'Times New Roman', Times, serif; font-size: 100px; font-weight: normal;
-            margin: 30px 0 40px 0; text-align: center; color: #000;
+            font-family: 'Times New Roman', Times, serif; font-size: 120px; font-weight: normal;
+            margin: 0 0 65px 0; text-align: center; color: #000; line-height: 1;
+            display: block; height: 300px; overflow: hidden; margin: 0 0 -60px 0; padding-top: 0px;
         }
 
         /* Hero & Form Section */
         .hero-section {
             position: relative; width: 100%; display: flex; justify-content: center;
-            align-items: center; padding: 20px 0;
+            align-items: center; padding: 0 0 20px 0;
         }
         .red-stripe {
             position: absolute; background-color: #EE0000; height: 420px; width: 100%;
-            z-index: 1; top: 45%; transform: translateY(-50%);
+            z-index: 1; top: 50%; transform: translateY(-50%);
         }
         .content-container {
             position: relative; z-index: 2; display: flex; align-items: center;
             justify-content: center; gap: 20px; width: 100%; max-width: 1200px;
         }
-        .char-img { height: 380px; width: auto; object-fit: contain; }
+        .char-img { height: 470px; width: auto; object-fit: contain; margin-bottom: 30px; }
 
         /* Login Form Styles */
-        .login-wrapper { width: 320px; padding: 0 20px; display: flex; flex-direction: column; }
+        .login-wrapper { width: 345px; flex-shrink: 0; padding: 0 20px; display: flex; flex-direction: column; }
         .form-group { margin-bottom: 15px; }
         .form-group label {
             display: block; color: #fff; font-weight: 600; font-size: 14px;
@@ -110,4 +111,4 @@
     @include('partials.footer')
 
 </body>
-</html>
+</html>                                                                                                                                                                                                                     
