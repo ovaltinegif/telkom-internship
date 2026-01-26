@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('admin.internships.update', $internship->id) }}">
+                    <form id="updateInternshipForm" method="POST" action="{{ route('admin.internships.update', $internship->id) }}">
                         @csrf
                         @method('PUT')
                         
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="mt-6 flex items-center gap-4">
-                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold shadow hover:bg-red-700 transition">
+                            <button type="button" onclick="confirmUpdate()" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold shadow hover:bg-red-700 transition">
                                 Update Internship
                             </button>
                             <a href="{{ route('admin.internships.index') }}" class="text-gray-600 hover:text-gray-900 text-sm">Cancel</a>
@@ -60,4 +60,28 @@
             </div>
         </div>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmUpdate() {
+            const form = document.getElementById('updateInternshipForm');
+            
+            if (form.reportValidity()) {
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Anda akan memperbarui status magang ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, perbarui!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        }
+    </script>
 </x-app-layout>
