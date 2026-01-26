@@ -26,6 +26,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/help', function () {
+    return view('help.index');
+})->name('help.index');
+
 // --- ROUTE DASHBOARD PINTAR (SOTIR ROLE) ---
 Route::get('/dashboard', function () {
     $user = Auth::user();
@@ -115,6 +119,32 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
 
     Route::post('/internship', [AdminController::class, 'storeInternship'])
         ->name('admin.internship.store');
+
+    // Fitur Data User
+    Route::get('/users', [AdminController::class, 'users'])
+        ->name('admin.users.index');
+
+    // Fitur Kelola Divisi
+    Route::get('/divisions', [AdminController::class, 'divisions'])
+        ->name('admin.divisions.index');
+    Route::get('/divisions/create', [AdminController::class, 'createDivision'])
+        ->name('admin.divisions.create');
+    Route::post('/divisions', [AdminController::class, 'storeDivision'])
+        ->name('admin.divisions.store');
+    Route::get('/divisions/{id}/edit', [AdminController::class, 'editDivision'])
+        ->name('admin.divisions.edit');
+    Route::put('/divisions/{id}', [AdminController::class, 'updateDivision'])
+        ->name('admin.divisions.update');
+    Route::delete('/divisions/{id}', [AdminController::class, 'destroyDivision'])
+        ->name('admin.divisions.destroy');
+
+    // Fitur Monitoring Magang
+    Route::get('/internships', [AdminController::class, 'internships'])
+        ->name('admin.internships.index');
+    Route::get('/internships/{id}/edit', [AdminController::class, 'editInternship'])
+        ->name('admin.internships.edit');
+    Route::put('/internships/{id}', [AdminController::class, 'updateInternship'])
+        ->name('admin.internships.update');
 
 });
 

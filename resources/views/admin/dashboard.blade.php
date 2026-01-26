@@ -27,7 +27,7 @@
                             </a>
 
                             {{-- Menu Item 2: Data User --}}
-                            <a href="#" class="flex flex-col items-center group">
+                            <a href="{{ route('admin.users.index') }}" class="flex flex-col items-center group">
                                 <div class="w-16 h-16 bg-white rounded-[24px] shadow-sm border border-gray-100 flex items-center justify-center mb-3 group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -37,7 +37,7 @@
                             </a>
 
                             {{-- Menu Item 3: Divisi --}}
-                            <a href="#" class="flex flex-col items-center group">
+                            <a href="{{ route('admin.divisions.index') }}" class="flex flex-col items-center group">
                                 <div class="w-16 h-16 bg-white rounded-[24px] shadow-sm border border-gray-100 flex items-center justify-center mb-3 group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -83,7 +83,7 @@
                             </div>
                             
                             <div class="mt-6 pt-4 border-t border-white/10">
-                                <a href="#" class="flex items-center justify-between group-hover:pl-1 transition-all">
+                                <a href="{{ route('admin.users.index', ['role' => 'student']) }}" class="flex items-center justify-between group-hover:pl-1 transition-all">
                                     <div class="flex items-center gap-2">
                                         <span class="bg-[#B71C1C] px-3 py-1 rounded-full text-[10px] font-bold shadow-inner uppercase tracking-wider border border-white/5">Regular</span>
                                         <span class="text-xs font-semibold tracking-wide">Lihat Detail</span>
@@ -124,7 +124,7 @@
                             </div>
                             
                              <div class="mt-6 pt-4 border-t border-white/10">
-                                <a href="#" class="flex items-center justify-between group-hover:pl-1 transition-all">
+                                <a href="{{ route('admin.internships.index') }}" class="flex items-center justify-between group-hover:pl-1 transition-all">
                                     <div class="flex items-center gap-2">
                                         <span class="bg-[#B71C1C] px-3 py-1 rounded-full text-[10px] font-bold shadow-inner uppercase tracking-wider border border-white/5">Report</span>
                                         <span class="text-xs font-semibold tracking-wide">Monitoring</span>
@@ -165,7 +165,7 @@
                             </div>
                             
                              <div class="mt-6 pt-4 border-t border-white/10">
-                                <a href="#" class="flex items-center justify-between group-hover:pl-1 transition-all">
+                                <a href="{{ route('admin.users.index', ['role' => 'mentor']) }}" class="flex items-center justify-between group-hover:pl-1 transition-all">
                                     <div class="flex items-center gap-2">
                                         <span class="bg-[#B71C1C] px-3 py-1 rounded-full text-[10px] font-bold shadow-inner uppercase tracking-wider border border-white/5">Access</span>
                                         <span class="text-xs font-semibold tracking-wide">Kelola Mentor</span>

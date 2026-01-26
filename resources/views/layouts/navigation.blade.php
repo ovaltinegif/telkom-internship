@@ -24,8 +24,8 @@
                     } elseif ($roleFn('admin')) {
                          $links = [
                             ['name' => 'Overview', 'route' => 'admin.dashboard', 'active' => request()->routeIs('admin.dashboard')],
-                            ['name' => 'Database', 'route' => '#', 'active' => false],
-                            ['name' => 'Monitoring', 'route' => '#', 'active' => false],
+                            ['name' => 'Database', 'route' => 'admin.users.index', 'active' => request()->routeIs('admin.users*') || request()->routeIs('admin.divisions*')],
+                            ['name' => 'Monitoring', 'route' => 'admin.internships.index', 'active' => request()->routeIs('admin.internships*')],
                         ];
                     } else {
                         $links = [
@@ -87,8 +87,8 @@
                             <p class="text-xs text-gray-500 uppercase font-semibold tracking-wider">Account</p>
                         </div>
                         
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">Profile Settings</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">Help Center</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">Profile Settings</a>
+                        <a href="{{ route('help.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">Help Center</a>
                     </div>
                 </div>
             </div>

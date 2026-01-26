@@ -80,4 +80,125 @@ class AdminController extends Controller
 
         return redirect()->route('admin.dashboard')->with('success', 'Mahasiswa berhasil didaftarkan magang!');
     }
+    /**
+     * Data User: List semua user.
+     */
+    public function users(Request $request)
+    {
+        $role = $request->query('role');
+        
+        $users = User::when($role, function ($query, $role) {
+                    return $query->where('role', $role);
+                })
+                ->latest()
+                ->paginate(10); // Pagination
+
+        return view('admin.users.index', compact('users', 'role'));
+    }
+
+    /**
+     * Kelola Divisi: List semua divisi.
+     */
+    public function divisions()
+    {
+        $divisions = Division::all();
+        return view('admin.divisions.index', compact('divisions'));
+    }
+
+    /**
+     * Form Tambah Divisi
+     */
+    public function createDivision()
+    {
+        return view('admin.divisions.create');
+    }
+
+    /**
+     * Simpan Divisi Baru
+     */
+    public function storeDivision(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Division::create($request->all());
+
+        return redirect()->route('admin.divisions.index')->with('success', 'Divisi berhasil ditambahkan!');
+    }
+
+    /**
+     * Form Edit Divisi
+     */
+    public function editDivision($id)
+    {
+        $division = Division::findOrFail($id);
+        return view('admin.divisions.edit', compact('division'));
+    }
+
+    /**
+     * Update Divisi
+     */
+    public function updateDivision(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $division = Division::findOrFail($id);
+        $division->update($request->all());
+
+        return redirect()->route('admin.divisions.index')->with('success', 'Divisi berhasil diperbarui!');
+    }
+
+    /**
+     * Hapus Divisi
+     */
+    public function destroyDivision($id)
+    {
+        $division = Division::findOrFail($id);
+        $division->delete();
+
+        return redirect()->route('admin.divisions.index')->with('success', 'Divisi berhasil dihapus!');
+    }
+
+    /**
+     * Monitoring Magang: List semua magang aktif.
+     */
+    public function internships()
+    {
+        $internships = Internship::with(['student', 'mentor', 'division'])
+                        ->latest()
+                        ->paginate(10);
+
+        return view('admin.internships.index', compact('internships'));
+    }
+
+    /**
+     * Form Edit Monitoring Magang
+     */
+    public function editInternship($id)
+    {
+        $internship = Internship::with(['student', 'division'])->findOrFail($id);
+        return view('admin.internships.edit', compact('internship'));
+    }
+
+    /**
+     * Update Data Monitoring Magang
+     */
+    public function updateInternship(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:active,finished,onboarding',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $internship = Internship::findOrFail($id);
+        $internship->update($request->all());
+
+        return redirect()->route('admin.internships.index')->with('success', 'Data magang berhasil diperbarui!');
+    }
 }
