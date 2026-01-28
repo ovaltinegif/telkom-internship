@@ -25,12 +25,12 @@
     <!-- Navbar -->
     <nav x-data="{ open: false }" class="sticky top-0 inset-x-0 z-[999] bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20 transition-all duration-300">
+            <div class="flex justify-between items-center h-28 transition-all duration-300">
                 
                 <!-- Left: Logo -->
                 <div class="shrink-0 flex items-center gap-4">
                     <a href="#" class="flex items-center gap-3 group">
-                       <img src="https://assets.telkomsel.com/public/logo-telkomsel.png" class="h-10 w-auto" alt="Telkomsel">
+                       <img src="{{ asset('images/logo-telkom.png') }}" class="h-24 w-auto" alt="Telkom Indonesia">
                     </a>
                 </div>
 
