@@ -35,7 +35,7 @@
             this.type('Telkom Witel', 'text1', () => {
                 this.cursor1 = false;
                 this.cursor2 = true;
-                this.type('Internship', 'text2', () => {
+                this.type('Semarang Jateng Utara', 'text2', () => {
                    // Wait 3 seconds, then delete
                    setTimeout(() => {
                        this.delete('text2', () => {
