@@ -20,6 +20,10 @@ class AttendanceController extends Controller
 
         $internship = Internship::where('student_id', Auth::id())->first();
 
+        if (!$internship || $internship->status !== 'active') {
+             return back()->with('error', 'Status magang belum aktif.');
+        }
+
         // Cek apakah hari ini sudah absen?
         $existingAttendance = Attendance::where('internship_id', $internship->id)
             ->whereDate('date', Carbon::today())

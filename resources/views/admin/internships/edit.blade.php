@@ -30,10 +30,44 @@
                             <div>
                                 <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                                 <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm">
-                                    <option value="active" {{ $internship->status == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="finished" {{ $internship->status == 'finished' ? 'selected' : '' }}>Finished</option>
+                                    <option value="pending" {{ $internship->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="onboarding" {{ $internship->status == 'onboarding' ? 'selected' : '' }}>Onboarding</option>
+                                    <option value="active" {{ $internship->status == 'active' ? 'selected' : '' }}>Active (Approved)</option>
+                                    <option value="finished" {{ $internship->status == 'finished' ? 'selected' : '' }}>Finished</option>
+                                    <option value="rejected" {{ $internship->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                                 </select>
+                            </div>
+
+                            <!-- Mentor Selection -->
+                            <div>
+                                <label for="mentor_id" class="block text-sm font-medium text-gray-700">Assign Mentor</label>
+                                <select name="mentor_id" id="mentor_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm">
+                                    <option value="">-- Select Mentor --</option>
+                                    @foreach($mentors as $mentor)
+                                        <option value="{{ $mentor->id }}" {{ $internship->mentor_id == $mentor->id ? 'selected' : '' }}>
+                                            {{ $mentor->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Document Verification -->
+                            <div class="md:col-span-2 mt-4 bg-gray-50 p-4 rounded-lg border">
+                                <h3 class="font-bold text-gray-800 mb-2">Verifikasi Berkas</h3>
+                                @if($internship->documents && $internship->documents->count() > 0)
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        @foreach($internship->documents as $doc)
+                                            <li>
+                                                <span class="uppercase font-semibold text-xs text-gray-500">{{ str_replace('_', ' ', $doc->type) }}</span>: 
+                                                <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="text-blue-600 hover:underline">
+                                                    Lihat Berkas ({{ $doc->name }})
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <p class="text-sm text-gray-500 italic">Belum ada berkas yang diupload.</p>
+                                @endif
                             </div>
 
                              <!-- Start Date -->

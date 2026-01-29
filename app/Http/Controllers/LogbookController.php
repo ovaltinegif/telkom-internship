@@ -15,6 +15,18 @@ class LogbookController extends Controller
      */
     public function create()
     {
+        $internship = Internship::where('student_id', Auth::id())->first();
+
+        // Cek apakah mahasiswa punya magang
+        if (!$internship) {
+            return redirect()->route('dashboard')->with('error', 'Anda belum terdaftar dalam program magang.');
+        }
+
+        // Cek status aktif
+        if ($internship->status !== 'active') {
+            return redirect()->route('dashboard')->with('error', 'Akun magang Anda belum aktif atau masih dalam proses verifikasi.');
+        }
+
         return view('logbooks.create');
     }
 

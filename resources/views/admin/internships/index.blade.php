@@ -42,7 +42,7 @@
                                             <div class="text-sm text-gray-900">{{ $internship->division->name }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $internship->mentor->name }}</div>
+                                            <div class="text-sm text-gray-900">{{ $internship->mentor?->name ?? 'Unassigned' }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ \Carbon\Carbon::parse($internship->start_date)->format('d M Y') }}

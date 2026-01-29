@@ -47,12 +47,12 @@ Route::get('/dashboard', function () {
     // 3. Jika MAHASISWA (Student)
     $internship = Internship::where('student_id', $user->id)->first();
 
-    // Jika belum didaftarkan Admin, tampilkan halaman Pending
-    if (!$internship) {
-        return view('pending'); 
+    // Jika belum ada data magang ATAU status belum active/finished
+    if (!$internship || !in_array($internship->status, ['active', 'finished'])) {
+        return view('pending', ['internship' => $internship]); 
     }
 
-    // Jika sudah ada data magang, tampilkan dashboard mahasiswa normal
+    // Jika sudah ada data magang dan status active/finished, tampilkan dashboard mahasiswa normal
     $logbooks = DailyLogbook::where('internship_id', $internship->id)->latest()->get();
     $todayAttendance = Attendance::where('internship_id', $internship->id)
         ->whereDate('date', Carbon::today())

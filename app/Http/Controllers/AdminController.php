@@ -179,10 +179,14 @@ class AdminController extends Controller
     /**
      * Form Edit Monitoring Magang
      */
+    /**
+     * Form Edit Monitoring Magang
+     */
     public function editInternship($id)
     {
-        $internship = Internship::with(['student', 'division'])->findOrFail($id);
-        return view('admin.internships.edit', compact('internship'));
+        $internship = Internship::with(['student', 'division', 'documents'])->findOrFail($id);
+        $mentors = User::where('role', 'mentor')->get();
+        return view('admin.internships.edit', compact('internship', 'mentors'));
     }
 
     /**
@@ -191,14 +195,30 @@ class AdminController extends Controller
     public function updateInternship(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:active,finished,onboarding',
+            'status' => 'required|in:active,finished,onboarding,pending,rejected',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'mentor_id' => 'nullable|exists:users,id',
         ]);
 
         $internship = Internship::findOrFail($id);
-        $internship->update($request->all());
+        $previousStatus = $internship->status;
 
-        return redirect()->route('admin.internships.index')->with('success', 'Data magang berhasil diperbarui!');
+        $internship->update([
+            'status' => $request->status,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'mentor_id' => $request->mentor_id,
+        ]);
+
+        // Trigger Email Notification if status changes to 'active'
+        if ($previousStatus !== 'active' && $request->status === 'active') {
+            // Ensure student has email
+            if ($internship->student && $internship->student->email) {
+                \Illuminate\Support\Facades\Mail::to($internship->student->email)->send(new \App\Mail\InternshipApproved($internship));
+            }
+        }
+
+        return redirect()->route('admin.internships.index')->with('success', 'Data magang berhasil diperbarui! ' . ($request->status === 'active' ? 'Notifikasi email telah dikirim.' : ''));
     }
 }
