@@ -87,7 +87,11 @@
                 Ikuti program internship kami untuk mendapatkan pengalaman langsung, mengasah kemampuanmu, dan terlibat dalam proyek nyata yang membawa perubahan.
             </p>
             <div class="flex justify-center gap-4">
-                <a href="#" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Apply Now</a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Go to Dashboard</a>
+                @else
+                     <a href="{{ route('register') }}" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Apply Now</a>
+                @endauth
                 <a href="#" class="bg-white text-gray-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">Contact Us</a>
             </div>
         </div>

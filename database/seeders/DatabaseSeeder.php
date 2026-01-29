@@ -26,23 +26,41 @@ class DatabaseSeeder extends Seeder
         'role' => 'admin', // Pastikan role ini ada
     ]);
         // 1. Buat Data Divisi
-        // Kita cek dulu biar tidak duplikat, atau create baru
-    $divGS = Division::create([
-            'name' => 'Government Service',
-            'description' => 'Layanan teknis & aplikasi untuk pelanggan pemerintahan'
-        ]);
-        
-        // Divisi 2: Access Data Management (ADM)
-        $divADM = Division::create([
-            'name' => 'Access Data Management',
-            'description' => 'Validasi dan pengelolaan data jaringan'
-        ]);
+        $divisions = [
+            [
+                'name' => 'Business Service',
+                'description' => 'Pengelolaan layanan bisnis dan kemitraan strategis.'
+            ],
+            [
+                'name' => 'Enterprise Service',
+                'description' => 'Solusi dan layanan untuk pelanggan korporat skala besar.'
+            ],
+            [
+                'name' => 'Government Service',
+                'description' => 'Layanan teknis & aplikasi untuk pelanggan pemerintahan.'
+            ],
+            [
+                'name' => 'Human Capital',
+                'description' => 'Pengelolaan sumber daya manusia dan pengembangan talenta.'
+            ],
+            [
+                'name' => 'Payment Collection',
+                'description' => 'Manajemen penagihan dan pembayaran.'
+            ],
+            [
+                'name' => 'Warroom',
+                'description' => 'Pusat pemantauan dan pengendalian operasional jaringan.'
+            ],
+        ];
 
-        // Divisi 3: CCAN (Corporate Customer) - Tambahan opsi
-        Division::create([
-            'name' => 'CCAN',
-            'description' => 'Penanganan gangguan pelanggan korporat'
-        ]);
+        foreach ($divisions as $divData) {
+            Division::create($divData);
+        }
+
+        // Ambil instance divisi untuk keperluan seeder internship di bawah
+        $divGS = Division::where('name', 'Government Service')->first();
+        // Since original logic used $divADM, let's pick another one for the second student
+        $divADM = Division::where('name', 'Human Capital')->first(); // Using Human Capital as a substitute example
 
         // 2. Buat Akun MENTOR (Gunakan akun ini untuk Login nanti)
         $mentor = User::create([
