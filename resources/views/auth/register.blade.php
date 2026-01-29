@@ -109,7 +109,7 @@
                         
                         <div>
                             <x-input-label for="name" :value="__('Nama Lengkap')" />
-                            <x-text-input id="name" class="block mt-1 w-full bg-gray-50 focus:bg-white transition" type="text" name="name" :value="old('name')" required placeholder="John Doe" />
+                            <x-text-input id="name" class="block mt-1 w-full bg-gray-50 focus:bg-white transition" type="text" name="name" :value="old('name')" required placeholder="Muhammad Dzaky Hamid" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
@@ -126,7 +126,7 @@
                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
                             </div>
                             <div>
-                                <x-input-label for="password_confirmation" :value="__('Konfirmasi Pw')" />
+                                <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')" />
                                 <x-text-input id="password_confirmation" class="block mt-1 w-full bg-gray-50 focus:bg-white transition" type="password" name="password_confirmation" required />
                             </div>
                         </div>
@@ -214,6 +214,18 @@
                             </div>
                        </div>
                        <div>
+                            <x-input-label for="duration" :value="__('Durasi Magang')" />
+                             <select name="duration" class="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500" required>
+                                <option value="">Pilih Durasi Magang</option>
+                                <option value="1 Bulan">1 Bulan</option>
+                                <option value="2 Bulan">2 Bulan</option>
+                                <option value="3 Bulan">3 Bulan</option>
+                                <option value="4 Bulan">4 Bulan</option>
+                                <option value="5 Bulan">5 Bulan</option>
+                                <option value="6 Bulan">6 Bulan</option>
+                             </select>
+                       </div>
+                       <div>
                             <x-input-label for="semester" :value="__('Semester Saat Ini')" />
                              <select name="semester" class="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500" required>
                                 <option value="">Pilih...</option>
@@ -223,7 +235,7 @@
                              </select>
                        </div>
                        <div>
-                             <x-input-label for="reason" :value="__('Motivasi / Alasan')" />
+                             <x-input-label for="reason" :value="__('Alasan Memilih Telkom Witel Semarang Jateng Utara sebagai Tempat Magang/Kerja Praktik')" />
                              <textarea name="reason" rows="4" class="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500" placeholder="Jelaskan mengapa Anda ingin magang di sini..." required></textarea>
                        </div>
                     </div>
@@ -260,8 +272,12 @@
                                 <input type="file" name="cv" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Surat Permohonan (PDF)</label>
-                                <input type="file" name="surat_permohonan" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer" required>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Surat Rekomendasi dari Dosen (PDF)</label>
+                                <input type="file" name="surat_rekomendasi" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer" required>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kartu Tanda Mahasiswa (Image/PDF)</label>
+                                <input type="file" name="ktm" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer" required>
                             </div>
                         </div>
                     </div>

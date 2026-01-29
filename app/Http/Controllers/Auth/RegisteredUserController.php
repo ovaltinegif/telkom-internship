@@ -43,12 +43,14 @@ class RegisteredUserController extends Controller
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'semester' => ['required', 'string'],
+            'duration' => ['required', 'string'],
             'reason' => ['required', 'string'],
 
             // Profile Info (needed for StudentProfile)
             // Files
             'cv' => ['required', 'file', 'mimes:pdf', 'max:10240'], // 10MB
-            'surat_permohonan' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+            'surat_rekomendasi' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+            'ktm' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:10240'], // KTM can be image or pdf
             'proposal' => ['nullable', 'file', 'mimes:pdf', 'max:10240'], // New: Optional Proposal
             'photo' => ['nullable', 'file', 'mimes:jpg,jpeg,png', 'max:10240'], // Changed to nullable per user UI change
         ]);
@@ -94,6 +96,7 @@ class RegisteredUserController extends Controller
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'semester' => $request->semester,
+                'duration' => $request->duration,
                 'reason' => $request->reason,
                 'status' => 'pending', // Waiting for approval
             ]);
@@ -109,12 +112,22 @@ class RegisteredUserController extends Controller
                 ]);
             }
 
-            if ($request->hasFile('surat_permohonan')) {
-                $path = $request->file('surat_permohonan')->store('documents/surat', 'public');
+            if ($request->hasFile('surat_rekomendasi')) {
+                $path = $request->file('surat_rekomendasi')->store('documents/surat', 'public');
                 \App\Models\Document::create([
                     'internship_id' => $internship->id,
-                    'name' => 'Surat Permohonan - ' . $user->name,
-                    'type' => 'surat_permohonan',
+                    'name' => 'Surat Rekomendasi - ' . $user->name,
+                    'type' => 'surat_rekomendasi',
+                    'file_path' => $path,
+                ]);
+            }
+
+            if ($request->hasFile('ktm')) {
+                $path = $request->file('ktm')->store('documents/ktm', 'public');
+                \App\Models\Document::create([
+                    'internship_id' => $internship->id,
+                    'name' => 'KTM - ' . $user->name,
+                    'type' => 'ktm',
                     'file_path' => $path,
                 ]);
             }
