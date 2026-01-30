@@ -17,12 +17,13 @@ class EvaluationController extends Controller
              abort(403, 'Anda bukan mentor untuk magang ini.');
         }
 
-        return view('evaluations.create', compact('internship'));
+        return view('mentor.evaluations.create', compact('internship'));
     }
 
     // Menyimpan Data Nilai ke Database
     public function store(Request $request, Internship $internship)
     {
+        // dd('store hit'); // DEBUG
         // Validasi input
         $validated = $request->validate([
             'discipline_score' => 'required|integer|min:0|max:100',

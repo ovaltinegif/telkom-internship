@@ -63,11 +63,11 @@
                              <div class="text-right">
                                 <span class="block text-xs text-slate-400 uppercase font-bold tracking-wider mb-2">Nilai Akhir</span>
                                 <span class="inline-flex items-center px-5 py-2 bg-emerald-100 text-emerald-800 rounded-xl font-bold text-xl border border-emerald-200 shadow-sm">
-                                    {{ $internship->evaluations->final_score }}
+                                    {{ $internship->evaluation->final_score }}
                                 </span>
                              </div>
                         @else
-                            <a href="{{ route('mentor.evaluations.create', $internship->student_id) }}" 
+                            <a href="{{ route('mentor.evaluations.create', $internship->id) }}" 
                                class="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-red-200 transition-all hover:scale-105 active:scale-95">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />

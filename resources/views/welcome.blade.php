@@ -72,7 +72,7 @@
     </nav>
 
     <!-- Hero / Internship Section -->
-    <section id="internship" class="relative bg-gray-900 h-screen sm:min-h-[600px] flex items-center justify-center">
+    <section id="internship" class="scroll-mt-32 relative bg-gray-900 h-screen sm:min-h-[600px] flex items-center justify-center">
         <!-- Background Image -->
         <div class="absolute inset-0 overflow-hidden">
              <!-- Placeholder for Hero Image - using a nice office/tech background -->
@@ -90,7 +90,7 @@
                 @auth
                     <a href="{{ route('dashboard') }}" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Go to Dashboard</a>
                 @else
-                     <a href="{{ route('register') }}" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Apply Now</a>
+                    <a href="{{ route('register') }}" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Apply Now</a>
                 @endauth
                 <a href="#" class="bg-white text-gray-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">Contact Us</a>
             </div>
@@ -98,7 +98,7 @@
     </section>
 
     <!-- Berita Section -->
-    <section id="berita" class="py-20 bg-white">
+    <section id="berita" class="scroll-mt-32 py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-center text-3xl font-bold text-gray-900 mb-12">Berita Terbaru</h2>
             
@@ -143,7 +143,7 @@
     </section>
 
     <!-- Benefit Section -->
-    <section id="benefit" class="py-20 bg-gray-50">
+    <section id="benefit" class="scroll-mt-32 py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row items-center gap-12">
                 <!-- Image Side with Carousel -->
@@ -250,7 +250,7 @@
     </section>
 
     <!-- About Us / Stats Section -->
-    <section id="aboutUs" class="py-20 bg-[#D42020] text-white">
+    <section id="aboutUs" class="scroll-mt-32 py-20 bg-[#D42020] text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl font-bold mb-4">Langkah Awal Menuju Karier Impian ✨ Dimulai di Sini</h2>
             <p class="text-white/80 mb-16 max-w-2xl mx-auto">Program internship kami telah mendukung ribuan peserta di seluruh Indonesia.</p>

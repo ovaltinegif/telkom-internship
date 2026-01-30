@@ -111,8 +111,8 @@ Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/approvals', [MentorController::class, 'approvals'])->name('mentor.approvals.index');
 
     // Fitur penilaian mahasiswa
-    Route::get('/evaluation/{studentId}/create', [EvaluationController::class, 'create'])->name('mentor.evaluations.create');
-    Route::post('/evaluation', [EvaluationController::class, 'store'])->name('mentor.evaluations.store');
+    Route::get('/evaluation/{internship}/create', [EvaluationController::class, 'create'])->name('mentor.evaluations.create');
+    Route::post('/evaluation/{internship}', [EvaluationController::class, 'store'])->name('mentor.evaluations.store');
 });
 
 // Group Route Khusus ADMIN (Dengan Perbaikan Syntax)
