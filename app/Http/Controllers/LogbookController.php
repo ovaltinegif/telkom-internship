@@ -11,6 +11,24 @@ use Illuminate\Support\Facades\Storage;
 class LogbookController extends Controller
 {
     /**
+     * Menampilkan daftar semua logbook (Activity).
+     */
+    public function index()
+    {
+        $internship = Internship::where('student_id', Auth::id())->first();
+
+        if (!$internship) {
+            return redirect()->route('dashboard');
+        }
+
+        $logbooks = DailyLogbook::where('internship_id', $internship->id)
+            ->latest()
+            ->paginate(10); // Pagination for activity page
+
+        return view('logbooks.index', compact('logbooks'));
+    }
+
+    /**
      * Menampilkan form isi logbook.
      */
     public function create()

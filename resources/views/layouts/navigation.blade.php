@@ -30,15 +30,15 @@
                     } else {
                         $links = [
                             ['name' => 'My Dashboard', 'route' => 'dashboard', 'active' => request()->routeIs('dashboard')],
-                            ['name' => 'Activity', 'route' => '#', 'active' => false],
-                            ['name' => 'Document', 'route' => '#', 'active' => false],
+                            ['name' => 'Activity', 'route' => 'logbooks.index', 'active' => request()->routeIs('logbooks.index')],
+                            ['name' => 'Document', 'route' => 'documents.index', 'active' => request()->routeIs('documents.index')],
                         ];
                     }
                 @endphp
 
                 @foreach($links as $link)
                     <a href="{{ $link['route'] === '#' ? '#' : route($link['route']) }}" 
-                       class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 {{ $link['active'] ? 'text-red-600 bg-red-50' : 'text-gray-500 hover:text-red-600 hover:bg-gray-50' }}">
+                       class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 {{ $link['active'] ? 'text-red-700 bg-red-50 shadow-sm border border-red-100' : 'text-slate-500 hover:text-red-600 hover:bg-slate-50' }}">
                         {{ $link['name'] }}
                     </a>
                 @endforeach

@@ -66,9 +66,15 @@ Route::get('/dashboard', function () {
 // Group Route untuk Mahasiswa (Logbook, Profile, dll)
 Route::middleware('auth')->group(function () {
     // route logbook
+    Route::get('/activity', [LogbookController::class, 'index'])->name('logbooks.index');
     Route::get('/logbooks/create', [LogbookController::class, 'create'])->name('logbooks.create');
     Route::post('/logbooks', [LogbookController::class, 'store'])->name('logbooks.store');
     
+    // route documents (placeholder)
+    Route::get('/documents', function () {
+        return view('documents.index');
+    })->name('documents.index');
+
     // route profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
