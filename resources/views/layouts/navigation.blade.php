@@ -18,8 +18,8 @@
                     if ($roleFn('mentor')) {
                         $links = [
                             ['name' => 'Dashboard', 'route' => 'mentor.dashboard', 'active' => request()->routeIs('mentor.dashboard')],
-                            ['name' => 'Approval', 'route' => '#', 'active' => false],
-                            ['name' => 'Grading', 'route' => '#', 'active' => false],
+                            ['name' => 'Mahasiswa', 'route' => 'mentor.students.index', 'active' => request()->routeIs('mentor.students*')],
+                            ['name' => 'Approval', 'route' => 'mentor.approvals.index', 'active' => request()->routeIs('mentor.approvals*')],
                         ];
                     } elseif ($roleFn('admin')) {
                          $links = [

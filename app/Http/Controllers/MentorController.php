@@ -20,6 +20,23 @@ class MentorController extends Controller
 
         return view('mentor.students.index', compact('internships'));
     }
+
+    /**
+     * Menampilkan daftar logbook yang perlu disetujui (Status: pending)
+     */
+    public function approvals()
+    {
+        $pendingLogbooks = DailyLogbook::with(['internship.student'])
+            ->whereHas('internship', function($q) {
+                $q->where('mentor_id', Auth::id());
+            })
+            ->where('status', 'pending')
+            ->latest()
+            ->paginate(10);
+
+        return view('mentor.approvals.index', compact('pendingLogbooks'));
+    }
+
     public function showStudent($id)
     {
         // Cari data magang berdasarkan ID, pastikan mentornya benar (security check)

@@ -107,6 +107,9 @@ Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
     // Action Approve/Reject Logbook
     Route::patch('/logbook/{id}/update', [MentorController::class, 'updateLogbook'])->name('mentor.logbook.update');
 
+    // Halaman Approval (List Pending Logbook)
+    Route::get('/approvals', [MentorController::class, 'approvals'])->name('mentor.approvals.index');
+
     // Fitur penilaian mahasiswa
     Route::get('/evaluation/{studentId}/create', [EvaluationController::class, 'create'])->name('mentor.evaluations.create');
     Route::post('/evaluation', [EvaluationController::class, 'store'])->name('mentor.evaluations.store');
