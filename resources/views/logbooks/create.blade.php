@@ -92,6 +92,7 @@
                     text: "Pastikan data sudah benar.",
                     icon: 'question',
                     showCancelButton: true,
+                    reverseButtons: true,
                     confirmButtonColor: '#ef4444', // Red 500
                     cancelButtonColor: '#64748b', // Slate 500
                     confirmButtonText: 'Ya, Simpan!',

@@ -215,6 +215,7 @@
             text: "Pastikan kamu sudah berada di lokasi kantor!",
             icon: 'question',
             showCancelButton: true,
+            reverseButtons: true,
             confirmButtonColor: '#10b981', // Emerald 500
             cancelButtonColor: '#6b7280',
             confirmButtonText: 'Ya, Check In!',
@@ -263,6 +264,7 @@
             text: "Pastikan pekerjaan hari ini sudah selesai ya!",
             icon: 'warning',
             showCancelButton: true,
+            reverseButtons: true,
             confirmButtonColor: '#f43f5e', // Rose 500
             cancelButtonColor: '#6b7280',
             confirmButtonText: 'Ya, Check Out',

@@ -106,6 +106,7 @@
                     text: "Anda akan memperbarui status magang ini!",
                     icon: 'warning',
                     showCancelButton: true,
+                    reverseButtons: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#6c757d',
                     confirmButtonText: 'Ya, perbarui!',

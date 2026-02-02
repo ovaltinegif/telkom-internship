@@ -222,6 +222,7 @@
                             : "Logbook akan ditolak. Pastikan Anda sudah memberikan catatan.",
                         icon: isApproved ? 'question' : 'warning',
                         showCancelButton: true,
+                        reverseButtons: true,
                         confirmButtonColor: isApproved ? '#10b981' : '#e11d48',
                         cancelButtonColor: '#64748b',
                         confirmButtonText: isApproved ? 'Ya, Terima' : 'Ya, Tolak',

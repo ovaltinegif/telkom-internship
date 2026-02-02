@@ -76,10 +76,10 @@
         <!-- Background Image -->
         <div class="absolute inset-0 overflow-hidden">
              <!-- Placeholder for Hero Image - using a nice office/tech background -->
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Hero Background" class="w-full h-full object-cover opacity-60">
+            <img src="{{ asset('images/gallery-12.jpg') }}" alt="Hero Background" class="w-full h-full object-cover opacity-60">
         </div>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up" data-aos-duration="1000">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
                 Kickstart Your Career with an Internship <br class="hidden md:block"> at Witel Semarang Jateng Utara!
             </h1>
@@ -100,39 +100,39 @@
     <!-- Berita Section -->
     <section id="berita" class="scroll-mt-32 py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-center text-3xl font-bold text-gray-900 mb-12">Berita Terbaru</h2>
+            <h2 class="text-center text-3xl font-bold text-gray-900 mb-12" data-aos="fade-up">Berita Terbaru</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- News Item 1 -->
-                <div class="group cursor-pointer">
+                <div class="group cursor-pointer" data-aos="fade-up" data-aos-delay="100">
                     <div class="rounded-2xl overflow-hidden shadow-lg h-full bg-white transition hover:-translate-y-1 hover:shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1571597438372-540dd352bf41?auto=format&fit=crop&q=80&w=400" alt="Briskwalk" class="w-full h-64 object-cover">
+                        <img src="{{ asset('images/gallery-01.jpg') }}" alt="Briskwalk" class="w-full h-64 object-cover">
                         <div class="p-6">
                              <!-- Example Date/Title overlay style from screenshot not exactly replicated but adapted -->
-                            <h3 class="text-xl font-bold text-orange-500 mb-2">Lorem Ipsum Dolor</h3>
-                            <p class="text-gray-600 font-medium">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <h3 class="text-xl font-bold text-orange-500 mb-2">Audit Eksternal IMS</h3>
+                            <p class="text-gray-600 font-medium">Witel Semarang Jateng Utara sukses melaksanakan Audit Eksternal IMS 2025 di STO Gombel dan neuCentrIX Candi. Kegiatan ini bertujuan memastikan sistem keamanan dan tata kelola operasional telah memenuhi standar internasional guna menjaga kualitas layanan yang unggul dan berkelanjutan.</p>
                         </div>
                     </div>
                 </div>
 
                  <!-- News Item 2 -->
-                 <div class="group cursor-pointer">
+                 <div class="group cursor-pointer" data-aos="fade-up" data-aos-delay="200">
                     <div class="rounded-2xl overflow-hidden shadow-lg h-full bg-white transition hover:-translate-y-1 hover:shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=400" alt="Innovation" class="w-full h-64 object-cover">
+                        <img src="{{ asset('images/gallery-14.jpg') }}" alt="Innovation" class="w-full h-64 object-cover">
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-blue-500 mb-2">Sit Amet Consectetur</h3>
-                            <p class="text-gray-600 font-medium">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <h3 class="text-xl font-bold text-blue-500 mb-2">AGENDA PERESMIAN BEDAH RUMAH BERSAMA P2TEL</h3>
+                            <p class="text-gray-600 font-medium">Sebagai bentuk kepedulian sosial, P2TEL bersama Telkom melaksanakan agenda peresmian program Bedah Rumah. Kegiatan ini bertujuan untuk memberikan hunian yang lebih layak bagi penerima manfaat, sekaligus mempererat silaturahmi dan solidaritas di lingkungan keluarga besar pensiunan Telkom.</p>
                         </div>
                     </div>
                 </div>
 
                  <!-- News Item 3 -->
-                 <div class="group cursor-pointer">
+                 <div class="group cursor-pointer" data-aos="fade-up" data-aos-delay="300">
                     <div class="rounded-2xl overflow-hidden shadow-lg h-full bg-white transition hover:-translate-y-1 hover:shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=400" alt="Pengajian" class="w-full h-64 object-cover">
+                        <img src="{{ asset('images/gallery-10.jpg') }}" alt="Pengajian" class="w-full h-64 object-cover">
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Adipiscing Elit</h3>
-                            <p class="text-gray-600 font-medium">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">SEREMONI PENYERAHAN BANTUAN SARANA AIR BERSIH</h3>
+                            <p class="text-gray-600 font-medium">Wujud nyata kepedulian sosial diwujudkan melalui penyerahan bantuan sarana air bersih bagi warga Desa Sidokumpul, Kendal. Program ini diharapkan dapat mempermudah akses air bersih bagi masyarakat sekitar sekaligus mendukung peningkatan standar kesehatan dan kesejahteraan lingkungan secara berkelanjutan.</p>
                         </div>
                     </div>
                 </div>
@@ -150,10 +150,10 @@
                 <div class="w-full lg:w-1/2 mb-10 lg:mb-0" x-data="{
                     activeSlide: 0,
                     slides: [
-                        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800',
-                        'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=800',
-                        'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800',
-                        'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800'
+                        '{{ asset("images/gallery-02.jpg") }}',
+                        '{{ asset("images/gallery-11.jpg") }}',
+                        '{{ asset("images/gallery-13.jpg") }}',
+                        '{{ asset("images/gallery-08.jpg") }}'
                     ],
                     next() {
                         this.activeSlide = (this.activeSlide + 1) % this.slides.length;
@@ -167,7 +167,7 @@
                         }, 3000);
                     }
                 }">
-                    <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group" data-aos="fade-right">
                         <!-- Sliding Container -->
                          <div class="absolute inset-0 flex transition-transform duration-700 ease-in-out"
                               :style="'transform: translateX(-' + (activeSlide * 100) + '%)'">
@@ -204,7 +204,7 @@
                 </div>
                 
                 <!-- Content Side -->
-                <div class="w-full lg:w-1/2 text-left">
+                <div class="w-full lg:w-1/2 text-left" data-aos="fade-left">
                     <h2 class="text-3xl md:text-4xl font-bold text-[#e60000] mb-6">Manfaat Internship di Witel Semarang Jateng Utara</h2>
                     <p class="text-gray-700 text-lg leading-relaxed mb-8">
                         Program Internship dan Kerja Praktik Witel Semarang Jateng Utara mengundang para mahasiswa untuk terlibat langsung dalam proyek-proyek industri, mengembangkan keterampilan digital, serta merasakan secara langsung budaya kerja yang kolaboratif.
@@ -251,24 +251,24 @@
 
     <!-- About Us / Stats Section -->
     <section id="aboutUs" class="scroll-mt-32 py-20 bg-[#D42020] text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="zoom-in">
             <h2 class="text-3xl font-bold mb-4">Langkah Awal Menuju Karier Impian ✨ Dimulai di Sini</h2>
             <p class="text-white/80 mb-16 max-w-2xl mx-auto">Program internship kami telah mendukung ribuan peserta di seluruh Indonesia.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <!-- Stat 1 -->
-                <div>
-                    <div class="text-5xl font-bold mb-2">1245+</div>
+                <div x-data="{ current: 0, target: 1245 }" x-intersect.once="let interval = setInterval(() => { if(current < target) { current += Math.ceil(target / 50); if(current > target) current = target; } else { clearInterval(interval) } }, 20)">
+                    <div class="text-5xl font-bold mb-2"><span x-text="current">0</span>+</div>
                     <div class="text-white/80 font-medium">Peserta Terdaftar</div>
                 </div>
                  <!-- Stat 2 -->
-                 <div>
-                    <div class="text-5xl font-bold mb-2">1000+</div>
+                 <div x-data="{ current: 0, target: 1000 }" x-intersect.once="let interval = setInterval(() => { if(current < target) { current += Math.ceil(target / 50); if(current > target) current = target; } else { clearInterval(interval) } }, 20)">
+                    <div class="text-5xl font-bold mb-2"><span x-text="current">0</span>+</div>
                     <div class="text-white/80 font-medium">Peserta Aktif Melamar</div>
                 </div>
                  <!-- Stat 3 -->
-                 <div>
-                    <div class="text-5xl font-bold mb-2">6</div>
+                 <div x-data="{ current: 0, target: 6 }" x-intersect.once="let interval = setInterval(() => { if(current < target) { current += 1; } else { clearInterval(interval) } }, 200)">
+                    <div class="text-5xl font-bold mb-2" x-text="current">0</div>
                     <div class="text-white/80 font-medium">Divisi Tersedia</div>
                 </div>
             </div>
@@ -278,11 +278,11 @@
     <!-- Stories/Testimonials (Optional based on screenshot) -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-12">Their Stories, Their Experience</h2>
+            <h2 class="text-3xl font-bold text-gray-900 mb-12" data-aos="fade-up">Their Stories, Their Experience</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Person 1 -->
-                <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-100" data-aos="flip-left" data-aos-delay="100">
                      <div class="w-16 h-16 rounded-full bg-gray-200 mx-auto mb-4 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-gray-400">
                           <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
@@ -292,7 +292,7 @@
                      <p class="text-xs text-gray-500 mt-2">"Enak dan seru magang di Witel Semarang Jateng Utara mendapatkan banyak pengalaman berharga."</p>
                 </div>
                 <!-- Person 2 -->
-                <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                <div class="bg-gray-50 p-6 rounded-xl border border-gray-100" data-aos="flip-left" data-aos-delay="200">
                     <div class="w-16 h-16 rounded-full bg-gray-200 mx-auto mb-4 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-gray-400">
                           <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
@@ -302,7 +302,7 @@
                     <p class="text-xs text-gray-500 mt-2">"Program magang di Witel Semarang Jateng Utara memberikan pengalaman yang sangat bermanfaat."</p>
                </div>
                <!-- Person 3 -->
-               <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+               <div class="bg-gray-50 p-6 rounded-xl border border-gray-100" data-aos="flip-left" data-aos-delay="300">
                     <div class="w-16 h-16 rounded-full bg-gray-200 mx-auto mb-4 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-gray-400">
                           <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
@@ -312,7 +312,7 @@
                     <p class="text-xs text-gray-500 mt-2">"Sangat bangga menjadi keluarga besar Telkom khususnya Witel Semarang Jateng Utara."</p>
                </div>
                <!-- Person 4 -->
-               <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+               <div class="bg-gray-50 p-6 rounded-xl border border-gray-100" data-aos="flip-left" data-aos-delay="400">
                     <div class="w-16 h-16 rounded-full bg-gray-200 mx-auto mb-4 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-gray-400">
                           <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
