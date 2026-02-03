@@ -43,7 +43,7 @@ Pastikan perangkat kamu sudah terpasang:
 
 1.  **Clone Repositori**
     ```bash
-    git clone [https://github.com/ovaltinegif/telkom-internship.git](https://github.com/ovaltinegif/telkom-internship.git)
+    git clone https://github.com/ovaltinegif/telkom-internship.git
     cd telkom-internship
     ```
 
