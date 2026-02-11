@@ -10,23 +10,46 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     
-                    {{-- Tabs Navigation --}}
-                    <div class="flex border-b border-gray-200 mb-6">
-                        <a href="{{ route('admin.internships.index', ['status' => 'pending']) }}" 
-                           class="mr-8 py-4 text-sm font-medium border-b-2 transition-colors duration-200 {{ $status === 'pending' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                            Applicants 
-                            <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ $pendingCount }}</span>
-                        </a>
-                        <a href="{{ route('admin.internships.index', ['status' => 'onboarding']) }}" 
-                           class="mr-8 py-4 text-sm font-medium border-b-2 transition-colors duration-200 {{ $status === 'onboarding' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                            Onboarding
-                             <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ $onboardingCount }}</span>
-                        </a>
-                        <a href="{{ route('admin.internships.index', ['status' => 'active']) }}" 
-                           class="mr-8 py-4 text-sm font-medium border-b-2 transition-colors duration-200 {{ $status === 'active' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                            Active
-                             <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ $activeCount }}</span>
-                        </a>
+                    {{-- Standard Tabs Navigation --}}
+                    <div class="border-b border-gray-200 mb-6">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            {{-- Applicants --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'pending']) }}" 
+                               class="{{ $status === 'pending' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Applicants
+                                <span class="{{ $status === 'pending' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-900' }} hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                                    {{ $pendingCount }}
+                                </span>
+                            </a>
+
+                            {{-- Onboarding --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'onboarding']) }}" 
+                               class="{{ $status === 'onboarding' ? 'border-yellow-500 text-yellow-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Onboarding
+                                <span class="{{ $status === 'onboarding' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-900' }} hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                                    {{ $onboardingCount }}
+                                </span>
+                            </a>
+
+                            {{-- Active --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'active']) }}" 
+                               class="{{ $status === 'active' ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Active
+                                <span class="{{ $status === 'active' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-900' }} hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                                    {{ $activeCount }}
+                                </span>
+                            </a>
+
+                            {{-- Finished --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'finished']) }}" 
+                               class="{{ $status === 'finished' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Finished
+                            </a>
+                        </nav>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -88,13 +111,27 @@
                                                     Review
                                                 </button>
                                             @elseif($status === 'onboarding')
-                                                <form action="{{ route('admin.internships.activate', $internship->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Verifikasi Pakta Integritas & Aktifkan Magang?')">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button type="submit" class="text-green-600 hover:text-green-900 font-bold">
-                                                        Verifikasi & Activate
-                                                    </button>
-                                                </form>
+                                                <div class="flex flex-col gap-2">
+                                                    @php
+                                                        $signedPact = $internship->documents->where('type', 'pakta_integritas_signed')->first();
+                                                    @endphp
+                                                    
+                                                    @if($signedPact)
+                                                        <a href="{{ Storage::url($signedPact->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-900 font-bold text-xs flex items-center">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                            Lihat Pakta
+                                                        </a>
+                                                        <form action="{{ route('admin.internships.activate', $internship->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Verifikasi Pakta Integritas & Aktifkan Magang?')">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="text-green-600 hover:text-green-900 font-bold text-xs uppercase bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                                                                Verifikasi & Activate
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="text-xs text-gray-500 italic bg-gray-50 px-2 py-1 rounded border border-gray-200">Menunggu Upload Pakta</span>
+                                                    @endif
+                                                </div>
                                             @else
                                                 <a href="{{ route('admin.internships.edit', $internship->id) }}" class="text-blue-600 hover:text-blue-900 font-bold">Assign</a>
                                             @endif
