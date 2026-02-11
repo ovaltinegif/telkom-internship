@@ -113,7 +113,7 @@
                         <div class="ml-4">
                             <h3 class="text-lg font-medium text-red-800">Pengajuan Ditolak</h3>
                             <div class="mt-2 text-sm text-red-700 space-y-2">
-                                <p>Mohon maaf, pengajuan magang Anda belum dapat diterima saat ini.</p>
+                                <p class="text-justify">Terima kasih atas ketertarikan saudara pada program magang PT Telkom Indonesia. Kami sampaikan bahwa dengan mempertimbangkan ketersediaan kuota, dapat kami sampaikan bahwa kami belum dapat memproses permohonan magang Saudara dikarenakan kuota magang pada lokasi yang diminati saat ini telah terpenuhi.</p>
                                 @if($internship->response_letter)
                                     <a href="{{ Storage::url($internship->response_letter) }}" target="_blank" class="text-red-900 font-semibold underline hover:text-red-950">
                                         Lihat Surat Penolakan

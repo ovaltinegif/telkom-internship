@@ -21,7 +21,7 @@ class AdminController extends Controller
         $activeInternships = Internship::where('status', 'active')->count();
 
         // Ambil 5 data magang terbaru untuk ditampilkan di tabel
-        $recentInternships = Internship::with(['student', 'mentor', 'division'])
+        $recentInternships = Internship::with(['student.studentProfile', 'mentor', 'division'])
                             ->latest()
                             ->take(5)
                             ->get();
@@ -174,7 +174,7 @@ class AdminController extends Controller
     {
         $status = $request->query('status', 'pending'); // Default to 'pending' (Applicants)
 
-        $internships = Internship::with(['student', 'mentor', 'division'])
+        $internships = Internship::with(['student.studentProfile', 'mentor', 'division'])
                         ->where('status', $status)
                         ->latest()
                         ->paginate(10)
@@ -238,6 +238,33 @@ class AdminController extends Controller
     }
 
     /**
+     * Reject Internship (Pending -> Rejected)
+     */
+    public function rejectInternship(Request $request, $id)
+    {
+        $internship = Internship::findOrFail($id);
+
+        if ($internship->status !== 'pending') {
+            return back()->with('error', 'Status magang tidak valid untuk ditolak.');
+        }
+
+        // Update status to rejected
+        $internship->update(['status' => 'rejected']);
+
+        // Send Rejection Email
+        if ($internship->student && $internship->student->email) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($internship->student->email)->send(new \App\Mail\InternshipRejected($internship));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Gagal mengirim email penolakan magang: ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('admin.internships.index', ['status' => 'pending'])
+            ->with('success', 'Pengajuan magang ditolak.');
+    }
+
+    /**
      * Activate Internship (Onboarding -> Active)
      */
     public function activateInternship($id)
@@ -278,6 +305,65 @@ class AdminController extends Controller
         return redirect()->route('admin.internships.index', ['status' => 'onboarding'])
             ->with('success', $message);
     }
+
+    /**
+     * Complete Internship (Upload Certificate & Assessment)
+     */
+    public function completeInternship(Request $request, $id)
+    {
+        $internship = Internship::with('student.studentProfile')->findOrFail($id);
+
+        if ($internship->status !== 'finished') {
+             // ...
+        }
+
+        $isSmk = optional($internship->student->studentProfile)->education_level === 'SMK';
+
+        $rules = [
+            'sertifikat_kelulusan' => 'required|file|mimes:pdf|max:2048',
+        ];
+
+        if ($isSmk) {
+             $rules['laporan_penilaian_pkl'] = 'required|file|mimes:pdf|max:2048';
+        } else {
+             $rules['laporan_penilaian_pkl'] = 'nullable|file|mimes:pdf|max:2048';
+        }
+
+        $request->validate($rules);
+
+        // Upload Certificate
+        if ($request->hasFile('sertifikat_kelulusan')) {
+            $path = $request->file('sertifikat_kelulusan')->store('documents/admin', 'public');
+            
+            // Delete old if exists (optional cleanup) or just add new
+            $internship->documents()->updateOrCreate(
+                ['type' => 'sertifikat_kelulusan'],
+                [
+                    'name' => 'Sertifikat Kelulusan Magang',
+                    'file_path' => $path,
+                    'is_verified' => true
+                ]
+            );
+        }
+
+        // Upload PKL Assessment (Required for SMK, Optional for others)
+        if ($request->hasFile('laporan_penilaian_pkl')) {
+            $path = $request->file('laporan_penilaian_pkl')->store('documents/admin', 'public');
+            
+            $internship->documents()->updateOrCreate(
+                ['type' => 'laporan_penilaian_pkl'],
+                [
+                    'name' => 'Laporan Penilaian PKL',
+                    'file_path' => $path,
+                    'is_verified' => true
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Dokumen kelulusan berhasil dikirim!');
+    }
+
+
 
 
     /**

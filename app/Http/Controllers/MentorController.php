@@ -12,13 +12,50 @@ class MentorController extends Controller
     /**
      * Menampilkan daftar mahasiswa yang dibimbing oleh mentor yang sedang login.
      */
-    public function myStudents()
+    public function myStudents(Request $request)
     {
-        $internships = Internship::with(['student.studentProfile', 'division'])
-                        ->where('mentor_id', Auth::id())
-                        ->get();
+        $status = $request->get('status', 'active');
+        $type = $request->get('type', 'all'); // all, mahasiswa, smk
 
-        return view('mentor.students.index', compact('internships'));
+        $query = Internship::with(['student.studentProfile', 'division'])
+                        ->where('mentor_id', Auth::id());
+
+        // Calculate counts for main tabs
+        $activeCount = (clone $query)->where('status', 'active')->count();
+        $finishedCount = (clone $query)->where('status', 'finished')->count();
+
+        // Calculate counts for sub-filters (Active Only)
+        $activeMahasiswaCount = (clone $query)->where('status', 'active')->whereHas('student.studentProfile', function($q) {
+            $q->where('education_level', '!=', 'SMK');
+        })->count();
+        
+        $activeSmkCount = (clone $query)->where('status', 'active')->whereHas('student.studentProfile', function($q) {
+            $q->where('education_level', 'SMK');
+        })->count();
+
+        // Filter based on status
+        $query->where('status', $status);
+
+        // Filter based on type (only if status is active)
+        if ($status === 'active' && $type !== 'all') {
+            if ($type === 'smk') {
+                $query->whereHas('student.studentProfile', function($q) {
+                    $q->where('education_level', 'SMK');
+                });
+            } elseif ($type === 'mahasiswa') {
+                $query->whereHas('student.studentProfile', function($q) {
+                    $q->where('education_level', '!=', 'SMK');
+                });
+            }
+        }
+
+        $internships = $query->get();
+
+        return view('mentor.students.index', compact(
+            'internships', 'status', 'type', 
+            'activeCount', 'finishedCount',
+            'activeMahasiswaCount', 'activeSmkCount'
+        ));
     }
 
     /**

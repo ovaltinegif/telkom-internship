@@ -57,6 +57,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Education</th>
                                     
                                     @if($status === 'active')
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Division</th>
@@ -79,6 +80,16 @@
                                                     <div class="text-xs text-gray-400">{{ $internship->student->email }}</div>
                                                 </div>
                                             </div>
+                                        </td>
+                                        
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @php
+                                                $eduLevel = $internship->student->studentProfile?->education_level ?? '-';
+                                                $classes = $eduLevel === 'SMK' ? 'bg-purple-100 text-purple-800' : 'bg-indigo-100 text-indigo-800';
+                                            @endphp
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $classes }}">
+                                                {{ $eduLevel }}
+                                            </span>
                                         </td>
                                         
                                         @if($status === 'active')
@@ -132,6 +143,16 @@
                                                         <span class="text-xs text-gray-500 italic bg-gray-50 px-2 py-1 rounded border border-gray-200">Menunggu Upload Pakta</span>
                                                     @endif
                                                 </div>
+                                            @elseif($status === 'finished')
+                                                @php
+                                                    $isSmk = optional($internship->student->studentProfile)->education_level === 'SMK';
+                                                    $hasCertificate = $internship->documents->where('type', 'sertifikat_kelulusan')->count() > 0;
+                                                @endphp
+                                                
+                                                <button @click="$dispatch('open-completion-modal', { id: {{ $internship->id }}, name: '{{ $internship->student->name }}', isSmk: {{ $isSmk ? 'true' : 'false' }} })" 
+                                                    class="text-blue-600 hover:text-blue-900 font-bold text-xs uppercase bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+                                                    {{ $hasCertificate ? 'Update Dokumen' : 'Kirim Sertifikat' }}
+                                                </button>
                                             @else
                                                 <a href="{{ route('admin.internships.edit', $internship->id) }}" class="text-blue-600 hover:text-blue-900 font-bold">Assign</a>
                                             @endif
@@ -153,6 +174,7 @@
         </div>
         
         @include('admin.internships.partials.review-modal')
+        @include('admin.internships.partials.completion-modal')
 
     </div>
 </x-app-layout>

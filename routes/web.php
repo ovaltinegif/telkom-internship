@@ -43,7 +43,7 @@ Route::get('/dashboard', function () {
     }
 
     // 3. Jika MAHASISWA (Student)
-    $internship = Internship::with('documents')->where('student_id', $user->id)->first();
+    $internship = Internship::with('documents')->where('student_id', $user->id)->latest()->first();
 
     // Jika belum ada data magang ATAU status belum active/finished
     if (!$internship || !in_array($internship->status, ['active', 'finished'])) {
@@ -75,12 +75,27 @@ Route::middleware('auth')->group(function () {
     Route::post('/logbooks/upload-image', [LogbookController::class , 'uploadImage'])->name('logbooks.uploadImage');
 
     // route documents (placeholder)
+    Route::get('/documents/transcript', function () {
+        $internship = \App\Models\Internship::with(['evaluation', 'student.studentProfile', 'division'])->where('student_id', Auth::id())->latest()->first();
+        if (!$internship || !$internship->evaluation) {
+            abort(404);
+        }
+        return view('documents.transcript', compact('internship'));
+    })->name('documents.transcript');
+
     Route::get('/documents', function () {
+<<<<<<< HEAD
             $internship = \App\Models\Internship::where('student_id', Auth::id())->first();
             $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
             return view('documents.index', compact('internship', 'isFinished'));
         }
         )->name('documents.index');
+=======
+        $internship = \App\Models\Internship::with('evaluation')->where('student_id', Auth::id())->latest()->first();
+        $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
+        return view('documents.index', compact('internship', 'isFinished'));
+    })->name('documents.index');
+>>>>>>> 5fb21c7c8c45b40bf232642284a138b7e0bee477
 
         // route profile
         Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
@@ -174,6 +189,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
         ->name('admin.internships.approve');
     Route::patch('/internships/{id}/activate', [AdminController::class , 'activateInternship'])
         ->name('admin.internships.activate');
+    Route::patch('/internships/{id}/reject', [AdminController::class, 'rejectInternship'])->name('admin.internships.reject'); // Rejection Route
+    Route::post('/internships/{id}/complete', [AdminController::class, 'completeInternship'])->name('admin.internships.complete'); // Completion Route
 
 });
 
