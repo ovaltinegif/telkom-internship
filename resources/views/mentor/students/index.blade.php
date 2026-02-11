@@ -9,6 +9,52 @@
     <div class="py-12"> 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-slate-100">
+                <div class="px-6 pt-6 pb-0">
+                    {{-- Tabs Navigation --}}
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            {{-- Active Tab --}}
+                            <a href="{{ route('mentor.students.index', ['status' => 'active']) }}" 
+                               class="{{ $status === 'active' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Mahasiswa Aktif
+                                <span class="{{ $status === 'active' ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-900' }} ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium inline-block">
+                                    {{ $activeCount }}
+                                </span>
+                            </a>
+
+                            
+                            {{-- Finished Tab --}}
+                            <a href="{{ route('mentor.students.index', ['status' => 'finished']) }}" 
+                               class="{{ $status === 'finished' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Mahasiswa Selesai
+                                <span class="{{ $status === 'finished' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-900' }} ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium inline-block">
+                                    {{ $finishedCount }}
+                                </span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    {{-- Sub Filter (Only for Active Tab) --}}
+                    @if($status === 'active')
+                        <div class="mt-4 flex gap-2">
+                             <a href="{{ route('mentor.students.index', ['status' => 'active', 'type' => 'all']) }}" 
+                               class="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors {{ $type === 'all' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50' }}">
+                                Semua
+                             </a>
+                             <a href="{{ route('mentor.students.index', ['status' => 'active', 'type' => 'mahasiswa']) }}" 
+                               class="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors {{ $type === 'mahasiswa' ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50' }}">
+                                Mahasiswa ({{ $activeMahasiswaCount }})
+                             </a>
+                             <a href="{{ route('mentor.students.index', ['status' => 'active', 'type' => 'smk']) }}" 
+                               class="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors {{ $type === 'smk' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50' }}">
+                                SMK ({{ $activeSmkCount }})
+                             </a>
+                        </div>
+                    @endif
+                </div>
+
                 <div class="p-6">
                     
                     @if($internships->isEmpty())

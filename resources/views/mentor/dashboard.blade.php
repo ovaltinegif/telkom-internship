@@ -144,20 +144,7 @@
                                                     </svg>
                                                 </a>
 
-                                                @if(!$internship->evaluation)
-                                                    <a href="{{ route('mentor.evaluations.create', $internship->id) }}" 
-                                                       class="text-amber-500 hover:text-amber-600 p-2 rounded-lg hover:bg-amber-50 transition-colors" title="Input Nilai">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                                                        </svg>
-                                                    </a>
-                                                @else
-                                                     <div class="text-emerald-500 p-2" title="Sudah Dinilai">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                @endif
+
                                             </div>
                                         </td>
                                     </tr>

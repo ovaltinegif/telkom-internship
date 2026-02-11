@@ -45,7 +45,7 @@ Route::get('/dashboard', function () {
     }
 
     // 3. Jika MAHASISWA (Student)
-    $internship = Internship::with('documents')->where('student_id', $user->id)->first();
+    $internship = Internship::with('documents')->where('student_id', $user->id)->latest()->first();
 
     // Jika belum ada data magang ATAU status belum active/finished
     if (!$internship || !in_array($internship->status, ['active', 'finished'])) {
@@ -76,8 +76,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/logbooks', [LogbookController::class, 'store'])->name('logbooks.store');
     
     // route documents (placeholder)
+    Route::get('/documents/transcript', function () {
+        $internship = \App\Models\Internship::with(['evaluation', 'student.studentProfile', 'division'])->where('student_id', Auth::id())->latest()->first();
+        if (!$internship || !$internship->evaluation) {
+            abort(404);
+        }
+        return view('documents.transcript', compact('internship'));
+    })->name('documents.transcript');
+
     Route::get('/documents', function () {
-        $internship = \App\Models\Internship::where('student_id', Auth::id())->first();
+        $internship = \App\Models\Internship::with('evaluation')->where('student_id', Auth::id())->latest()->first();
         $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
         return view('documents.index', compact('internship', 'isFinished'));
     })->name('documents.index');
