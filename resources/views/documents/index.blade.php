@@ -61,7 +61,8 @@
                     </button>
                 </div>
 
-                {{-- Extension Request --}}
+                {{-- Extension Request (Hidden if Finished) --}}
+                @if(!$isFinished)
                 <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors">
                     <div class="flex items-center gap-4">
                         <div class="bg-amber-100 text-amber-600 p-3 rounded-xl">
@@ -78,6 +79,41 @@
                         Upload Surat
                     </button>
                 </div>
+                @endif
+
+                {{-- Completion Documents (Visible if Finished or Docs Exist) --}}
+                @php
+                    $certificate = $internship->documents->where('type', 'sertifikat_kelulusan')->first();
+                    $assessment = $internship->documents->where('type', 'laporan_penilaian_pkl')->first();
+                @endphp
+
+                @if($certificate || $assessment)
+                <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-green-100 text-green-600 p-3 rounded-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-800">Dokumen Kelulusan</h4>
+                            <p class="text-sm text-slate-500">Download sertifikat dan penilaian magang</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        @if($certificate)
+                            <a href="{{ Storage::url($certificate->file_path) }}" target="_blank" class="text-sm font-semibold text-green-600 border border-green-200 px-4 py-2 rounded-xl hover:bg-green-50 transition-colors">
+                                Sertifikat
+                            </a>
+                        @endif
+                        @if($assessment)
+                            <a href="{{ Storage::url($assessment->file_path) }}" target="_blank" class="text-sm font-semibold text-green-600 border border-green-200 px-4 py-2 rounded-xl hover:bg-green-50 transition-colors">
+                                Penilaian
+                            </a>
+                        @endif
+                    </div>
+                </div>
+                @endif
 
                 {{-- Final Report --}}
                 <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors">

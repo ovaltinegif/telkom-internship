@@ -174,6 +174,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
         ->name('admin.internships.approve');
     Route::patch('/internships/{id}/activate', [AdminController::class, 'activateInternship'])
         ->name('admin.internships.activate');
+    Route::patch('/internships/{id}/reject', [AdminController::class, 'rejectInternship'])->name('admin.internships.reject'); // Rejection Route
+    Route::post('/internships/{id}/complete', [AdminController::class, 'completeInternship'])->name('admin.internships.complete'); // Completion Route
 
 });
 
