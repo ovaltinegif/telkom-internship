@@ -84,18 +84,10 @@ Route::middleware('auth')->group(function () {
     })->name('documents.transcript');
 
     Route::get('/documents', function () {
-<<<<<<< HEAD
-            $internship = \App\Models\Internship::where('student_id', Auth::id())->first();
-            $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
-            return view('documents.index', compact('internship', 'isFinished'));
-        }
-        )->name('documents.index');
-=======
         $internship = \App\Models\Internship::with('evaluation')->where('student_id', Auth::id())->latest()->first();
         $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
         return view('documents.index', compact('internship', 'isFinished'));
     })->name('documents.index');
->>>>>>> 5fb21c7c8c45b40bf232642284a138b7e0bee477
 
         // route profile
         Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');

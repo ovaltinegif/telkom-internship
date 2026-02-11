@@ -207,11 +207,7 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ \Carbon\Carbon::parse($log->date)->format('d/m/Y') }}</td>
-<<<<<<< HEAD
-                <td class="text-left">{{ Str::limit($log->activity, 150) }}</td>
-=======
-                <td>{!! $log->activity !!}</td>
->>>>>>> 76018bee55aab06aa35edbd3e71f60d94be8c263
+                <td class="text-left">{!! $log->activity !!}</td>
                 <td>{{ ucfirst($log->status) }}</td>
             </tr>
             @empty
