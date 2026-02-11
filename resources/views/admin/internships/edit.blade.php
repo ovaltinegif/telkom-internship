@@ -72,17 +72,7 @@
                                 </select>
                             </div>
 
-                            <!-- Response Letter (Acceptance/Rejection) -->
-                            <div class="col-span-2 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                <label for="response_letter" class="block text-sm font-bold text-blue-800 mb-1">Upload Surat Balasan Penerimaan</label>
-                                <input type="file" name="response_letter" id="response_letter" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
-                                <p class="text-xs text-blue-600 mt-1">Upload surat resmi dari Witel yang akan didownload oleh mahasiswa.</p>
-                                @if($internship->response_letter)
-                                    <p class="text-xs text-green-600 mt-2 font-semibold">
-                                        Sudah ada surat terupload: <a href="{{ Storage::url($internship->response_letter) }}" target="_blank" class="underline">Lihat Surat</a>
-                                    </p>
-                                @endif
-                            </div>
+
 
                             <!-- Document Verification -->
                             <div class="md:col-span-2 mt-4 bg-gray-50 p-4 rounded-lg border">

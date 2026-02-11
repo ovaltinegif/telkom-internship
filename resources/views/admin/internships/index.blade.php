@@ -111,13 +111,27 @@
                                                     Review
                                                 </button>
                                             @elseif($status === 'onboarding')
-                                                <form action="{{ route('admin.internships.activate', $internship->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Verifikasi Pakta Integritas & Aktifkan Magang?')">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button type="submit" class="text-green-600 hover:text-green-900 font-bold">
-                                                        Verifikasi & Activate
-                                                    </button>
-                                                </form>
+                                                <div class="flex flex-col gap-2">
+                                                    @php
+                                                        $signedPact = $internship->documents->where('type', 'pakta_integritas_signed')->first();
+                                                    @endphp
+                                                    
+                                                    @if($signedPact)
+                                                        <a href="{{ Storage::url($signedPact->file_path) }}" target="_blank" class="text-blue-600 hover:text-blue-900 font-bold text-xs flex items-center">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                            Lihat Pakta
+                                                        </a>
+                                                        <form action="{{ route('admin.internships.activate', $internship->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Verifikasi Pakta Integritas & Aktifkan Magang?')">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="text-green-600 hover:text-green-900 font-bold text-xs uppercase bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                                                                Verifikasi & Activate
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="text-xs text-gray-500 italic bg-gray-50 px-2 py-1 rounded border border-gray-200">Menunggu Upload Pakta</span>
+                                                    @endif
+                                                </div>
                                             @else
                                                 <a href="{{ route('admin.internships.edit', $internship->id) }}" class="text-blue-600 hover:text-blue-900 font-bold">Assign</a>
                                             @endif
