@@ -5,73 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transkrip Nilai Magang - {{ $internship->student->name }}</title>
     <style>
-        body { font-family: 'Times New Roman', serif; line-height: 1.5; color: #000; padding: 40px; }
-        .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #000; padding-bottom: 20px; }
-        .header img { max-height: 80px; margin-bottom: 10px; }
-        .header h1 { font-size: 18pt; margin: 0; text-transform: uppercase; }
-        .header h2 { font-size: 14pt; margin: 5px 0 0; font-weight: normal; }
+        body { 
+            font-family: Arial, Helvetica, sans-serif; 
+            font-size: 11pt; 
+            line-height: 1.5; 
+            color: #000; 
+            padding: 40px 60px; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white;
+        }
         
-        .info-table { width: 100%; margin-bottom: 30px; }
-        .info-table td { padding: 5px 0; vertical-align: top; }
-        .info-table .label { width: 150px; font-weight: bold; }
-        .info-table .colon { width: 20px; text-align: center; }
+        /* Header Section */
+        .header-container { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .header-left table { width: 100%; border-collapse: collapse; }
+        .header-left td { padding: 2px 0; vertical-align: top; }
+        .header-left .label { width: 80px; }
+        .header-left .colon { width: 10px; text-align: center; }
+        
+        .logo img { height: 120px; }
+        .logo p { font-size: 8pt; margin: 5px 0 0; font-style: italic; text-align: right; color: #555; }
 
-        .grades-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        .grades-table th, .grades-table td { border: 1px solid #000; padding: 10px; text-align: center; }
-        .grades-table th { background-color: #f0f0f0; font-weight: bold; }
+        /* Addressee */
+        .addressee { margin-bottom: 30px; }
+        .addressee p { margin: 2px 0; }
+
+        /* Body */
+        .content { text-align: justify; margin-bottom: 20px; }
+        
+        /* Student Info Table */
+        .student-info { width: 100%; margin: 20px 0; border-collapse: collapse; }
+        .student-info td { padding: 4px 10px; vertical-align: top; }
+        .student-info .label { width: 20px; text-align: center; font-weight: bold; }
+        .student-info .field { width: 150px; font-weight: bold; }
+        .student-info .val { font-weight: bold; }
+
+        /* Grades Table */
+        .grades-table { width: 100%; border-collapse: collapse; margin: 20px 0 30px; }
+        .grades-table th, .grades-table td { border: 1px solid #000; padding: 8px; text-align: center; font-size: 10pt; }
+        .grades-table th { background-color: #f9f9f9; font-weight: bold; }
         .grades-table td.text-left { text-align: left; }
+        .grades-table .footer-row { font-weight: bold; background-color: #fafafa; }
+        .grades-table .footer-row td { border-top: 2px solid #000; }
 
-        .footer { margin-top: 50px; display: flex; justify-content: flex-end; }
-        .signature { text-align: center; width: 250px; }
-        .signature p { margin: 0; }
-        .signature .date { margin-bottom: 80px; }
-        .signature .name { font-weight: bold; text-decoration: underline; }
+        /* Rules List */
+        .rules-list { margin: 10px 0 30px 20px; }
+        .rules-list li { margin-bottom: 5px; }
 
+        /* Footer / Signature */
+        .footer { margin-top: 40px; }
+        .signature-block { width: 250px; float: left; } /* Or right based on image? Image 3 shows signature at bottom left? No, bottom left usually. Let's check Image 3 again. It has signature on left side? Mentors usually sign on right or left. I'll put it on the left as per standard or image. Wait, image 3 has signature on LEFT. "Hormat Kami, QR, Nama". OK. */
+        
+        .signature-block p { margin: 0; }
+        .signature-block .role { font-weight: bold; margin-bottom: 10px; }
+        .signature-block .qr-code { 
+            width: 100px; height: 100px; margin: 5px 0; 
+        }
+        .signature-block .name { font-weight: bold; text-decoration: underline; }
+        .signature-block .id { font-size: 9pt; }
+
+        /* Print Controls */
         @media print {
-            body { padding: 0; }
-            button { display: none; }
+            body { padding: 0; margin: 20px; box-shadow: none; }
+            .print-btn { display: none; }
         }
 
         .print-btn {
             position: fixed; top: 20px; right: 20px;
-            background: #0ea5e9; color: white; border: none; padding: 10px 20px;
+            background: #e11d48; color: white; border: none; padding: 10px 20px;
             border-radius: 5px; cursor: pointer; font-family: sans-serif; font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: background 0.2s;
         }
-        .print-btn:hover { background: #0284c7; }
+        .print-btn:hover { background: #be123c; }
+
+        /* Watermark (Optional based on image) */
+        .watermark {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 80pt; color: rgba(0,0,0,0.03); z-index: -1; pointer-events: none;
+            white-space: nowrap; font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <button onclick="window.print()" class="print-btn">Cetak Transkrip</button>
+    <button onclick="window.print()" class="print-btn">
+        <svg style="width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:5px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+        Cetak Dokumen
+    </button>
+    
+    <!-- Watermark -->
+    <div class="watermark">{{ $internship->student->studentProfile->nim ?? 'TRANSKRIP' }}</div>
 
-    <div class="header">
-        <h1>Transkrip Nilai Magang</h1>
-        <h2>PT Telkom Indonesia (Persero) Tbk</h2>
+    <!-- Header -->
+    <div class="header-container">
+        <div class="header-left">
+            <table>
+                <tr>
+                    <td class="label">Nomor</td>
+                    <td class="colon">:</td>
+                    <td>{{ 'Tel.' . str_pad($internship->id, 3, '0', STR_PAD_LEFT) . '/HC-00/HK000/' . date('Y') }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Lampiran</td>
+                    <td class="colon">:</td>
+                    <td>1 (satu) lembar</td>
+                </tr>
+                <tr>
+                    <td class="label">Perihal</td>
+                    <td class="colon">:</td>
+                    <td><strong>Transkrip Nilai Magang Industri</strong></td>
+                </tr>
+            </table>
+        </div>
+        <div class="logo">
+            <img src="{{ asset('images/logo-telkom.png') }}" alt="Telkom Indonesia">
+        </div>
     </div>
 
-    <table class="info-table">
-        <tr>
-            <td class="label">Nama Mahasiswa</td>
-            <td class="colon">:</td>
-            <td>{{ $internship->student->name }}</td>
-        </tr>
-        <tr>
-            <td class="label">Asal Instansi</td>
-            <td class="colon">:</td>
-            <td>{{ $internship->student->studentProfile->university }}</td>
-        </tr>
-        <tr>
-            <td class="label">Divisi Magang</td>
-            <td class="colon">:</td>
-            <td>{{ $internship->division->name }}</td>
-        </tr>
-        <tr>
-            <td class="label">Periode Magang</td>
-            <td class="colon">:</td>
-            <td>{{ \Carbon\Carbon::parse($internship->start_date)->format('d F Y') }} - {{ \Carbon\Carbon::parse($internship->end_date)->format('d F Y') }}</td>
-        </tr>
-    </table>
+    <!-- Addressee -->
+    <div class="addressee">
+        <p>Kepada Yth.</p>
+        <p>Ketua Program Studi / Koordinator Magang</p>
+        <p><strong>{{ $internship->student->studentProfile->university ?? 'Universitas' }}</strong></p>
+        <p>di Tempat</p>
+    </div>
 
+    <!-- Body -->
+    <div class="content">
+        <p>Dengan hormat,</p>
+        <p>Sehubungan dengan telah berakhirnya pelaksanaan program Magang Industri mahasiswa berikut:</p>
+        
+        <table class="student-info">
+            <tr>
+                <td class="label">1.</td>
+                <td class="field">Nama</td>
+                <td class="colon">:</td>
+                <td class="val">{{ $internship->student->name }}</td>
+            </tr>
+            <tr>
+                <td class="label"></td>
+                <td class="field">NIM</td>
+                <td class="colon">:</td>
+                <td class="val">{{ $internship->student->studentProfile->nim ?? '-' }}</td>
+            </tr>
+            <tr>
+                <td class="label"></td>
+                <td class="field">Unit Magang</td>
+                <td class="colon">:</td>
+                <td class="val">{{ $internship->division->name }}</td>
+            </tr>
+            <tr>
+                <td class="label"></td>
+                <td class="field">Mentor</td>
+                <td class="colon">:</td>
+                <td class="val">{{ $internship->mentor ? $internship->mentor->name : '-' }}</td>
+            </tr>
+        </table>
+
+        <p>Dengan ini kami sampaikan hasil penilaian akhir (Transkrip Nilai) selama periode magang tanggal <strong>{{ \Carbon\Carbon::parse($internship->start_date)->isoFormat('D MMMM Y') }}</strong> s.d. <strong>{{ \Carbon\Carbon::parse($internship->end_date)->isoFormat('D MMMM Y') }}</strong> sebagai berikut:</p>
+    </div>
+
+    <!-- Grades Table -->
     <table class="grades-table">
         <thead>
             <tr>
@@ -84,37 +179,48 @@
         <tbody>
             <tr>
                 <td>1</td>
-                <td class="text-left">Kedisiplinan & Etika Kerja</td>
+                <td class="text-left">Kedisiplinan & Etika Kerja (Discipline)</td>
                 <td>{{ $internship->evaluation->discipline_score }}</td>
                 <td>{{ $internship->evaluation->discipline_score >= 85 ? 'A' : ($internship->evaluation->discipline_score >= 70 ? 'B' : 'C') }}</td>
             </tr>
             <tr>
                 <td>2</td>
-                <td class="text-left">Kemampuan Teknis & Hasil Kerja</td>
+                <td class="text-left">Kemampuan Teknis & Hasil Kerja (Technical Skill)</td>
                 <td>{{ $internship->evaluation->technical_score }}</td>
                 <td>{{ $internship->evaluation->technical_score >= 85 ? 'A' : ($internship->evaluation->technical_score >= 70 ? 'B' : 'C') }}</td>
             </tr>
             <tr>
                 <td>3</td>
-                <td class="text-left">Komunikasi & Kerjasama Tim</td>
+                <td class="text-left">Komunikasi & Kerjasama Tim (Soft Skill)</td>
                 <td>{{ $internship->evaluation->soft_skill_score }}</td>
                 <td>{{ $internship->evaluation->soft_skill_score >= 85 ? 'A' : ($internship->evaluation->soft_skill_score >= 70 ? 'B' : 'C') }}</td>
             </tr>
-            <tr style="font-weight: bold; background-color: #fafafa;">
-                <td colspan="2" class="text-right" style="padding-right: 20px;">Nilai Akhir Rata-Rata</td>
-                <td style="font-size: 14pt;">{{ $internship->evaluation->final_score }}</td>
-                <td style="font-size: 14pt;">{{ $internship->evaluation->final_score >= 85 ? 'A' : ($internship->evaluation->final_score >= 70 ? 'B' : 'C') }}</td>
+            <tr class="footer-row">
+                <td colspan="2" style="text-align: right; padding-right: 20px;">NILAI AKHIR (FINAL SCORE)</td>
+                <td style="font-size: 11pt;">{{ $internship->evaluation->final_score }}</td>
+                <td style="font-size: 11pt;">{{ $internship->evaluation->final_score >= 85 ? 'A' : ($internship->evaluation->final_score >= 70 ? 'B' : 'C') }}</td>
             </tr>
         </tbody>
     </table>
 
+    <div class="content">
+        <p>Demikian surat keterangan dan transkrip nilai ini kami sampaikan untuk dapat dipergunakan sebagaimana mestinya. Atas perhatian dan kerjasamanya kami ucapkan terima kasih.</p>
+    </div>
+
+    <!-- Footer / Signature -->
     <div class="footer">
-        <div class="signature">
-            <p class="date">Jakarta, {{ now()->format('d F Y') }}</p>
-            <p>Pembimbing Lapangan,</p>
-            <br><br><br>
-            <p class="name">{{ $internship->mentor ? $internship->mentor->name : 'Manager Divisi' }}</p>
-            <p>NIP. ...........................</p>
+        <div class="signature-block">
+            <p>Hormat Kami,</p>
+            <p class="role">Mgr Shared Service & General Support</p>
+            
+            <!-- QR Code Validasi -->
+            @php
+                $qrData = "Validasi Dokumen Magang Telkom - " . $internship->student->name . " - " . ($internship->student->studentProfile->nim ?? '') . " - Nilai Akhir: " . $internship->evaluation->final_score;
+            @endphp
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrData) }}" class="qr-code" alt="QR Code Validasi">
+
+            <p class="name">{{ $internship->mentor ? $internship->mentor->name : 'Lulu Kurnijati, S.T.' }}</p>
+            <p class="id">NIK. {{ $internship->mentor ? '940012' : '......................' }}</p>
         </div>
     </div>
 
