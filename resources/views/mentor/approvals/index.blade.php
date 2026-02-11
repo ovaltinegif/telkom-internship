@@ -47,8 +47,8 @@
                                                 {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
                                             </td>
                                             <td class="px-6 py-4">
-                                                 <div class="text-slate-700 max-w-md line-clamp-2" title="{{ $logbook->activity }}">
-                                                    {{ $logbook->activity }}
+                                                 <div class="text-slate-700 max-w-md line-clamp-2" title="{{ strip_tags($logbook->activity) }}">
+                                                    {{ strip_tags($logbook->activity) }}
                                                  </div>
                                             </td>
                                             <td class="px-6 py-4">

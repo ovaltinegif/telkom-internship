@@ -67,8 +67,8 @@
                                             <td class="px-6 py-4 font-medium text-slate-900">
                                                 {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
                                             </td>
-                                            <td class="px-6 py-4 text-slate-600 max-w-lg" title="{{ $logbook->activity }}">
-                                                {{ Str::limit($logbook->activity, 100) }}
+                                            <td class="px-6 py-4 text-slate-600 max-w-lg" title="{{ strip_tags($logbook->activity) }}">
+                                                {{ Str::limit(strip_tags($logbook->activity), 100) }}
                                             </td>
                                             <td class="px-6 py-4">
                                                 @if($logbook->evidence)
@@ -194,6 +194,7 @@
                                         <th class="px-6 py-4 font-semibold">Tanggal</th>
                                         <th class="px-6 py-4 font-semibold">Waktu Masuk</th>
                                         <th class="px-6 py-4 font-semibold">Waktu Keluar</th>
+                                        <th class="px-6 py-4 font-semibold">Lokasi</th>
                                         <th class="px-6 py-4 font-semibold">Status</th>
                                         <th class="px-6 py-4 font-semibold">Durasi</th>
                                     </tr>
@@ -205,10 +206,22 @@
                                                 {{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}
                                             </td>
                                             <td class="px-6 py-4 text-slate-600 font-mono text-xs">
-                                                {{ $attendance->check_in_time ? \Carbon\Carbon::parse($attendance->check_in_time)->format('H:i') : '-' }}
+                                                {{ $attendance->check_in_time ? \Carbon\Carbon::parse($attendance->check_in_time)->format('H:i:s') : '-' }}
                                             </td>
                                             <td class="px-6 py-4 text-slate-600 font-mono text-xs">
-                                                {{ $attendance->check_out_time ? \Carbon\Carbon::parse($attendance->check_out_time)->format('H:i') : '-' }}
+                                                {{ $attendance->check_out_time ? \Carbon\Carbon::parse($attendance->check_out_time)->format('H:i:s') : '-' }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                @if($attendance->check_in_lat && $attendance->check_in_long)
+                                                    <a href="https://www.google.com/maps?q={{ $attendance->check_in_lat }},{{ $attendance->check_in_long }}" target="_blank" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-xs font-medium">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                                            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.62.829.799 1.654 1.38 2.274 1.766a11.267 11.267 0 00.758.433l.017.007.006.003.002.001.309.066zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+                                                        </svg>
+                                                        Lihat Peta
+                                                    </a>
+                                                @else
+                                                    <span class="text-slate-400 text-xs">-</span>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
@@ -217,7 +230,12 @@
                                             </td>
                                             <td class="px-6 py-4 text-slate-500 text-xs">
                                                 @if($attendance->check_in_time && $attendance->check_out_time)
-                                                    {{ \Carbon\Carbon::parse($attendance->check_in_time)->diffInHours(\Carbon\Carbon::parse($attendance->check_out_time)) }} Jam
+                                                    @php
+                                                        $start = \Carbon\Carbon::parse($attendance->check_in_time);
+                                                        $end = \Carbon\Carbon::parse($attendance->check_out_time);
+                                                        $diff = $start->diff($end);
+                                                    @endphp
+                                                    {{ $diff->h }} Jam {{ $diff->i }} Menit
                                                 @else
                                                     -
                                                 @endif

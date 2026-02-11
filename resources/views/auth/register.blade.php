@@ -200,11 +200,59 @@
                        <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="start_date" class="!text-xs text-gray-500" :value="__('Mulai Magang')" />
-                                <x-text-input type="date" name="start_date" x-model="startDate" class="w-full mt-1" x-bind:class="{'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500': errors.start_date}" required @input="errors.start_date = false" />
+                                <div class="relative">
+                                     <x-text-input 
+                                        type="text" 
+                                        name="start_date" 
+                                        x-model="startDate" 
+                                        x-init="flatpickr($el, { 
+                                            dateFormat: 'Y-m-d', 
+                                            altInput: true, 
+                                            altFormat: 'd/m/Y', 
+                                            locale: 'id', 
+                                            disableMobile: true,
+                                            onChange: function(selectedDates, dateStr, instance) {
+                                                startDate = dateStr;
+                                                errors.start_date = false;
+                                            }
+                                        })"
+                                        class="w-full mt-1 bg-white" 
+                                        x-bind:class="{'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500': errors.start_date}" 
+                                        required 
+                                        placeholder="dd/mm/yyyy"
+                                    />
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <x-input-label for="end_date" class="!text-xs text-gray-500" :value="__('Selesai Magang')" />
-                                <x-text-input type="date" name="end_date" x-model="endDate" class="w-full mt-1" x-bind:class="{'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500': errors.end_date}" required @input="errors.end_date = false" />
+                                <div class="relative">
+                                    <x-text-input 
+                                        type="text" 
+                                        name="end_date" 
+                                        x-model="endDate" 
+                                        x-init="flatpickr($el, { 
+                                            dateFormat: 'Y-m-d', 
+                                            altInput: true, 
+                                            altFormat: 'd/m/Y', 
+                                            locale: 'id', 
+                                            disableMobile: true,
+                                            onChange: function(selectedDates, dateStr, instance) {
+                                                endDate = dateStr;
+                                                errors.end_date = false;
+                                            }
+                                        })"
+                                        class="w-full mt-1 bg-white" 
+                                        x-bind:class="{'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500': errors.end_date}" 
+                                        required 
+                                        placeholder="dd/mm/yyyy"
+                                    />
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
                             </div>
                        </div>
                        <div>

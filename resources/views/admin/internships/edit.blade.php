@@ -107,13 +107,33 @@
                              <!-- Start Date -->
                              <div>
                                 <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
-                                <input type="date" name="start_date" id="start_date" value="{{ \Carbon\Carbon::parse($internship->start_date)->format('Y-m-d') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm" required>
+                                <input 
+                                    type="text" 
+                                    name="start_date" 
+                                    id="start_date" 
+                                    value="{{ \Carbon\Carbon::parse($internship->start_date)->format('Y-m-d') }}" 
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm bg-white" 
+                                    required
+                                    placeholder="dd/mm/yyyy"
+                                    x-data
+                                    x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })"
+                                >
                             </div>
 
                             <!-- End Date -->
                             <div>
                                 <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
-                                <input type="date" name="end_date" id="end_date" value="{{ \Carbon\Carbon::parse($internship->end_date)->format('Y-m-d') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm" required>
+                                <input 
+                                    type="text" 
+                                    name="end_date" 
+                                    id="end_date" 
+                                    value="{{ \Carbon\Carbon::parse($internship->end_date)->format('Y-m-d') }}" 
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm bg-white" 
+                                    required
+                                    placeholder="dd/mm/yyyy"
+                                    x-data
+                                    x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })"
+                                >
                             </div>
                         </div>
 

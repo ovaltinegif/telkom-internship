@@ -92,8 +92,8 @@
                                                 <td class="px-6 py-4 font-medium text-slate-900">
                                                     {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
                                                 </td>
-                                                <td class="px-6 py-4 text-slate-600 max-w-xs truncate" title="{{ $logbook->activity }}">
-                                                    {{ Str::limit($logbook->activity, 40) }}
+                                                <td class="px-6 py-4 text-slate-600 max-w-xs truncate" title="{{ strip_tags($logbook->activity) }}">
+                                                    {{ Str::limit(strip_tags($logbook->activity), 40) }}
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     @if($logbook->evidence)
@@ -195,7 +195,7 @@
                                     <div class="text-center space-y-4 w-full">
                                         <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 w-full mb-2">
                                             <p class="text-emerald-200 text-xs uppercase tracking-wide font-bold">Waktu Masuk</p>
-                                            <p class="text-2xl font-mono text-emerald-400 font-bold mt-1">{{ $todayAttendance->check_in_time }}</p>
+                                            <p class="text-2xl font-mono text-emerald-400 font-bold mt-1">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i:s') }}</p>
                                         </div>
 
                                         <form action="{{ route('attendance.checkOut') }}" method="POST" id="checkOutForm" class="w-full">
@@ -221,11 +221,11 @@
                                         <div class="grid grid-cols-2 gap-3 w-full mt-4">
                                             <div class="bg-white/5 rounded-lg p-3 text-center">
                                                 <p class="text-xs text-indigo-300 uppercase">Masuk</p>
-                                                <p class="font-mono text-sm font-bold text-white">{{ $todayAttendance->check_in_time }}</p>
+                                                <p class="font-mono text-sm font-bold text-white">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i:s') }}</p>
                                             </div>
                                             <div class="bg-white/5 rounded-lg p-3 text-center">
                                                 <p class="text-xs text-indigo-300 uppercase">Keluar</p>
-                                                <p class="font-mono text-sm font-bold text-white">{{ $todayAttendance->check_out_time }}</p>
+                                                <p class="font-mono text-sm font-bold text-white">{{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('H:i:s') }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -262,7 +262,12 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Tanggal</label>
-                            <input type="date" name="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                            <div class="relative">
+                                <input type="text" name="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white" required placeholder="dd/mm/yyyy" id="permission_date">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                </div>
+                            </div>
                         </div>
 
                         <div>
@@ -414,5 +419,16 @@
     }
     // Call once on load
     getLocation(); 
+
+    // Init Flatpickr for Permission Date
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#permission_date", {
+            dateFormat: 'Y-m-d',
+            altInput: true,
+            altFormat: 'd/m/Y',
+            locale: 'id',
+            disableMobile: true
+        });
+    });
     </script>
 </x-app-layout>

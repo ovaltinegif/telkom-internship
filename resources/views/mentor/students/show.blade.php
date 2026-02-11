@@ -105,7 +105,9 @@
                                         {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4 align-top">
-                                        <p class="text-slate-800 leading-relaxed">{{ $logbook->activity }}</p>
+                                        <div class="text-slate-800 leading-relaxed trix-content">
+                                            {!! $logbook->activity !!}
+                                        </div>
                                         @if($logbook->mentor_note)
                                             <div class="mt-2 text-xs font-medium text-indigo-600 bg-indigo-50 p-2 rounded-lg border border-indigo-100 inline-block">
                                                 💬 Note: {{ $logbook->mentor_note }}

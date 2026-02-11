@@ -81,7 +81,7 @@ class LogbookController extends Controller
             'date' => 'required|date',
             'activity' => 'required|string',
             'evidence' => 'nullable|file|mimes:jpg,png,pdf,jpeg|max:5120', // Maksimal 5MB
-        ]); 
+        ]);
 
         // 2. Cari Data Internship milik User yang sedang login
         // Asumsinya 1 user mahasiswa punya 1 data internship
@@ -117,6 +117,20 @@ class LogbookController extends Controller
         ]);
 
         // 5. Redirect kembali dengan pesan sukses
+        // 5. Redirect kembali dengan pesan sukses
         return redirect()->route('dashboard')->with('success', 'Logbook berhasil disimpan!');
+    }
+
+    /**
+     * Handle Image Upload from Trix Editor.
+     */
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('logbook-images', 'public');
+            return response()->json([
+                'url' => Storage::url($path),
+            ]);
+        }
     }
 }

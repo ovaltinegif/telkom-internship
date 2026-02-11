@@ -34,7 +34,21 @@
                         {{-- Tanggal Lahir --}}
                         <div class="mb-4">
                             <x-input-label for="date_of_birth" :value="__('Tanggal Lahir')" />
-                            <x-text-input id="date_of_birth" class="block mt-1 w-full" type="date" name="date_of_birth" required />
+                            <div class="relative">
+                                <x-text-input 
+                                    id="date_of_birth" 
+                                    class="block mt-1 w-full bg-white" 
+                                    type="text" 
+                                    name="date_of_birth" 
+                                    required 
+                                    placeholder="dd/mm/yyyy"
+                                    x-data
+                                    x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })"
+                                />
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -70,13 +84,41 @@
                             {{-- Tanggal Mulai --}}
                             <div>
                                 <x-input-label for="start_date" :value="__('Tanggal Mulai')" />
-                                <x-text-input id="start_date" class="block mt-1 w-full" type="date" name="start_date" required />
+                                <div class="relative">
+                                    <x-text-input 
+                                        id="start_date" 
+                                        class="block mt-1 w-full bg-white" 
+                                        type="text" 
+                                        name="start_date" 
+                                        required 
+                                        placeholder="dd/mm/yyyy"
+                                        x-data
+                                        x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })"
+                                    />
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
                             </div>
 
                             {{-- Tanggal Selesai --}}
                             <div>
                                 <x-input-label for="end_date" :value="__('Tanggal Selesai')" />
-                                <x-text-input id="end_date" class="block mt-1 w-full" type="date" name="end_date" required />
+                                <div class="relative">
+                                    <x-text-input 
+                                        id="end_date" 
+                                        class="block mt-1 w-full bg-white" 
+                                        type="text" 
+                                        name="end_date" 
+                                        required 
+                                        placeholder="dd/mm/yyyy"
+                                        x-data
+                                        x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })"
+                                    />
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

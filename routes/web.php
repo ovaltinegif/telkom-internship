@@ -11,16 +11,14 @@ use App\Http\Controllers\AttendanceController;
 use App\Models\Attendance;
 use Carbon\Carbon;
 use App\Http\Controllers\MentorController;
-use App\Http\Controllers\AdminController; 
-use App\Http\Controllers\EvaluationController; 
+use App\Http\Controllers\AdminController;
+
+use App\Http\Controllers\EvaluationController;
+
 use App\Models\User;
 use App\Models\Division;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
+/* |-------------------------------------------------------------------------- | Web Routes |-------------------------------------------------------------------------- */
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,12 +47,12 @@ Route::get('/dashboard', function () {
 
     // Jika belum ada data magang ATAU status belum active/finished
     if (!$internship || !in_array($internship->status, ['active', 'finished'])) {
-        return view('pending', ['internship' => $internship]); 
+        return view('pending', ['internship' => $internship]);
     }
 
     // Jika sudah ada data magang dan status active/finished, tampilkan dashboard mahasiswa normal
     $logbooks = DailyLogbook::where('internship_id', $internship->id)->latest()->get();
-    
+
     $todayAttendance = Attendance::where('internship_id', $internship->id)
         ->whereDate('date', Carbon::today())
         ->first();
@@ -71,10 +69,11 @@ Route::get('/dashboard', function () {
 // Group Route untuk Mahasiswa (Logbook, Profile, dll)
 Route::middleware('auth')->group(function () {
     // route logbook
-    Route::get('/activity', [LogbookController::class, 'index'])->name('logbooks.index');
-    Route::get('/logbooks/create', [LogbookController::class, 'create'])->name('logbooks.create');
-    Route::post('/logbooks', [LogbookController::class, 'store'])->name('logbooks.store');
-    
+    Route::get('/activity', [LogbookController::class , 'index'])->name('logbooks.index');
+    Route::get('/logbooks/create', [LogbookController::class , 'create'])->name('logbooks.create');
+    Route::post('/logbooks', [LogbookController::class , 'store'])->name('logbooks.store');
+    Route::post('/logbooks/upload-image', [LogbookController::class , 'uploadImage'])->name('logbooks.uploadImage');
+
     // route documents (placeholder)
     Route::get('/documents/transcript', function () {
         $internship = \App\Models\Internship::with(['evaluation', 'student.studentProfile', 'division'])->where('student_id', Auth::id())->latest()->first();
@@ -85,102 +84,110 @@ Route::middleware('auth')->group(function () {
     })->name('documents.transcript');
 
     Route::get('/documents', function () {
+<<<<<<< HEAD
+            $internship = \App\Models\Internship::where('student_id', Auth::id())->first();
+            $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
+            return view('documents.index', compact('internship', 'isFinished'));
+        }
+        )->name('documents.index');
+=======
         $internship = \App\Models\Internship::with('evaluation')->where('student_id', Auth::id())->latest()->first();
         $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
         return view('documents.index', compact('internship', 'isFinished'));
     })->name('documents.index');
+>>>>>>> 5fb21c7c8c45b40bf232642284a138b7e0bee477
 
-    // route profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    // route attendance atau absen
-    Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
-    Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.checkOut');
-    Route::post('/attendance/permission', [AttendanceController::class, 'permission'])->name('attendance.permission');
-    Route::get('/attendance/report', [AttendanceController::class, 'downloadReport'])->name('attendance.report');
+        // route profile
+        Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class , 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class , 'destroy'])->name('profile.destroy');
 
-    // route documents
-    Route::post('/documents/extension', [App\Http\Controllers\DocumentController::class, 'storeExtension'])->name('documents.storeExtension');
-    Route::post('/documents/final-report', [App\Http\Controllers\DocumentController::class, 'storeFinalReport'])->name('documents.storeFinalReport');
-    Route::post('/documents/pakta-integritas', [App\Http\Controllers\DocumentController::class, 'storePaktaIntegritas'])->name('documents.storePaktaIntegritas');
-}); 
+        // route attendance atau absen
+        Route::post('/attendance/check-in', [AttendanceController::class , 'checkIn'])->name('attendance.checkIn');
+        Route::post('/attendance/check-out', [AttendanceController::class , 'checkOut'])->name('attendance.checkOut');
+        Route::post('/attendance/permission', [AttendanceController::class , 'permission'])->name('attendance.permission');
+        Route::get('/attendance/report', [AttendanceController::class , 'downloadReport'])->name('attendance.report');
+
+        // route documents
+        Route::post('/documents/extension', [App\Http\Controllers\DocumentController::class , 'storeExtension'])->name('documents.storeExtension');
+        Route::post('/documents/final-report', [App\Http\Controllers\DocumentController::class , 'storeFinalReport'])->name('documents.storeFinalReport');
+        Route::post('/documents/pakta-integritas', [App\Http\Controllers\DocumentController::class , 'storePaktaIntegritas'])->name('documents.storePaktaIntegritas');    });
+
 
 // Group Route Khusus Mentor (Dashboard Mentor)
 Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
     // Dashboard Mentor
     Route::get('/dashboard', function () {
-        $pendingLogbooks = \App\Models\DailyLogbook::where('status', 'pending')->count();
-        
-        $internships = \App\Models\Internship::with('student')
-            ->where('mentor_id', \Illuminate\Support\Facades\Auth::id())
-            ->get();
+            $pendingLogbooks = \App\Models\DailyLogbook::where('status', 'pending')->count();
 
-        return view('mentor.dashboard', compact('pendingLogbooks', 'internships'));
-    })->name('mentor.dashboard');  
+            $internships = \App\Models\Internship::with('student')
+                ->where('mentor_id', \Illuminate\Support\Facades\Auth::id())
+                ->get();
 
-    // List Mahasiswa
-    Route::get('/my-students', [MentorController::class, 'myStudents'])->name('mentor.students.index');
-    
-    // Detail Mahasiswa
-    Route::get('/student/{id}', [MentorController::class, 'showStudent'])->name('mentor.students.show');
-    
-    // Action Approve/Reject Logbook
-    Route::patch('/logbook/{id}/update', [MentorController::class, 'updateLogbook'])->name('mentor.logbook.update');
+            return view('mentor.dashboard', compact('pendingLogbooks', 'internships'));
+        }
+        )->name('mentor.dashboard');
 
-    // Halaman Approval (List Pending Logbook)
-    Route::get('/approvals', [MentorController::class, 'approvals'])->name('mentor.approvals.index');
+        // List Mahasiswa
+        Route::get('/my-students', [MentorController::class , 'myStudents'])->name('mentor.students.index');
 
-    // Fitur penilaian mahasiswa
-    Route::get('/evaluation/{internship}/create', [EvaluationController::class, 'create'])->name('mentor.evaluations.create');
-    Route::post('/evaluation/{internship}', [EvaluationController::class, 'store'])->name('mentor.evaluations.store');
-});
+        // Detail Mahasiswa
+        Route::get('/student/{id}', [MentorController::class , 'showStudent'])->name('mentor.students.show');
+
+        // Action Approve/Reject Logbook
+        Route::patch('/logbook/{id}/update', [MentorController::class , 'updateLogbook'])->name('mentor.logbook.update');
+
+        // Halaman Approval (List Pending Logbook)
+        Route::get('/approvals', [MentorController::class , 'approvals'])->name('mentor.approvals.index');
+
+        // Fitur penilaian mahasiswa
+        Route::get('/evaluation/{internship}/create', [EvaluationController::class , 'create'])->name('mentor.evaluations.create');
+        Route::post('/evaluation/{internship}', [EvaluationController::class , 'store'])->name('mentor.evaluations.store');    });
 
 // Group Route Khusus ADMIN (Dengan Perbaikan Syntax)
 Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
-    
+
     // Dashboard Admin
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])
+    Route::get('/dashboard', [AdminController::class , 'dashboard'])
         ->name('admin.dashboard');
-    
+
     // Fitur Setup Magang
-    Route::get('/internship/create', [AdminController::class, 'createInternship'])
+    Route::get('/internship/create', [AdminController::class , 'createInternship'])
         ->name('admin.internship.create');
 
-    Route::post('/internship', [AdminController::class, 'storeInternship'])
+    Route::post('/internship', [AdminController::class , 'storeInternship'])
         ->name('admin.internship.store');
 
     // Fitur Data User
-    Route::get('/users', [AdminController::class, 'users'])
+    Route::get('/users', [AdminController::class , 'users'])
         ->name('admin.users.index');
 
     // Fitur Kelola Divisi
-    Route::get('/divisions', [AdminController::class, 'divisions'])
+    Route::get('/divisions', [AdminController::class , 'divisions'])
         ->name('admin.divisions.index');
-    Route::get('/divisions/create', [AdminController::class, 'createDivision'])
+    Route::get('/divisions/create', [AdminController::class , 'createDivision'])
         ->name('admin.divisions.create');
-    Route::post('/divisions', [AdminController::class, 'storeDivision'])
+    Route::post('/divisions', [AdminController::class , 'storeDivision'])
         ->name('admin.divisions.store');
-    Route::get('/divisions/{id}/edit', [AdminController::class, 'editDivision'])
+    Route::get('/divisions/{id}/edit', [AdminController::class , 'editDivision'])
         ->name('admin.divisions.edit');
-    Route::put('/divisions/{id}', [AdminController::class, 'updateDivision'])
+    Route::put('/divisions/{id}', [AdminController::class , 'updateDivision'])
         ->name('admin.divisions.update');
-    Route::delete('/divisions/{id}', [AdminController::class, 'destroyDivision'])
+    Route::delete('/divisions/{id}', [AdminController::class , 'destroyDivision'])
         ->name('admin.divisions.destroy');
 
     // Fitur Monitoring Magang
-    Route::get('/internships', [AdminController::class, 'internships'])
+    Route::get('/internships', [AdminController::class , 'internships'])
         ->name('admin.internships.index');
-    Route::get('/internships/{id}/edit', [AdminController::class, 'editInternship'])
+    Route::get('/internships/{id}/edit', [AdminController::class , 'editInternship'])
         ->name('admin.internships.edit');
-    Route::put('/internships/{id}', [AdminController::class, 'updateInternship'])
+    Route::put('/internships/{id}', [AdminController::class , 'updateInternship'])
         ->name('admin.internships.update');
-    
+
     // Workflow Actions
-    Route::patch('/internships/{id}/approve', [AdminController::class, 'approveInternship'])
+    Route::patch('/internships/{id}/approve', [AdminController::class , 'approveInternship'])
         ->name('admin.internships.approve');
-    Route::patch('/internships/{id}/activate', [AdminController::class, 'activateInternship'])
+    Route::patch('/internships/{id}/activate', [AdminController::class , 'activateInternship'])
         ->name('admin.internships.activate');
     Route::patch('/internships/{id}/reject', [AdminController::class, 'rejectInternship'])->name('admin.internships.reject'); // Rejection Route
     Route::post('/internships/{id}/complete', [AdminController::class, 'completeInternship'])->name('admin.internships.complete'); // Completion Route
@@ -192,10 +199,10 @@ Route::get('/debug-db', function () {
     $user = \App\Models\User::with('studentProfile')->first();
     $divisions = \App\Models\Division::all();
     return response()->json([
-        'message' => 'Cek Data Database',
-        'user_data' => $user,
-        'divisions' => $divisions
+    'message' => 'Cek Data Database',
+    'user_data' => $user,
+    'divisions' => $divisions
     ]);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

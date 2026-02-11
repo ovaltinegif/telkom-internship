@@ -12,6 +12,10 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_red.css">
+
     <style>
         /* Custom CSS untuk Telkom Witel Internship Theme */
         body {
@@ -109,6 +113,10 @@
     </main>
 
     @include('partials.footer')
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 
 </body>
 </html>                                                                                                                                                                                                                     
