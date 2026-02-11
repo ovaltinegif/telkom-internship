@@ -11,7 +11,8 @@
         
         <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #d32f2f; margin: 20px 0;">
             <p style="margin: 0;"><strong>Langkah Selanjutnya:</strong></p>
-            <p>Silakan datang ke kantor Telkom (Bagian HC / Sekuriti) untuk mengambil <strong>ID Card Magang</strong> Anda.</p>
+            <p>silakan mengambil ID Card di unit Shared Service & General Support.</p>
+            <p>Terima kasih.</p>
         </div>
 
         <p>Tanggal Mulai Magang: {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }}</p>

@@ -10,23 +10,46 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     
-                    {{-- Tabs Navigation --}}
-                    <div class="flex border-b border-gray-200 mb-6">
-                        <a href="{{ route('admin.internships.index', ['status' => 'pending']) }}" 
-                           class="mr-8 py-4 text-sm font-medium border-b-2 transition-colors duration-200 {{ $status === 'pending' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                            Applicants 
-                            <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ $pendingCount }}</span>
-                        </a>
-                        <a href="{{ route('admin.internships.index', ['status' => 'onboarding']) }}" 
-                           class="mr-8 py-4 text-sm font-medium border-b-2 transition-colors duration-200 {{ $status === 'onboarding' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                            Onboarding
-                             <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ $onboardingCount }}</span>
-                        </a>
-                        <a href="{{ route('admin.internships.index', ['status' => 'active']) }}" 
-                           class="mr-8 py-4 text-sm font-medium border-b-2 transition-colors duration-200 {{ $status === 'active' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                            Active
-                             <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ $activeCount }}</span>
-                        </a>
+                    {{-- Standard Tabs Navigation --}}
+                    <div class="border-b border-gray-200 mb-6">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            {{-- Applicants --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'pending']) }}" 
+                               class="{{ $status === 'pending' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Applicants
+                                <span class="{{ $status === 'pending' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-900' }} hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                                    {{ $pendingCount }}
+                                </span>
+                            </a>
+
+                            {{-- Onboarding --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'onboarding']) }}" 
+                               class="{{ $status === 'onboarding' ? 'border-yellow-500 text-yellow-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Onboarding
+                                <span class="{{ $status === 'onboarding' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-900' }} hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                                    {{ $onboardingCount }}
+                                </span>
+                            </a>
+
+                            {{-- Active --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'active']) }}" 
+                               class="{{ $status === 'active' ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Active
+                                <span class="{{ $status === 'active' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-900' }} hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                                    {{ $activeCount }}
+                                </span>
+                            </a>
+
+                            {{-- Finished --}}
+                            <a href="{{ route('admin.internships.index', ['status' => 'finished']) }}" 
+                               class="{{ $status === 'finished' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Finished
+                            </a>
+                        </nav>
                     </div>
 
                     <div class="overflow-x-auto">

@@ -45,7 +45,7 @@ Route::get('/dashboard', function () {
     }
 
     // 3. Jika MAHASISWA (Student)
-    $internship = Internship::where('student_id', $user->id)->first();
+    $internship = Internship::with('documents')->where('student_id', $user->id)->first();
 
     // Jika belum ada data magang ATAU status belum active/finished
     if (!$internship || !in_array($internship->status, ['active', 'finished'])) {
@@ -96,6 +96,7 @@ Route::middleware('auth')->group(function () {
     // route documents
     Route::post('/documents/extension', [App\Http\Controllers\DocumentController::class, 'storeExtension'])->name('documents.storeExtension');
     Route::post('/documents/final-report', [App\Http\Controllers\DocumentController::class, 'storeFinalReport'])->name('documents.storeFinalReport');
+    Route::post('/documents/pakta-integritas', [App\Http\Controllers\DocumentController::class, 'storePaktaIntegritas'])->name('documents.storePaktaIntegritas');
 }); 
 
 // Group Route Khusus Mentor (Dashboard Mentor)

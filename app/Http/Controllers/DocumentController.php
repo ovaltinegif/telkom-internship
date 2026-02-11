@@ -74,4 +74,33 @@ class DocumentController extends Controller
 
         return back()->with('success', 'Laporan akhir berhasil diunggah.');
     }
+    // Upload Signed Pakta Integritas (Onboarding)
+    public function storePaktaIntegritas(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:pdf|max:5120',
+        ]);
+
+        $internship = Internship::where('student_id', Auth::id())->first();
+
+        if (!$internship) {
+            return back()->with('error', 'Data magang tidak ditemukan.');
+        }
+
+        if ($internship->status !== 'onboarding') {
+            return back()->with('error', 'Status magang tidak valid untuk mengunggah Pakta Integritas.');
+        }
+
+        $path = $request->file('file')->store('documents/student/pakta', 'public');
+
+        Document::create([
+            'internship_id' => $internship->id,
+            'name' => 'Pakta Integritas (Signed)',
+            'type' => 'pakta_integritas_signed',
+            'file_path' => $path,
+            'is_verified' => false,
+        ]);
+
+        return back()->with('success', 'Pakta Integritas berhasil diunggah. Menunggu verifikasi Admin.');
+    }
 }

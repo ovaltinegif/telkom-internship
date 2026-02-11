@@ -191,12 +191,42 @@ class AdminController extends Controller
     /**
      * Approve Internship (Pending -> Onboarding)
      */
-    public function approveInternship($id)
+    /**
+     * Approve Internship (Pending -> Onboarding)
+     * Admin uploads Surprise Jawaban & Pakta Integrity Template
+     */
+    public function approveInternship(Request $request, $id)
     {
         $internship = Internship::findOrFail($id);
         
         if ($internship->status !== 'pending') {
             return back()->with('error', 'Status magang tidak valid untuk disetujui.');
+        }
+
+        $request->validate([
+            'surat_jawaban' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'pakta_integritas_link' => 'required|url',
+        ]);
+
+        // Upload Surat Jawaban
+        if ($request->hasFile('surat_jawaban')) {
+            $path = $request->file('surat_jawaban')->store('documents/admin', 'public');
+            $internship->documents()->create([
+                'name' => 'Surat Jawaban Magang',
+                'type' => 'surat_jawaban',
+                'file_path' => $path,
+                'is_verified' => true
+            ]);
+        }
+
+        // Store Google Docs Link
+        if ($request->filled('pakta_integritas_link')) {
+            $internship->documents()->create([
+                'name' => 'Link Template Pakta Integritas',
+                'type' => 'pakta_integritas',
+                'file_path' => $request->pakta_integritas_link, // Storing URL directly
+                'is_verified' => true
+            ]);
         }
 
         $internship->update(['status' => 'onboarding']);
@@ -212,10 +242,21 @@ class AdminController extends Controller
      */
     public function activateInternship($id)
     {
-        $internship = Internship::findOrFail($id);
+        $internship = Internship::with('documents')->findOrFail($id);
 
         if ($internship->status !== 'onboarding') {
             return back()->with('error', 'Status magang tidak valid untuk diaktivasi.');
+        }
+
+        // Check if student has uploaded signed pakta integritas
+        $hasSignedPact = $internship->documents()->where('type', 'pakta_integritas_signed')->exists();
+
+        // Note: You can uncomment this if you want to strictly enforce it. 
+        // For now, allow admin to override or maybe just warn? 
+        // Based on user request "jika aktor mahasiswa... sudah isi pakta integritas ... lalu admin approve", it implies admin makes the call.
+        // But the system should probably check.
+        if (!$hasSignedPact) {
+             return back()->with('error', 'Mahasiswa belum mengupload Pakta Integritas yang sudah ditandatangani.');
         }
 
         $internship->update(['status' => 'active']);
