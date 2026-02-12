@@ -105,6 +105,7 @@
                             <div>
                                 <x-input-label for="password" :value="__('Password')" />
                                 <x-text-input id="password" class="block mt-1 w-full bg-gray-50 focus:bg-white transition" x-bind:class="{'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500': errors.password}" type="password" name="password" required @input="errors.password = false" />
+                                <p class="text-xs text-gray-500 mt-1">Minimal 8 karakter</p>
                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
                             </div>
                             <div>
@@ -502,6 +503,12 @@
                         if (!password) this.errors.password = true;
                         if (!confirm) this.errors.password_confirmation = true;
                         if (!term) this.errors.term = true;
+
+                        if (password && password.length < 8) {
+                             this.errors.password = true;
+                             this.showError('Password minimal 8 karakter.');
+                             return;
+                        }
 
                         if (Object.keys(this.errors).length > 0) {
                             this.showError('Harap lengkapi semua data dan setujui ketentuan.');
