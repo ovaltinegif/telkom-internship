@@ -72,18 +72,20 @@ Route::middleware('auth')->group(function () {
 
     // route documents (placeholder)
     Route::get('/documents/transcript', function () {
-        $internship = \App\Models\Internship::with(['evaluation', 'student.studentProfile', 'division'])->where('student_id', Auth::id())->latest()->first();
-        if (!$internship || !$internship->evaluation) {
-            abort(404);
+            $internship = \App\Models\Internship::with(['evaluation', 'student.studentProfile', 'division'])->where('student_id', Auth::id())->latest()->first();
+            if (!$internship || !$internship->evaluation) {
+                abort(404);
+            }
+            return view('documents.transcript', compact('internship'));
         }
-        return view('documents.transcript', compact('internship'));
-    })->name('documents.transcript');
+        )->name('documents.transcript');
 
-    Route::get('/documents', function () {
-        $internship = \App\Models\Internship::with('evaluation')->where('student_id', Auth::id())->latest()->first();
-        $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
-        return view('documents.index', compact('internship', 'isFinished'));
-    })->name('documents.index');
+        Route::get('/documents', function () {
+            $internship = \App\Models\Internship::with('evaluation')->where('student_id', Auth::id())->latest()->first();
+            $isFinished = $internship && \Carbon\Carbon::now()->gte($internship->end_date);
+            return view('documents.index', compact('internship', 'isFinished'));
+        }
+        )->name('documents.index');
 
         // route profile
         Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
@@ -99,7 +101,8 @@ Route::middleware('auth')->group(function () {
         // route documents
         Route::post('/documents/extension', [App\Http\Controllers\DocumentController::class , 'storeExtension'])->name('documents.storeExtension');
         Route::post('/documents/final-report', [App\Http\Controllers\DocumentController::class , 'storeFinalReport'])->name('documents.storeFinalReport');
-        Route::post('/documents/pakta-integritas', [App\Http\Controllers\DocumentController::class , 'storePaktaIntegritas'])->name('documents.storePaktaIntegritas');    });
+        Route::post('/documents/pakta-integritas', [App\Http\Controllers\DocumentController::class , 'storePaktaIntegritas'])->name('documents.storePaktaIntegritas');
+    });
 
 
 // Group Route Khusus Mentor (Dashboard Mentor)
@@ -130,7 +133,8 @@ Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
 
         // Fitur penilaian mahasiswa
         Route::get('/evaluation/{internship}/create', [EvaluationController::class , 'create'])->name('mentor.evaluations.create');
-        Route::post('/evaluation/{internship}', [EvaluationController::class , 'store'])->name('mentor.evaluations.store');    });
+        Route::post('/evaluation/{internship}', [EvaluationController::class , 'store'])->name('mentor.evaluations.store');
+    });
 
 // Group Route Khusus ADMIN (Dengan Perbaikan Syntax)
 Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
@@ -177,9 +181,13 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
         ->name('admin.internships.approve');
     Route::patch('/internships/{id}/activate', [AdminController::class , 'activateInternship'])
         ->name('admin.internships.activate');
-    Route::patch('/internships/{id}/reject', [AdminController::class, 'rejectInternship'])->name('admin.internships.reject'); // Rejection Route
-    Route::post('/internships/{id}/complete', [AdminController::class, 'completeInternship'])->name('admin.internships.complete'); // Completion Route
+    Route::patch('/internships/{id}/reject', [AdminController::class , 'rejectInternship'])->name('admin.internships.reject'); // Rejection Route
+    Route::post('/internships/{id}/complete', [AdminController::class , 'completeInternship'])->name('admin.internships.complete'); // Completion Route
 
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4a203f27dcf05ba3003e4355925065c91be510ba
 require __DIR__ . '/auth.php';
