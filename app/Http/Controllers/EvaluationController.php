@@ -23,7 +23,7 @@ class EvaluationController extends Controller
     // Menyimpan Data Nilai ke Database
     public function store(Request $request, Internship $internship)
     {
-        // dd('store hit'); // DEBUG
+
         // Validasi input
         $validated = $request->validate([
             'discipline_score' => 'required|integer|min:0|max:100',
@@ -45,7 +45,7 @@ class EvaluationController extends Controller
             'feedback'         => $request->feedback,
         ]);
 
-        // PERBAIKAN DISINI: Redirect ke detail mahasiswa, bukan dashboard umum
+        // Redirect ke detail mahasiswa
         return redirect()->route('mentor.students.show', $internship->student_id)
             ->with('success', 'Nilai berhasil disimpan!');
     }
