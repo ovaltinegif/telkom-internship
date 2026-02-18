@@ -10,7 +10,7 @@ Sistem Manajemen Magang (Internship Management System) adalah aplikasi berbasis 
 
 Aplikasi ini menggunakan sistem *Role-Based Access Control* (RBAC) dengan tiga peran utama:
 
-* **Mahasiswa (Student)**
+* **Mahasiswa/SMK (Student)**
     * Melakukan absensi masuk (*check-in*) dan pulang (*check-out*) harian.
     * Mengisi dan mengelola logbook aktivitas harian.
     * Melihat status magang dan dokumen pendukung lainnya.
