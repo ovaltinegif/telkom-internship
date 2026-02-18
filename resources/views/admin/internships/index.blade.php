@@ -119,29 +119,32 @@
                                         @if($status === 'active')
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @php
-                                                    $endDate = \Carbon\Carbon::parse($internship->end_date);
+                                                    $endDate = \Carbon\Carbon::parse($internship->end_date)->endOfDay();
                                                     $now = \Carbon\Carbon::now()->startOfDay();
-                                                    $end = $endDate->copy()->startOfDay();
-                                                    $days = $now->diffInDays($end, false);
+                                                    $diff = $now->diff($endDate);
+                                                    $isExpired = $now->gt($endDate);
+                                                    $remainingDays = $now->diffInDays($endDate, false);
                                                 @endphp
 
                                                 <div class="flex items-center gap-3">
                                                     <div class="flex-shrink-0">
-                                                        <div class="p-2 rounded-lg {{ $days > 10 ? 'bg-blue-50 text-blue-600' : ($days > 0 ? 'bg-orange-50 text-orange-600' : 'bg-gray-100 text-gray-500') }}">
+                                                        <div class="p-2 rounded-lg {{ $remainingDays > 10 ? 'bg-blue-50 text-blue-600' : ($remainingDays > 0 ? 'bg-orange-50 text-orange-600' : 'bg-gray-100 text-gray-500') }}">
                                                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                             </svg>
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        @if($days > 0)
-                                                            <div class="text-sm font-bold {{ $days > 10 ? 'text-gray-900' : 'text-orange-600' }}">
-                                                                {{ $days }} Hari Lagi
+                                                        @if(!$isExpired)
+                                                            <div class="text-sm font-bold {{ $remainingDays > 10 ? 'text-gray-900' : 'text-orange-600' }}">
+                                                                @if($diff->y > 0) {{ $diff->y }} Th @endif
+                                                                @if($diff->m > 0) {{ $diff->m }} Bln @endif
+                                                                @if($diff->d > 0) {{ $diff->d }} Hr @endif
                                                             </div>
                                                             <div class="text-xs text-gray-500 font-medium">
                                                                 Selesai {{ $endDate->format('d M Y') }}
                                                             </div>
-                                                        @elseif($days == 0)
+                                                        @elseif($remainingDays == 0)
                                                             <div class="text-sm font-bold text-orange-600">
                                                                 Hari Terakhir
                                                             </div>
@@ -151,9 +154,6 @@
                                                         @else
                                                             <div class="text-sm font-bold text-gray-500">
                                                                 Selesai
-                                                            </div>
-                                                            <div class="text-xs text-gray-400 font-medium">
-                                                                Lewat {{ abs($days) }} Hari
                                                             </div>
                                                         @endif
                                                     </div>
@@ -180,6 +180,7 @@
                                                 {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}
                                             </td>
                                         @endif
+
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @if($status === 'pending')
                                                 <button @click="$dispatch('open-review-modal', { 
