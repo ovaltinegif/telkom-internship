@@ -30,13 +30,18 @@
                     } else {
                         // Student Menu
                         $internship = Auth::user()->internship;
-                        $isActive = $internship && in_array($internship->status, ['active', 'finished']);
+                        $isActive = $internship && $internship->status === 'active';
+                        $isFinished = $internship && $internship->status === 'finished';
 
-                        $links = [
-                            ['name' => 'My Dashboard', 'route' => 'dashboard', 'active' => request()->routeIs('dashboard')],
-                        ];
+                        $links = [];
 
-                        if ($isActive) {
+                        // 1. Dashboard (Only for Active / New users)
+                        if (!$isFinished) {
+                            $links[] = ['name' => 'My Dashboard', 'route' => 'dashboard', 'active' => request()->routeIs('dashboard')];
+                        }
+
+                        // 2. Activity & Document (Active OR Finished)
+                        if ($isActive || $isFinished) {
                             $links[] = ['name' => 'Activity', 'route' => 'logbooks.index', 'active' => request()->routeIs('logbooks.index')];
                             $links[] = ['name' => 'Document', 'route' => 'documents.index', 'active' => request()->routeIs('documents.index')];
                         }

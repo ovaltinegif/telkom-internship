@@ -24,6 +24,15 @@ class DocumentController extends Controller
             return back()->with('error', 'Data magang tidak ditemukan.');
         }
 
+        // Check if extension already exists
+        $existingExtension = Document::where('internship_id', $internship->id)
+            ->where('type', 'perpanjangan_magang')
+            ->exists();
+
+        if ($existingExtension) {
+            return back()->with('error', 'Anda sudah mengajukan perpanjangan magang. Pengajuan hanya dapat dilakukan satu kali.');
+        }
+
         $path = $request->file('file')->store('extensions', 'public');
 
         Document::create([

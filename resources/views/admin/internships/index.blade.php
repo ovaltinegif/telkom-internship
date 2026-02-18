@@ -49,6 +49,20 @@
                                       whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
                                 Finished
                             </a>
+
+                            {{-- Extension Requests (Conditional) --}}
+                            @if($extensionCount > 0 || $status === 'extension')
+                            <a href="{{ route('admin.internships.index', ['status' => 'extension']) }}" 
+                               class="{{ $status === 'extension' ? 'border-amber-500 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
+                                      whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
+                                Extended
+                                @if($extensionCount > 0)
+                                <span class="{{ $status === 'extension' ? 'bg-amber-100 text-amber-600' : 'bg-red-100 text-red-600' }} ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium inline-block">
+                                    {{ $extensionCount }}
+                                </span>
+                                @endif
+                            </a>
+                            @endif
                         </nav>
                     </div>
 
@@ -145,6 +159,19 @@
                                                     class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                     {{ $hasCertificate ? 'Update Dokumen' : 'Kirim Sertifikat' }}
                                                 </button>
+                                            @elseif($status === 'extension')
+                                                @php
+                                                    $extensionDoc = $internship->documents->where('type', 'perpanjangan_magang')->first();
+                                                @endphp
+                                                <button @click="$dispatch('open-extension-modal', { 
+                                                    id: {{ $internship->id }}, 
+                                                    name: '{{ $internship->student->name }}', 
+                                                    current_end_date: '{{ $internship->end_date }}',
+                                                    doc_url: '{{ $extensionDoc ? Storage::url($extensionDoc->file_path) : '#' }}'
+                                                })" 
+                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 shadow-sm">
+                                                    Review Extension
+                                                </button>
                                             @else
                                                 <a href="{{ route('admin.internships.edit', $internship->id) }}" 
                                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
@@ -171,6 +198,7 @@
         @include('admin.internships.partials.review-modal')
         @include('admin.internships.partials.completion-modal')
         @include('admin.internships.partials.activation-modal')
+        @include('admin.internships.partials.extension-modal')
 
     </div>
 </x-app-layout>

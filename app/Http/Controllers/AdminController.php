@@ -178,22 +178,38 @@ class AdminController extends Controller
     {
         $status = $request->query('status', 'pending'); // Default to 'pending' (Applicants)
 
-        $internships = Internship::with(['student.studentProfile', 'mentor', 'division'])
-            ->where('status', $status)
-            ->latest()
-            ->paginate(10)
-            ->appends(['status' => $status]);
-
         // Counts for Tabs
         $pendingCount = Internship::where('status', 'pending')->count();
         $onboardingCount = Internship::where('status', 'onboarding')->count();
         $activeCount = Internship::where('status', 'active')->count();
+        
+        // Count Pending Extensions (Active/Finished internships with unverified 'perpanjangan_magang' doc)
+        $extensionCount = Internship::whereHas('documents', function($q) {
+            $q->where('type', 'perpanjangan_magang')->where('is_verified', false);
+        })->count();
+
+        // Filter Logic
+        if ($status === 'extension') {
+             $internships = Internship::with(['student.studentProfile', 'mentor', 'division', 'documents'])
+                ->whereHas('documents', function($q) {
+                    $q->where('type', 'perpanjangan_magang')->where('is_verified', false);
+                })
+                ->latest()
+                ->paginate(10)
+                ->appends(['status' => $status]);
+        } else {
+             $internships = Internship::with(['student.studentProfile', 'mentor', 'division'])
+                ->where('status', $status)
+                ->latest()
+                ->paginate(10)
+                ->appends(['status' => $status]);
+        }
 
         // Pass Divisions and Mentors for Dropdowns in Review Modal
         $divisions = Division::all();
         $mentors = User::where('role', 'mentor')->get();
 
-        return view('admin.internships.index', compact('internships', 'status', 'pendingCount', 'onboardingCount', 'activeCount', 'divisions', 'mentors'));
+        return view('admin.internships.index', compact('internships', 'status', 'pendingCount', 'onboardingCount', 'activeCount', 'extensionCount', 'divisions', 'mentors'));
     }
 
     /**
@@ -412,5 +428,62 @@ class AdminController extends Controller
 
         return redirect()->route('admin.internships.index', ['status' => 'active'])
             ->with('success', 'Data magang berhasil diperbarui!');
+    }
+    /**
+     * Approve Extension Request
+     */
+    public function approveExtension(Request $request, $id)
+    {
+        $request->validate([
+            'new_end_date' => 'required|date|after:today',
+        ]);
+
+        $internship = Internship::findOrFail($id);
+        
+        // Find the extension document
+        $extensionDoc = $internship->documents()->where('type', 'perpanjangan_magang')->where('is_verified', false)->first();
+
+        if (!$extensionDoc) {
+             return back()->with('error', 'Dokumen perpanjangan tidak ditemukan atau sudah diverifikasi.');
+        }
+
+        // Update Internship End Date
+        $internship->update([
+            'end_date' => $request->new_end_date,
+            // If it was finished, set back to active? Or keep as active?
+            // Usually extensions happen when active. If finished, maybe re-activate?
+            'status' => 'active' 
+        ]);
+
+        // Mark Document as Verified
+        $extensionDoc->update(['is_verified' => true]);
+
+        // Optional: Send Notification Email
+
+        return redirect()->route('admin.internships.index', ['status' => 'extension'])
+            ->with('success', 'Perpanjangan magang disetujui! Tanggal selesai diperbarui.');
+    }
+
+    /**
+     * Reject Extension Request
+     */
+    public function rejectExtension(Request $request, $id)
+    {
+        $internship = Internship::findOrFail($id);
+        
+        // Find the extension document
+        $extensionDoc = $internship->documents()->where('type', 'perpanjangan_magang')->where('is_verified', false)->first();
+
+        if ($extensionDoc) {
+             // Delete the document so they can re-upload? Or keep it as rejected record?
+             // For now, let's delete it so they can try again if user wants.
+             // OR keep it but maybe add a 'rejected' flag. 
+             // Simplest: Delete document.
+             \Illuminate\Support\Facades\Storage::disk('public')->delete($extensionDoc->file_path);
+             $extensionDoc->delete();
+        }
+
+        return redirect()->route('admin.internships.index', ['status' => 'extension'])
+            ->with('success', 'Pengajuan perpanjangan ditolak.');
     }
 }

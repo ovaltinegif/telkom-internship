@@ -46,6 +46,11 @@ Route::get('/dashboard', function () {
         return view('pending', ['internship' => $internship]);
     }
 
+    // Jika FINISHED -> Redirect ke Activity (Logbook), jangan tampilkan Dashboard
+    if ($internship->status === 'finished') {
+        return redirect()->route('logbooks.index');
+    }
+
     // Jika sudah ada data magang dan status active/finished, tampilkan dashboard mahasiswa normal
     $logbooks = DailyLogbook::where('internship_id', $internship->id)->latest()->get();
 
@@ -183,6 +188,10 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
         ->name('admin.internships.activate');
     Route::patch('/internships/{id}/reject', [AdminController::class , 'rejectInternship'])->name('admin.internships.reject'); // Rejection Route
     Route::post('/internships/{id}/complete', [AdminController::class , 'completeInternship'])->name('admin.internships.complete'); // Completion Route
+
+    // Extension Workflow
+    Route::patch('/internships/{id}/approve-extension', [AdminController::class , 'approveExtension'])->name('admin.internships.approveExtension');
+    Route::patch('/internships/{id}/reject-extension', [AdminController::class , 'rejectExtension'])->name('admin.internships.rejectExtension');
 
 });
 

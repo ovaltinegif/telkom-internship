@@ -34,17 +34,33 @@ class AuthenticatedSessionController extends Controller
         if ($user->hasrole('student')) {
             $internship = \App\Models\Internship::where('student_id', $user->id)->first();
 
-            // If internship exists and status is finished or dropped, block login
-            if ($internship && in_array($internship->status, ['finished', 'dropped'])) {
-                Auth::guard('web')->logout();
+            // If internship exists
+            if ($internship) {
+                // 1. Block 'dropped' status immediately
+                if ($internship->status === 'dropped') {
+                    Auth::guard('web')->logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return back()->withErrors(['email' => 'Akun Anda telat dinonaktifkan (Dropped).']);
+                }
 
-                $request->session()->invalidate();
+                // 2. Handle 'finished' status
+                if ($internship->status === 'finished') {
+                    // Check if more than 1 month has passed since end_date
+                    $endDate = \Carbon\Carbon::parse($internship->end_date);
+                    $limitDate = $endDate->copy()->addMonth();
 
-                $request->session()->regenerateToken();
+                    if (now()->gt($limitDate)) {
+                        Auth::guard('web')->logout();
+                        $request->session()->invalidate();
+                        $request->session()->regenerateToken();
 
-                return back()->withErrors([
-                    'email' => 'Masa magang Anda telah selesai. Silakan buat akun baru untuk mendaftar kembali.',
-                ]);
+                        return back()->withErrors([
+                            'email' => 'Masa akses akun Anda telah berakhir (lebih dari 1 bulan setelah magang selesai).',
+                        ]);
+                    }
+                    // If within 1 month, ALLOW login (proceed to redirect logic below)
+                }
             }
             
             // Allow if:

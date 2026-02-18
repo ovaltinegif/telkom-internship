@@ -39,15 +39,11 @@
                                 <h3 class="text-lg font-bold text-slate-800">Semua Aktivitas</h3>
                                 <p class="text-sm text-slate-500 mt-1">Pantau terus perkembangan magangmu</p>
                             </div>
-                            @can('create', App\Models\DailyLogbook::class)
-                            <a href="{{ route('logbooks.create') }}" class="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-red-500/30 transition-all">
-                                + Isi Logbook
-                            </a>
-                            @endcan
-                            {{-- Fallback button if policy not used --}}
-                            <a href="{{ route('logbooks.create') }}" class="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-red-500/30 transition-all">
-                                + Isi Logbook
-                            </a>
+                            @if(Auth::user()->internship && Auth::user()->internship->status === 'active')
+                                <a href="{{ route('logbooks.create') }}" class="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-red-500/30 transition-all">
+                                    + Isi Logbook
+                                </a>
+                            @endif
                         </div>
     
                         <div class="overflow-x-auto">
