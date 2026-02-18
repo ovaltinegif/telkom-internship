@@ -5,7 +5,7 @@
             
             {{-- Left: Logo --}}
             <div class="shrink-0 flex items-center gap-4">
-                <a href="{{ Auth::user()->role === 'mentor' ? route('mentor.dashboard') : route('dashboard') }}" class="flex items-center gap-3 group">
+                <a href="{{ auth()->user()->role === 'mentor' ? route('mentor.dashboard') : route('dashboard') }}" class="flex items-center gap-3 group">
                    <img src="{{ asset('images/logo-telkom.png') }}" class="h-16 w-auto" alt="Telkom Indonesia">
                 </a>
             </div>
@@ -13,7 +13,7 @@
             {{-- Center: Modern Navigation Links --}}
             <div class="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
                  @php
-                    $roleFn = fn($r) => Auth::user()->role === $r;
+                    $roleFn = fn($r) => auth()->user()->role === $r;
                     $links = [];
                     if ($roleFn('mentor')) {
                         $links = [

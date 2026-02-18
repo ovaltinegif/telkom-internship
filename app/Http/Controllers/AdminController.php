@@ -26,7 +26,12 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.dashboard', compact('totalStudents', 'totalMentors', 'activeInternships', 'recentInternships'));
+        // Ambil data perpanjangan magang yang pending
+        $pendingExtensions = \App\Models\InternshipExtension::with(['internship.student', 'internship.division', 'internship.mentor'])
+            ->where('status', 'pending')
+            ->get();
+
+        return view('admin.dashboard', compact('totalStudents', 'totalMentors', 'activeInternships', 'recentInternships', 'pendingExtensions'));
     }
 
     /**
@@ -182,23 +187,24 @@ class AdminController extends Controller
         $pendingCount = Internship::where('status', 'pending')->count();
         $onboardingCount = Internship::where('status', 'onboarding')->count();
         $activeCount = Internship::where('status', 'active')->count();
-        
-        // Count Pending Extensions (Active/Finished internships with unverified 'perpanjangan_magang' doc)
-        $extensionCount = Internship::whereHas('documents', function($q) {
-            $q->where('type', 'perpanjangan_magang')->where('is_verified', false);
-        })->count();
+
+        // Count Pending Extensions
+        $extensionCount = \App\Models\InternshipExtension::where('status', 'pending')->count();
 
         // Filter Logic
         if ($status === 'extension') {
-             $internships = Internship::with(['student.studentProfile', 'mentor', 'division', 'documents'])
-                ->whereHas('documents', function($q) {
-                    $q->where('type', 'perpanjangan_magang')->where('is_verified', false);
-                })
+            $internships = Internship::whereHas('extensions', function ($q) {
+                $q->where('status', 'pending');
+            })
+                ->with(['student.studentProfile', 'mentor', 'division', 'extensions' => function ($q) {
+                $q->where('status', 'pending');
+            }])
                 ->latest()
                 ->paginate(10)
                 ->appends(['status' => $status]);
-        } else {
-             $internships = Internship::with(['student.studentProfile', 'mentor', 'division'])
+        }
+        else {
+            $internships = Internship::with(['student.studentProfile', 'mentor', 'division'])
                 ->where('status', $status)
                 ->latest()
                 ->paginate(10)
@@ -404,39 +410,26 @@ class AdminController extends Controller
         $divisions = Division::all();
         return view('admin.internships.show', compact('internship', 'mentors', 'divisions'));
     }
+
     /**
      * Approve Extension Request
      */
-    public function approveExtension(Request $request, $id)
+    public function approveExtension($id)
     {
-        $request->validate([
-            'new_end_date' => 'required|date|after:today',
+        $extension = \App\Models\InternshipExtension::findOrFail($id);
+
+        // Update extension status
+        $extension->update([
+            'status' => 'approved'
         ]);
 
-        $internship = Internship::findOrFail($id);
-        
-        // Find the extension document
-        $extensionDoc = $internship->documents()->where('type', 'perpanjangan_magang')->where('is_verified', false)->first();
-
-        if (!$extensionDoc) {
-             return back()->with('error', 'Dokumen perpanjangan tidak ditemukan atau sudah diverifikasi.');
-        }
-
-        // Update Internship End Date
+        // Update internship end date
+        $internship = $extension->internship;
         $internship->update([
-            'end_date' => $request->new_end_date,
-            // If it was finished, set back to active? Or keep as active?
-            // Usually extensions happen when active. If finished, maybe re-activate?
-            'status' => 'active' 
+            'end_date' => $extension->new_end_date
         ]);
 
-        // Mark Document as Verified
-        $extensionDoc->update(['is_verified' => true]);
-
-        // Optional: Send Notification Email
-
-        return redirect()->route('admin.internships.index', ['status' => 'extension'])
-            ->with('success', 'Perpanjangan magang disetujui! Tanggal selesai diperbarui.');
+        return back()->with('success', 'Pengajuan perpanjangan berhasil disetujui.');
     }
 
     /**
@@ -444,21 +437,13 @@ class AdminController extends Controller
      */
     public function rejectExtension(Request $request, $id)
     {
-        $internship = Internship::findOrFail($id);
-        
-        // Find the extension document
-        $extensionDoc = $internship->documents()->where('type', 'perpanjangan_magang')->where('is_verified', false)->first();
+        $extension = \App\Models\InternshipExtension::findOrFail($id);
 
-        if ($extensionDoc) {
-             // Delete the document so they can re-upload? Or keep it as rejected record?
-             // For now, let's delete it so they can try again if user wants.
-             // OR keep it but maybe add a 'rejected' flag. 
-             // Simplest: Delete document.
-             \Illuminate\Support\Facades\Storage::disk('public')->delete($extensionDoc->file_path);
-             $extensionDoc->delete();
-        }
+        $extension->update([
+            'status' => 'rejected',
+            'reason' => $request->reason // Optional reason
+        ]);
 
-        return redirect()->route('admin.internships.index', ['status' => 'extension'])
-            ->with('success', 'Pengajuan perpanjangan ditolak.');
+        return back()->with('success', 'Pengajuan perpanjangan berhasil ditolak.');
     }
 }

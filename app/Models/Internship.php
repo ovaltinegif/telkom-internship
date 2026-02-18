@@ -16,18 +16,18 @@ class Internship extends Model
 
     public function student()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(User::class , 'student_id');
     }
 
     public function mentor()
     {
-        return $this->belongsTo(User::class, 'mentor_id');
+        return $this->belongsTo(User::class , 'mentor_id');
     }
 
     public function division()
     {
         return $this->belongsTo(Division::class);
-    }   
+    }
 
     public function project()
     {
@@ -49,5 +49,10 @@ class Internship extends Model
     public function documents()
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function extensions()
+    {
+        return $this->hasMany(InternshipExtension::class);
     }
 }

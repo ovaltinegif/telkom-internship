@@ -51,16 +51,14 @@
                             </a>
 
                             {{-- Extension Requests (Conditional) --}}
-                            @if($extensionCount > 0 || $status === 'extension')
+                            @if($extensionCount > 0)
                             <a href="{{ route('admin.internships.index', ['status' => 'extension']) }}" 
                                class="{{ $status === 'extension' ? 'border-amber-500 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
                                       whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
                                 Extended
-                                @if($extensionCount > 0)
                                 <span class="{{ $status === 'extension' ? 'bg-amber-100 text-amber-600' : 'bg-red-100 text-red-600' }} ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium inline-block">
                                     {{ $extensionCount }}
                                 </span>
-                                @endif
                             </a>
                             @endif
                         </nav>
@@ -78,6 +76,10 @@
 
                                     @if($status === 'active')
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sisa Durasi</th>
+                                    @elseif($status === 'extension')
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current End</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">New End</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
                                     @else
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
@@ -157,6 +159,19 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                        @elseif($status === 'extension')
+                                            @php
+                                                $extension = $internship->extensions->first();
+                                            @endphp
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                                                {{ \Carbon\Carbon::parse($extension->new_end_date)->format('d M Y') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ \Carbon\Carbon::parse($extension->new_start_date)->diffInDays(\Carbon\Carbon::parse($extension->new_end_date)->addDay()) }} Hari
+                                            </td>
                                         @else
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {{ \Carbon\Carbon::parse($internship->start_date)->format('d M Y') }}
@@ -176,6 +191,35 @@
                                                     class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
                                                     Review Application
                                                 </button>
+                                            @elseif($status === 'extension')
+                                                 <div class="flex items-center gap-2 justify-end">
+                                                    @php
+                                                        $extension = $internship->extensions->first();
+                                                    @endphp
+                                                    <a href="{{ Storage::url($extension->file_path) }}" target="_blank" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-2 rounded-lg" title="Lihat Surat">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                                        </svg>
+                                                    </a>
+                                                    <form id="approve-extension-form-{{ $extension->id }}" action="{{ route('admin.internships.approveExtension', $extension->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="button" onclick="confirmApproveExtension('{{ $extension->id }}')" class="text-green-600 hover:text-green-900 bg-green-50 p-2 rounded-lg" title="Setujui">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                    <form id="reject-extension-form-{{ $extension->id }}" action="{{ route('admin.internships.rejectExtension', $extension->id) }}" method="POST" class="flex items-center">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="button" onclick="confirmRejectExtension('{{ $extension->id }}')" class="text-red-600 hover:text-red-900 bg-red-50 p-2 rounded-lg" title="Tolak">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             @elseif($status === 'onboarding')
                                                 <div class="flex flex-col space-y-2">
                                                     @php
@@ -216,7 +260,9 @@
                                                     id: {{ $internship->id }}, 
                                                     name: '{{ $internship->student->name }}', 
                                                     current_end_date: '{{ $internship->end_date }}',
-                                                    doc_url: '{{ $extensionDoc ? Storage::url($extensionDoc->file_path) : '#' }}'
+                                                    doc_url: '{{ $extensionDoc ? Storage::url($extensionDoc->file_path) : '#' }}',
+                                                    university: '{{ optional($internship->student->studentProfile)->university ?? '-' }}',
+                                                    major: '{{ optional($internship->student->studentProfile)->major ?? '-' }}'
                                                 })" 
                                                     class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 shadow-sm">
                                                     Review Extension
@@ -250,4 +296,104 @@
         @include('admin.internships.partials.extension-modal')
 
     </div>
+    @push('scripts')
+    <script>
+        function confirmApproveExtension(id) {
+            Swal.fire({
+                title: 'Setujui Perpanjangan?',
+                text: "Durasi magang akan diperbarui sesuai tanggal yang diajukan.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Setujui',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('approve-extension-form-' + id).submit();
+                }
+            })
+        }
+
+        function confirmRejectExtension(id) {
+            Swal.fire({
+                title: 'Tolak Perpanjangan?',
+                text: "Pengajuan perpanjangan akan ditolak dan status kembali menjadi aktif.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Tolak',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('reject-extension-form-' + id).submit();
+                }
+            })
+        }
+
+        function submitExtensionModalApprove() {
+            const dateInput = document.getElementById('new_end_date');
+            if (!dateInput.value) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Perhatian',
+                    text: 'Mohon isi tanggal selesai baru.',
+                    confirmButtonColor: '#f59e0b'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Konfirmasi Persetujuan',
+                text: "Apakah Anda yakin ingin menyetujui perpanjangan ini?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Setujui',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('extension-modal-approve-form').submit();
+                }
+            })
+        }
+
+        function submitExtensionModalReject() {
+            Swal.fire({
+                title: 'Konfirmasi Penolakan',
+                text: "Apakah Anda yakin ingin menolak perpanjangan ini? Dokumen akan dihapus.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Tolak',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('extension-modal-reject-form').submit();
+                }
+            })
+        }
+
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+            });
+        @endif
+    </script>
+    @endpush
 </x-app-layout>

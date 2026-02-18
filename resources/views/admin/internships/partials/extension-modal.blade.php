@@ -1,6 +1,6 @@
 {{-- Extension Review Modal --}}
-<div x-data="{ open: false, id: null, name: '', current_end_date: '', doc_url: '#' }"
-     @open-extension-modal.window="open = true; id = $event.detail.id; name = $event.detail.name; current_end_date = $event.detail.current_end_date; doc_url = $event.detail.doc_url"
+<div x-data="{ open: false, id: null, name: '', university: '', major: '', current_end_date: '', doc_url: '#' }"
+     @open-extension-modal.window="open = true; id = $event.detail.id; name = $event.detail.name; university = $event.detail.university; major = $event.detail.major; current_end_date = $event.detail.current_end_date; doc_url = $event.detail.doc_url"
      class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
     <div x-show="open" 
@@ -34,12 +34,17 @@
                             <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Review Perpanjangan Magang</h3>
                             <div class="mt-2">
                                 <p class="text-sm text-gray-500">
-                                    Tinjau pengajuan perpanjangan magang untuk <span class="font-bold text-gray-800" x-text="name"></span>.
+                                    Pengajuan oleh <span class="font-bold text-gray-800" x-text="name"></span>
                                 </p>
+                                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                                    <span class="bg-gray-100 px-2 py-0.5 rounded" x-text="university"></span>
+                                    <span>&bull;</span>
+                                    <span class="bg-gray-100 px-2 py-0.5 rounded" x-text="major"></span>
+                                </div>
                                 
                                 <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
                                     <div class="flex justify-between items-center mb-2">
-                                        <span class="text-sm text-gray-500">Tanggal Selesai Saat Ini:</span>
+                                        <span class="text-sm text-gray-500">Selesai Saat Ini:</span>
                                         <span class="text-sm font-semibold text-gray-800" x-text="current_end_date"></span>
                                     </div>
                                     <div class="flex justify-between items-center">
@@ -55,7 +60,7 @@
                                 </div>
 
                                 {{-- Approval Form --}}
-                                <form :action="`{{ url('/admin/internships') }}/${id}/approve-extension`" method="POST" class="mt-4">
+                                <form id="extension-modal-approve-form" :action="`{{ url('/admin/internships') }}/${id}/approve-extension`" method="POST" class="mt-4">
                                     @csrf
                                     @method('PATCH')
                                     
@@ -64,7 +69,7 @@
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm">
                                     
                                     <div class="mt-5 sm:flex sm:flex-row-reverse">
-                                        <button type="submit" class="inline-flex w-full justify-center rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 sm:ml-3 sm:w-auto">
+                                        <button type="button" onclick="submitExtensionModalApprove()" class="inline-flex w-full justify-center rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 sm:ml-3 sm:w-auto">
                                             Setujui & Perbarui
                                         </button>
                                         <button type="button" @click="open = false" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
@@ -76,10 +81,10 @@
                                 {{-- Rejection Form (Separate) --}}
                                 <div class="mt-6 border-t border-gray-100 pt-4">
                                     <p class="text-xs text-gray-400 mb-2">Jika dokumen tidak valid, Anda dapat menolak pengajuan ini.</p>
-                                    <form :action="`{{ url('/admin/internships') }}/${id}/reject-extension`" method="POST">
+                                    <form id="extension-modal-reject-form" :action="`{{ url('/admin/internships') }}/${id}/reject-extension`" method="POST">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menolak pengajuan ini? Dokumen akan dihapus.')" 
+                                        <button type="button" onclick="submitExtensionModalReject()" 
                                                 class="text-sm text-red-600 hover:text-red-500 font-medium underline">
                                             Tolak Pengajuan
                                         </button>
