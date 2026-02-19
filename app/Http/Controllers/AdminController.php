@@ -48,10 +48,14 @@ class AdminController extends Controller
             ->whereYear('created_at', Carbon::now()->year)
             ->count();
 
+        // Count pending applicants (new)
+        $pendingApplicants = Internship::where('status', 'pending')->count();
+
         return view('admin.dashboard', compact(
             'totalStudents', 'totalMentors', 'activeInternships',
             'recentInternships', 'pendingExtensions',
-            'studentGrowth', 'mentorGrowth', 'internshipGrowth'
+            'studentGrowth', 'mentorGrowth', 'internshipGrowth',
+            'pendingApplicants'
         ));
     }
 
@@ -146,8 +150,6 @@ class AdminController extends Controller
             'password' => 'required|string|min:8',
             'nik' => 'required|string|unique:mentor_profiles',
             'position' => 'required|string|max:255',
-            'division_id' => 'required|exists:divisions,id',
-            'phone_number' => 'nullable|string|max:20',
         ]);
 
         // 1. Create User
@@ -163,8 +165,6 @@ class AdminController extends Controller
             'user_id' => $user->id,
             'nik' => $request->nik,
             'position' => $request->position,
-            'division_id' => $request->division_id,
-            'phone_number' => $request->phone_number,
         ]);
 
         return redirect()->route('admin.users.index', ['role' => 'mentor'])
@@ -188,6 +188,11 @@ class AdminController extends Controller
 
         // Count Pending Extensions
         $extensionCount = \App\Models\InternshipExtension::where('status', 'pending')->count();
+
+        // Redirect if trying to view extensions but none exist
+        if ($status === 'extension' && $extensionCount === 0) {
+            return redirect()->route('admin.internships.index', ['status' => 'pending']);
+        }
 
         // Filter Logic
         if ($status === 'extension') {
@@ -315,7 +320,7 @@ class AdminController extends Controller
             // 'division_id' => $request->division_id, // Already set during approval
         ]);
 
-        $message = 'Magang diaktivasi! Mahasiswa sekarang Active dengan Mentor & Divisi terpilih.';
+        $message = 'Program magang berhasil diaktifkan. Mahasiswa kini berstatus Active dengan Mentor & Divisi terpilih.';
 
         // Trigger Email Notification (Account Active, Silakan Ambil ID Card)
         if ($internship->student && $internship->student->email) {

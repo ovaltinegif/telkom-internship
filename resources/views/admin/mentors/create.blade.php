@@ -81,24 +81,7 @@
                                 <x-text-input id="position" class="block mt-1 w-full" type="text" name="position" :value="old('position')" placeholder="Contoh: Officer 3 Digital" required />
                             </div>
 
-                             {{-- Field: Divisi --}}
-                            <div>
-                                <x-input-label for="division_id" :value="__('Unit / Divisi')" class="text-slate-700 font-semibold mb-1" />
-                                <select name="division_id" id="division_id" class="block mt-1 w-full border-slate-300 focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm">
-                                    <option value="">-- Pilih Unit --</option>
-                                    @foreach($divisions as $division)
-                                        <option value="{{ $division->id }}" {{ old('division_id') == $division->id ? 'selected' : '' }}>
-                                            {{ $division->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
 
-                            {{-- Field: No HP --}}
-                            <div>
-                                <x-input-label for="phone_number" :value="__('Nomor Handphone (Optional)')" class="text-slate-700 font-semibold mb-1" />
-                                <x-text-input id="phone_number" class="block mt-1 w-full" type="text" name="phone_number" :value="old('phone_number')" />
-                            </div>
 
                         </div>
 

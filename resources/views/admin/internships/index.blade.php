@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12" x-data="{ activeTab: '{{ $status }}' }">
+    <div class="py-12" x-data>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
@@ -68,23 +68,24 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Education</th>
+                                    <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                    <th scope="col" class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Education</th>
                                     
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Division</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mentor</th>
+                                    <th scope="col" class="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Division</th>
+                                    <th scope="col" class="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mentor</th>
 
-                                    @if($status === 'active')
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sisa Durasi</th>
-                                    @elseif($status === 'extension')
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current End</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">New End</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
-                                    @else
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
-                                    @endif
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    {{-- Unified Date Column (20%) --}}
+                                    <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        @if($status === 'active')
+                                            Sisa Durasi
+                                        @elseif($status === 'extension')
+                                            Extension Details
+                                        @else
+                                            Duration
+                                        @endif
+                                    </th>
+                                    
+                                    <th scope="col" class="w-auto px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -116,8 +117,9 @@
                                             <div class="text-sm text-gray-900">{{ $internship->mentor?->name ?? '-' }}</div>
                                         </td>
 
-                                        @if($status === 'active')
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                        {{-- Unified Date Info Cell --}}
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($status === 'active')
                                                 @php
                                                     $endDate = \Carbon\Carbon::parse($internship->end_date)->endOfDay();
                                                     $now = \Carbon\Carbon::now()->startOfDay();
@@ -158,28 +160,28 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            </td>
-                                        @elseif($status === 'extension')
-                                            @php
-                                                $extension = $internship->extensions->first();
-                                            @endphp
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                                                {{ \Carbon\Carbon::parse($extension->new_end_date)->format('d M Y') }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ \Carbon\Carbon::parse($extension->new_start_date)->diffInDays(\Carbon\Carbon::parse($extension->new_end_date)->addDay()) }} Hari
-                                            </td>
-                                        @else
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ \Carbon\Carbon::parse($internship->start_date)->format('d M Y') }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}
-                                            </td>
-                                        @endif
+                                            @elseif($status === 'extension')
+                                                @php
+                                                    $extension = $internship->extensions->first();
+                                                @endphp
+                                                <div class="flex flex-col">
+                                                    <div class="text-xs text-gray-500">Current: <span class="font-medium text-gray-700">{{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}</span></div>
+                                                    <div class="text-sm font-bold text-green-600">New: {{ \Carbon\Carbon::parse($extension->new_end_date)->format('d M Y') }}</div>
+                                                    <div class="text-xs text-gray-400 mt-0.5">
+                                                        +{{ \Carbon\Carbon::parse($extension->new_start_date)->diffInDays(\Carbon\Carbon::parse($extension->new_end_date)->addDay()) }} Days
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="flex flex-col">
+                                                    <div class="text-sm font-medium text-gray-900">
+                                                        {{ \Carbon\Carbon::parse($internship->start_date)->format('d M Y') }}
+                                                    </div>
+                                                    <div class="text-xs text-gray-500">
+                                                        s/d {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @if($status === 'pending')
@@ -278,7 +280,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">No data found for this status.</td>
+                                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">No data found for this status.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

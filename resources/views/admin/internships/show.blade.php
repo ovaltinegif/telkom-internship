@@ -174,7 +174,7 @@
                     </div>
 
                     <div class="mt-10 flex items-center justify-end border-t pt-6">
-                        <a href="{{ route('admin.internships.index') }}" class="flex items-center px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg font-bold shadow-sm hover:bg-gray-50 hover:text-gray-900 transition mb-10">
+                        <a href="{{ route('admin.internships.index', ['status' => $internship->status]) }}" class="flex items-center px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg font-bold shadow-sm hover:bg-gray-50 hover:text-gray-900 transition mb-10">
                             <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
                             Back to List
                         </a>

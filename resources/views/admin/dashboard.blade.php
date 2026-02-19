@@ -114,153 +114,110 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                {{-- Left Column: Recent Internships --}}
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                            <h3 class="text-lg font-bold text-gray-800">Recent Activity</h3>
-                            <a href="{{ route('admin.internships.index') }}" class="text-sm font-medium text-red-600 hover:text-red-800 transition-colors">View All &rarr;</a>
+
+            {{-- Action Items Section --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Pending Applicants -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-red-50 text-red-600 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">Pending Applicants</h3>
                         </div>
-                        <div class="divide-y divide-gray-100">
-                            @forelse($recentInternships as $internship)
-                                <div class="px-6 py-4 hover:bg-gray-50 transition-colors group">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-4">
-                                            <div class="h-10 w-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 font-bold text-sm">
-                                                {{ substr($internship->student->name, 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <h4 class="text-sm font-bold text-gray-800 group-hover:text-red-600 transition-colors">{{ $internship->student->name }}</h4>
-                                                <div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
-                                                     <span>{{ $internship->division->name ?? 'No Division' }}</span>
-                                                     <span>&bull;</span>
-                                                     <span>{{ $internship->created_at->diffForHumans() }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        @php
-                                            $statusConfig = [
-                                                'active' => ['bg' => 'bg-green-100', 'text' => 'text-green-800'],
-                                                'finished' => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800'],
-                                                'pending' => ['bg' => 'bg-yellow-100', 'text' => 'text-yellow-800'],
-                                            ];
-                                            $config = $statusConfig[$internship->status] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-800'];
-                                        @endphp
-                                        
-                                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full {{ $config['bg'] }} {{ $config['text'] }}">
-                                            {{ ucfirst($internship->status) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="py-12 flex flex-col items-center justify-center text-center opacity-60">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                                    </svg>
-                                    <p class="text-sm font-medium text-gray-500">No recent activity found.</p>
-                                </div>
-                            @endforelse
-                        </div>
+                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">{{ $pendingApplicants }} Waiting</span>
                     </div>
+                    <p class="text-gray-500 text-sm mb-4">Mahasiswa baru menunggu review dan persetujuan.</p>
+                    
+                    @if($pendingApplicants > 0)
+                        <a href="{{ route('admin.internships.index', ['status' => 'pending']) }}" class="block w-full text-center py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
+                            Review Applications
+                        </a>
+                    @else
+                        <button onclick="Swal.fire('Info', 'Tidak ada aplikasi pending saat ini.', 'info')" class="block w-full text-center py-2.5 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed">
+                            Review Applications
+                        </button>
+                    @endif
                 </div>
 
-                {{-- Right Column: Pending Actions --}}
-                <div class="space-y-6">
-                     {{-- Pending Extensions Card --}}
-                    <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200 bg-red-50 flex justify-between items-center">
-                            <h3 class="text-lg font-bold text-red-800">Pending Extensions</h3>
-                            @if($pendingExtensions->count() > 0)
-                                <span class="bg-red-200 text-red-800 text-xs font-bold px-2 py-0.5 rounded-full border border-red-300">
-                                    {{ $pendingExtensions->count() }}
-                                </span>
-                            @endif
-                        </div>
-                        <div class="divide-y divide-gray-100">
-                             @forelse($pendingExtensions as $extension)
-                                <div class="p-5 hover:bg-gray-50 transition-colors">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold text-xs">
-                                                {{ substr($extension->internship->student->name, 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <h5 class="text-sm font-bold text-gray-800">{{ $extension->internship->student->name }}</h5>
-                                                <span class="text-xs text-gray-500">{{ $extension->created_at->shortAbsoluteDiffForHumans() }} ago</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="bg-gray-50 p-3 rounded-md text-xs text-gray-600 italic mb-3 border border-gray-100">
-                                        "{{ Str::limit($extension->reason, 80) }}"
-                                    </div>
-                                    
-                                    <button 
-                                        x-data
-                                        @click="$dispatch('open-extension-modal', { 
-                                            id: '{{ $extension->id }}', 
-                                            studentName: '{{ $extension->internship->student->name }}',
-                                            currentEndDate: '{{ \Carbon\Carbon::parse($extension->internship->end_date)->format('d M Y') }}',
-                                            newEndDate: '{{ \Carbon\Carbon::parse($extension->new_end_date)->format('d M Y') }}',
-                                            reason: '{{ $extension->reason }}',
-                                            university: '{{ optional($extension->internship->student->studentProfile)->university ?? '-' }}',
-                                            major: '{{ optional($extension->internship->student->studentProfile)->major ?? '-' }}'
-                                        })"
-                                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                        Review Request
-                                    </button>
-                                </div>
-                            @empty
-                                <div class="p-8 text-center opacity-60">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <p class="text-sm font-medium text-gray-500">All caught up!</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-
-                    {{-- Quick Links Card --}}
-                    <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Quick Actions</h3>
-                        </div>
-                        <div class="p-4 space-y-2">
-                             <a href="{{ route('admin.users.index', ['role' => 'student']) }}" class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-all group">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-red-50 p-1.5 rounded text-red-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">View All Students</span>
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                <!-- Pending Extensions -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                     <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-amber-50 text-amber-600 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                            </a>
-                            
-                            <a href="{{ route('admin.users.index', ['role' => 'mentor']) }}" class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-all group">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-red-50 p-1.5 rounded text-red-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">View All Mentors</span>
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">Extension Requests</h3>
                         </div>
+                        <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">{{ $pendingExtensions->count() }} Requests</span>
                     </div>
+                    <p class="text-gray-500 text-sm mb-4">Pengajuan perpanjangan durasi magang.</p>
+                    
+                    @if($pendingExtensions->count() > 0)
+                        <a href="{{ route('admin.internships.index', ['status' => 'extension']) }}" class="block w-full text-center py-2.5 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition">
+                            Review Extensions
+                        </a>
+                    @else
+                        <button onclick="Swal.fire('Info', 'Tidak ada pengajuan perpanjangan saat ini.', 'info')" class="block w-full text-center py-2.5 bg-gray-300 text-gray-500 font-semibold rounded-lg cursor-not-allowed">
+                            Review Extensions
+                        </button>
+                    @endif
                 </div>
             </div>
+
+            {{-- Recent Activity Table --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-800">Recent Internship Activity</h3>
+                    <a href="{{ route('admin.internships.index') }}" class="text-sm text-red-600 font-semibold hover:text-red-800">View All</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-semibold">
+                            <tr>
+                                <th class="px-6 py-4">Student</th>
+                                <th class="px-6 py-4">Division</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse($recentInternships as $internship)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4">
+                                    <div class="font-medium text-gray-900">{{ $internship->student->name }}</div>
+                                    <div class="text-xs text-gray-500">{{ $internship->student->email }}</div>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">
+                                    {{ $internship->division->name ?? '-' }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold
+                                        {{ $internship->status == 'active' ? 'bg-green-100 text-green-700' : 
+                                          ($internship->status == 'pending' ? 'bg-red-100 text-red-700' : 
+                                          ($internship->status == 'finished' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700')) }}">
+                                        {{ ucfirst($internship->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-500">
+                                    {{ $internship->created_at->format('d M Y') }}
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No recent activity found.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
     

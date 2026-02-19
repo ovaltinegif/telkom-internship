@@ -60,85 +60,20 @@ class DatabaseSeeder extends Seeder
             Division::firstOrCreate(['name' => $divData['name']], $divData);
         }
 
-        // Ambil instance divisi untuk keperluan seeder internship di bawah
-        $divGS = Division::where('name', 'Government Service')->first();
-        // Since original logic used $divADM, let's pick another one for the second student
-        $divADM = Division::where('name', 'Human Capital')->first(); // Using Human Capital as a substitute example
+    // Ambil instance divisi untuk keperluan seeder internship di bawah
+    // $divGS = Division::where('name', 'Government Service')->first();
+    // $divADM = Division::where('name', 'Human Capital')->first(); 
 
-        // 2. Buat Akun MENTOR (Gunakan akun ini untuk Login nanti)
-        $mentor = User::where('email', 'mentor@telkom.co.id')->first();
-        if (!$mentor) {
-            $mentor = User::create([
-                'name' => 'Bapak Mentor Telkom',
-                'email' => 'mentor@telkom.co.id',
-                'password' => Hash::make('password'),
-                'role' => 'mentor',
-            ]);
-        }
+    // 2. Buat Akun MENTOR (Gunakan akun ini untuk Login nanti)
+    // CODE REMOVED AS REQUESTED (Bapak Mentor Telkom)
 
-        // Buat Profil Mentor
-        MentorProfile::create([
-            'user_id' => $mentor->id,
-            'nik' => '123456789',
-            'position' => 'Senior Developer',
-        ]);
+    // 3. Buat Akun MAHASISWA 1
+    // CODE REMOVED AS REQUESTED (Dzaky Hamid)
 
-        // 3. Buat Akun MAHASISWA 1
-        $mhs1 = User::create([
-            'name' => 'Dzaky Hamid',
-            'email' => 'dzaky@student.co.id',
-            'password' => Hash::make('password'),
-            'role' => 'student',
-        ]);
+    // 4. Buat Akun MAHASISWA 2
+    // CODE REMOVED AS REQUESTED (Budi Santoso)
 
-        // Buat Profil Mahasiswa 1
-        StudentProfile::create([
-            'user_id' => $mhs1->id,
-            'university' => 'Universitas Dian Nuswantoro',
-            'major' => 'Sistem Informasi',
-            'nim' => 'A11.2023.00001',
-            'phone' => '081234567890',
-            'address' => 'Semarang',
-        ]);
-
-        // 4. Buat Akun MAHASISWA 2
-        $mhs2 = User::create([
-            'name' => 'Budi Santoso',
-            'email' => 'budi@student.co.id',
-            'password' => Hash::make('password'),
-            'role' => 'student',
-        ]);
-
-        // Buat Profil Mahasiswa 2
-        StudentProfile::create([
-            'user_id' => $mhs2->id,
-            'university' => 'UGM',
-            'major' => 'Ilmu Komputer',
-            'nim' => '12345/UGM/2023',
-            'phone' => '08987654321',
-            'address' => 'Yogyakarta',
-        ]);
-
-        // 5. HUBUNGKAN MENTOR & MAHASISWA DI TABEL INTERNSHIPS
-        
-        // Magang Mahasiswa 1 (Dibimbing oleh Mentor di atas)
-        Internship::create([
-            'student_id' => $mhs1->id,
-            'mentor_id'  => $mentor->id, // PENTING: ID Mentor yg login
-            'division_id' => $divGS->id,
-            'start_date' => '2026-01-12',
-            'end_date'   => '2026-02-12',
-            'status'     => 'active',
-        ]);
-
-        // Magang Mahasiswa 2 (Dibimbing oleh Mentor yang sama)
-        Internship::create([
-            'student_id' => $mhs2->id,
-            'mentor_id'  => $mentor->id, // PENTING: ID Mentor yg login
-            'division_id' => $divADM->id,
-            'start_date' => '2026-01-15',
-            'end_date'   => '2026-02-15',
-            'status'     => 'onboarding',
-        ]);
+    // 5. HUBUNGKAN MENTOR & MAHASISWA DI TABEL INTERNSHIPS
+    // CODE REMOVED AS REQUESTED
     }
 }
