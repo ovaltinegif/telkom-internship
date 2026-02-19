@@ -24,9 +24,11 @@ class AttendanceController extends Controller
             return back()->with('error', 'Status magang belum aktif.');
         }
 
-        // Cek apakah hari ini sudah absen?
+        // Cek apakah hari ini sudah absen? (Logic Reset jam 7 pagi)
+        $dateCheck = Carbon::now()->hour < 7 ?Carbon::yesterday() : Carbon::today();
+
         $existingAttendance = Attendance::where('internship_id', $internship->id)
-            ->whereDate('date', Carbon::today())
+            ->whereDate('date', $dateCheck)
             ->first();
 
         if ($existingAttendance) {
@@ -54,7 +56,7 @@ class AttendanceController extends Controller
 
         Attendance::create([
             'internship_id' => $internship->id,
-            'date' => Carbon::today(),
+            'date' => $dateCheck,
             'check_in_time' => Carbon::now()->format('H:i:s'),
             'check_in_lat' => $request->latitude,
             'check_in_long' => $request->longitude,
@@ -69,9 +71,11 @@ class AttendanceController extends Controller
     {
         $internship = Internship::where('student_id', Auth::id())->first();
 
-        // Cari absen hari ini yang belum di-checkout
+        // Cari absen hari ini yang belum di-checkout (Logic Reset 7 Pagi)
+        $dateCheck = Carbon::now()->hour < 7 ?Carbon::yesterday() : Carbon::today();
+
         $attendance = Attendance::where('internship_id', $internship->id)
-            ->whereDate('date', Carbon::today())
+            ->whereDate('date', $dateCheck)
             ->first();
 
         if (!$attendance) {

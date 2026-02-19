@@ -360,18 +360,26 @@
                     <div class="text-center">
                         <p class="text-slate-500 text-sm font-medium mb-3">Tanggal Pengajuan</p>
                         
+                        @php
+                            // Logic Reset 7 Pagi untuk Display Tanggal
+                            $displayDate = \Carbon\Carbon::now()->hour < 7 ? \Carbon\Carbon::yesterday() : \Carbon\Carbon::today();
+                        @endphp
+
                         {{-- 1. Badge Display (For Checked-in Users) --}}
                         <div id="date_badge_container" class="hidden flex items-center justify-center gap-2">
                             <div class="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold text-xl border border-red-100 shadow-sm">
-                                {{ \Carbon\Carbon::now()->format('d') }}
+                                {{ $displayDate->format('d') }}
                             </div>
                             <div class="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold text-xl border border-red-100 shadow-sm">
-                                {{ \Carbon\Carbon::now()->translatedFormat('F') }}
+                                {{ $displayDate->translatedFormat('F') }}
                             </div>
                             <div class="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold text-xl border border-red-100 shadow-sm">
-                                {{ \Carbon\Carbon::now()->format('Y') }}
+                                {{ $displayDate->format('Y') }}
                             </div>
                         </div>
+
+                        {{-- Hidden Input for Form Submission --}}
+                        <input type="hidden" name="date" value="{{ $displayDate->format('Y-m-d') }}" id="hidden_date_input">
 
                         {{-- 2. Date Input (For Non-Checked-in Users) --}}
                         <div id="date_input_container" class="relative group max-w-xs mx-auto">
@@ -504,6 +512,7 @@
         const badgeContainer = document.getElementById('date_badge_container');
         const inputContainer = document.getElementById('date_input_container');
         const dateInput = document.getElementById('permission_date');
+        const hiddenDateInput = document.getElementById('hidden_date_input');
 
         // Radio Buttons
         const tempRadio = document.querySelector('input[name="permit_type"][value="temporary"]');
@@ -514,7 +523,11 @@
             // 1. Show Badge, Hide Input
             badgeContainer.classList.remove('hidden');
             inputContainer.classList.add('hidden');
-            dateInput.removeAttribute('required'); // Not needed since hidden input has value
+            
+            // Manage Inputs: Enable Hidden, Disable Manual
+            dateInput.removeAttribute('required'); 
+            dateInput.disabled = true; 
+            hiddenDateInput.disabled = false;
 
             // 2. Lock Permit Type to 'temporary'
             tempRadio.checked = true;
@@ -527,7 +540,11 @@
             // 1. Show Input, Hide Badge
             badgeContainer.classList.add('hidden');
             inputContainer.classList.remove('hidden');
+            
+            // Manage Inputs: Disable Hidden, Enable Manual
             dateInput.setAttribute('required', 'required');
+            dateInput.disabled = false; 
+            hiddenDateInput.disabled = true;
 
              // 2. Unlock Permit Type
              fullRadio.disabled = false;

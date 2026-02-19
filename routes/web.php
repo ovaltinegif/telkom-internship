@@ -54,12 +54,17 @@ Route::get('/dashboard', function () {
     // Jika sudah ada data magang dan status active/finished, tampilkan dashboard mahasiswa normal
     $logbooks = DailyLogbook::where('internship_id', $internship->id)->latest()->get();
 
+    // Logic Reset per Jam 7 Pagi (Day starts at 07:00)
+    $now = Carbon::now();
+    // Jika sebelum jam 7 pagi, anggap masih hari kemarin (untuk display status)
+    $dateQuery = $now->hour < 7 ?Carbon::yesterday() : Carbon::today();
+
     $todayAttendance = Attendance::where('internship_id', $internship->id)
-        ->whereDate('date', Carbon::today())
+        ->whereDate('date', $dateQuery)
         ->first();
 
     $todayLogbook = DailyLogbook::where('internship_id', $internship->id)
-        ->whereDate('date', Carbon::today())
+        ->whereDate('date', $dateQuery)
         ->exists();
 
     return view('dashboard', compact('internship', 'logbooks', 'todayAttendance', 'todayLogbook'));
