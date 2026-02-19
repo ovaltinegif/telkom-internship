@@ -211,14 +211,29 @@
                                             <p class="text-white font-bold text-lg">Belum Check-In</p>
                                         </div>
                                         
-                                        <form action="{{ route('attendance.checkIn') }}" method="POST" id="checkInForm" class="w-full">
-                                            @csrf
-                                            <input type="hidden" name="latitude" id="lat_in">
-                                            <input type="hidden" name="longitude" id="long_in">
-                                            <button type="button" onclick="confirmCheckIn()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-500/20 transition-all duration-300 transform hover:-translate-y-1">
-                                               CHECK IN SEKARANG
-                                            </button>
-                                        </form>
+                                        @php
+                                            $now = \Carbon\Carbon::now();
+                                            $startCheckIn = $now->copy()->hour(7)->minute(0)->second(0);
+                                            $endCheckIn = $now->copy()->hour(9)->minute(0)->second(0);
+                                            // Optional: Allow check-in if it's strictly between 7 and 9
+                                            $isCheckInTime = $now->between($startCheckIn, $endCheckIn);
+                                        @endphp
+
+                                        @if($isCheckInTime)
+                                            <form action="{{ route('attendance.checkIn') }}" method="POST" id="checkInForm" class="w-full">
+                                                @csrf
+                                                <input type="hidden" name="latitude" id="lat_in">
+                                                <input type="hidden" name="longitude" id="long_in">
+                                                <button type="button" onclick="confirmCheckIn()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-500/20 transition-all duration-300 transform hover:-translate-y-1">
+                                                   CHECK IN SEKARANG
+                                                </button>
+                                            </form>
+                                        @else
+                                            <div class="w-full bg-slate-800/50 border border-slate-700 text-slate-400 font-bold py-3.5 rounded-xl text-center flex flex-col items-center justify-center gap-1 cursor-not-allowed">
+                                                <span>Check In Ditutup</span>
+                                                <span class="text-xs font-normal text-slate-500">Hanya tersedia pukul 07:00 - 09:00</span>
+                                            </div>
+                                        @endif
                                         
                                         <div class="pt-2">
                                             <button onclick="openPermissionModal()" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
@@ -282,12 +297,25 @@
                                             <p class="text-2xl font-mono text-emerald-400 font-bold mt-1">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i:s') }}</p>
                                         </div>
 
-                                        <form action="{{ route('attendance.checkOut') }}" method="POST" id="checkOutForm" class="w-full">
-                                            @csrf
-                                            <button type="button" onclick="confirmCheckOut()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-rose-500/20 transition-all duration-300 transform hover:-translate-y-1">
-                                               CHECK OUT PULANG
-                                            </button>
-                                        </form>
+                                        @php
+                                            $now = \Carbon\Carbon::now();
+                                            $startCheckOut = $now->copy()->hour(17)->minute(0)->second(0);
+                                            $isCheckOutTime = $now->gte($startCheckOut);
+                                        @endphp
+
+                                        @if($isCheckOutTime)
+                                            <form action="{{ route('attendance.checkOut') }}" method="POST" id="checkOutForm" class="w-full">
+                                                @csrf
+                                                <button type="button" onclick="confirmCheckOut()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-rose-500/20 transition-all duration-300 transform hover:-translate-y-1">
+                                                   CHECK OUT PULANG
+                                                </button>
+                                            </form>
+                                        @else
+                                            <div class="w-full bg-slate-800/50 border border-slate-700 text-slate-400 font-bold py-3.5 rounded-xl text-center flex flex-col items-center justify-center gap-1 cursor-not-allowed">
+                                                <span>Belum Waktunya Pulang</span>
+                                                <span class="text-xs font-normal text-slate-500">Check Out terbuka pukul 17:00</span>
+                                            </div>
+                                        @endif
 
                                         <div class="pt-2">
                                             <button onclick="openPermissionModal(true)" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
