@@ -6,7 +6,7 @@
             {{-- Left: Logo --}}
             <div class="shrink-0 flex items-center gap-4">
                 <a href="{{ auth()->user()->role === 'mentor' ? route('mentor.dashboard') : route('dashboard') }}" class="flex items-center gap-3 group">
-                   <img src="{{ asset('images/logo-telkom.png') }}" class="h-16 w-auto" alt="Telkom Indonesia">
+                   <img src="{{ asset('images/logo-telkom.png') }}" class="h-20 w-auto" alt="Telkom Indonesia">
                 </a>
             </div>
 

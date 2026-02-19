@@ -39,7 +39,7 @@
             background-color: #fff;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* Match other headers */
         }
-        .logo img { height: 70px; width: auto; }
+        .logo img { height: 100px; width: auto; }
         .main-website-btn {
             background-color: #D6001C; color: #fff; text-decoration: none;
             padding: 10px 25px; border-radius: 20px; font-weight: bold; font-size: 14px;

@@ -114,11 +114,30 @@ class AttendanceController extends Controller
         }
 
         // Check if attendance exists for date
-        $exists = Attendance::where('internship_id', $internship->id)
+        $existingAttendance = Attendance::where('internship_id', $internship->id)
             ->whereDate('date', $request->date)
-            ->exists();
+            ->first();
 
-        if ($exists) {
+        if ($existingAttendance) {
+            // Allow update ONLY if permit_type is 'temporary' (Half-day)
+            if ($request->permit_type === 'temporary') {
+                $attachmentPath = $existingAttendance->attachment;
+                if ($request->hasFile('attachment')) {
+                    $attachmentPath = $request->file('attachment')->store('permissions', 'public');
+                }
+
+                $existingAttendance->update([
+                    'status' => 'permit',
+                    'permit_type' => 'temporary',
+                    'permit_start_time' => $request->start_time,
+                    'permit_end_time' => $request->end_time,
+                    'note' => $request->note,
+                    'attachment' => $attachmentPath,
+                ]);
+
+                return back()->with('success', 'Pengajuan izin sementara berhasil disimpan.');
+            }
+
             return back()->with('error', 'Absensi/Izin untuk tanggal ini sudah ada.');
         }
 

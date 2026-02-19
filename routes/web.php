@@ -155,9 +155,14 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
     Route::post('/internship', [AdminController::class , 'storeInternship'])
         ->name('admin.internship.store');
 
+
     // Fitur Data User
     Route::get('/users', [AdminController::class , 'users'])
         ->name('admin.users.index');
+
+    // Fitur Mentor
+    Route::get('/mentors/create', [AdminController::class , 'createMentor'])->name('admin.mentors.create');
+    Route::post('/mentors', [AdminController::class , 'storeMentor'])->name('admin.mentors.store');
 
 
 

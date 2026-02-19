@@ -23,7 +23,7 @@
         .header-left .label { width: 80px; }
         .header-left .colon { width: 10px; text-align: center; }
         
-        .logo img { height: 120px; }
+        .logo img { height: 140px; }
         .logo p { font-size: 8pt; margin: 5px 0 0; font-style: italic; text-align: right; color: #555; }
 
         /* Addressee */

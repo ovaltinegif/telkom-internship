@@ -110,7 +110,7 @@
                             <span class="text-sm font-medium text-red-200">Tim Mentor Stabil</span>
                         @endif
                     </div>
-                    <a href="{{ route('admin.users.index', ['role' => 'mentor']) }}" class="absolute inset-0 z-10"></a>
+                    <a href="{{ route('admin.mentors.create') }}" class="absolute inset-0 z-10"></a>
                 </div>
             </div>
 

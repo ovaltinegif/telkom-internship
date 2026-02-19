@@ -127,6 +127,51 @@ class AdminController extends Controller
     }
 
     /**
+     * Form Tambah Mentor Baru
+     */
+    public function createMentor()
+    {
+        $divisions = Division::all();
+        return view('admin.mentors.create', compact('divisions'));
+    }
+
+    /**
+     * Simpan Data Mentor Baru
+     */
+    public function storeMentor(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'nik' => 'required|string|unique:mentor_profiles',
+            'position' => 'required|string|max:255',
+            'division_id' => 'required|exists:divisions,id',
+            'phone_number' => 'nullable|string|max:20',
+        ]);
+
+        // 1. Create User
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'mentor',
+        ]);
+
+        // 2. Create Mentor Profile
+        \App\Models\MentorProfile::create([
+            'user_id' => $user->id,
+            'nik' => $request->nik,
+            'position' => $request->position,
+            'division_id' => $request->division_id,
+            'phone_number' => $request->phone_number,
+        ]);
+
+        return redirect()->route('admin.users.index', ['role' => 'mentor'])
+            ->with('success', 'Mentor baru berhasil ditambahkan!');
+    }
+
+    /**
      * Monitoring Magang: List semua magang aktif.
      */
     /**
