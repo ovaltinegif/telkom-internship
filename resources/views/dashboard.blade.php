@@ -469,6 +469,7 @@
 
                     {{-- Reason --}}
                     <div>
+                        <br>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Alasan Izin</label>
                         <textarea name="note" rows="3" 
                             class="block w-full rounded-xl border-slate-200 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm py-3 px-3 transition-all" 
