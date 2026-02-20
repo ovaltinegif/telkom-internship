@@ -2,9 +2,9 @@
     <x-slot name="header">
         <div class="flex flex-col gap-1">
             <h2 class="font-bold text-2xl text-slate-800 leading-tight">
-                {{ __('Setup Program Magang Baru') }}
+                {{ __('Setup Program Intern Baru') }}
             </h2>
-            <p class="text-slate-500 text-sm">Validasi dan aktifkan periode magang mahasiswa</p>
+            <p class="text-slate-500 text-sm">Validasi dan aktifkan periode intern</p>
         </div>
     </x-slot>
 
@@ -24,8 +24,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-slate-800">Formulir Setup Magang</h3>
-                            <p class="text-slate-500 text-sm">Pastikan data mahasiswa dan penempatan sudah benar.</p>
+                            <h3 class="text-lg font-bold text-slate-800">Formulir Setup Intern</h3>
+                            <p class="text-slate-500 text-sm">Pastikan data intern dan penempatan sudah benar.</p>
                         </div>
                     </div>
 
@@ -53,7 +53,7 @@
                             
                             {{-- Field: Mahasiswa --}}
                             <div class="md:col-span-2">
-                                <x-input-label for="student_id" :value="__('Pilih Mahasiswa')" class="text-slate-700 font-semibold mb-1" />
+                                <x-input-label for="student_id" :value="__('Pilih Intern')" class="text-slate-700 font-semibold mb-1" />
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -61,7 +61,7 @@
                                         </svg>
                                     </div>
                                     <select name="student_id" id="student_id" class="pl-10 block w-full border-slate-300 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm transition-all py-2.5">
-                                        <option value="">-- Cari Mahasiswa --</option>
+                                        <option value="">-- Cari Intern --</option>
                                         @foreach($students as $student)
                                             <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
                                         @endforeach

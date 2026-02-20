@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\StudentProfile;
+use App\Models\MentorProfile;
 
 class ProfileController extends Controller
 {
@@ -35,29 +36,43 @@ class ProfileController extends Controller
 
         $request->user()->save();
         //simpan data tambahan ke tabel student_profiles
-        //simpan data tambahan ke tabel student_profiles
-        $data = [
-            'nim' => $request->nim,
-            'university' => $request->university,
-            'major' => $request->major,
-            'phone_number' => $request->phone_number,
-            'address' => $request->address,
-        ];
+        if ($request->user()->role === 'student') {
+            $data = [
+                'nim' => $request->nim,
+                'university' => $request->university,
+                'major' => $request->major,
+                'phone_number' => $request->phone_number,
+                'address' => $request->address,
+            ];
 
-        // Handle Photo Upload
-        if ($request->hasFile('photo')) {
-            // Delete old photo if exists
-            if ($request->user()->studentProfile && $request->user()->studentProfile->photo) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($request->user()->studentProfile->photo);
+            // Handle Photo Upload
+            if ($request->hasFile('photo')) {
+                // Delete old photo if exists
+                if ($request->user()->studentProfile && $request->user()->studentProfile->photo) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($request->user()->studentProfile->photo);
+                }
+                $path = $request->file('photo')->store('profile-photos', 'public');
+                $data['photo'] = $path;
             }
-            $path = $request->file('photo')->store('profile-photos', 'public');
-            $data['photo'] = $path;
-        }
 
-        $request->user()->studentProfile()->updateOrCreate(
-        ['user_id' => $request->user()->id],
-            $data
-        );
+            $request->user()->studentProfile()->updateOrCreate(
+            ['user_id' => $request->user()->id],
+                $data
+            );
+        }
+        elseif ($request->user()->role === 'mentor') {
+            // Update Data Mentor
+            $data = [
+                'nik' => $request->nik,
+                'position' => $request->position,
+                'phone_number' => $request->phone_number,
+            ];
+
+            $request->user()->mentorProfile()->updateOrCreate(
+            ['user_id' => $request->user()->id],
+                $data
+            );
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

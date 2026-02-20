@@ -134,7 +134,7 @@
     <!-- Body -->
     <div class="content">
         <p>Dengan hormat,</p>
-        <p>Berikut kami sampaikan laporan rekapan aktivitas harian (logbook) dan kehadiran (presensi) mahasiswa magang untuk periode <strong>{{ \Carbon\Carbon::createFromDate($year, $month, 1)->translatedFormat('F Y') }}</strong>:</p>
+        <p>Berikut kami sampaikan laporan rekapan aktivitas harian (logbook) dan kehadiran (presensi) intern untuk periode <strong>{{ \Carbon\Carbon::createFromDate($year, $month, 1)->translatedFormat('F Y') }}</strong>:</p>
         
         <table class="student-info">
             <tr>
@@ -151,7 +151,7 @@
             </tr>
             <tr>
                 <td class="label"></td>
-                <td class="field">Unit Magang</td>
+                <td class="field">Unit Intern</td>
                 <td class="colon">:</td>
                 <td class="val">{{ $internship->division->name }}</td>
             </tr>
@@ -219,14 +219,14 @@
     </table>
 
     <div class="content">
-        <p>Demikian laporan ini dibuat dengan sebenar-benarnya untuk dapat digunakan sebagai monitoring kegiatan magang.</p>
+        <p>Demikian laporan ini dibuat dengan sebenar-benarnya untuk dapat digunakan sebagai monitoring kegiatan intern.</p>
     </div>
 
     <!-- Footer / Signature -->
     <div class="footer">
         <div class="signature-block">
             <p>Hormat Kami,</p>
-            <p class="role">Mahasiswa Magang</p>
+            <p class="role">Intern</p>
             
             <!-- QR Code Validasi -->
             @php

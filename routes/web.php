@@ -20,9 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/help', function () {
-    return view('help.index');
-})->name('help.index');
+
 
 // --- ROUTE DASHBOARD PINTAR (SOTIR ROLE) ---
 Route::get('/dashboard', function () {
@@ -67,9 +65,48 @@ Route::get('/dashboard', function () {
         ->whereDate('date', $dateQuery)
         ->exists();
 
-    return view('dashboard', compact('internship', 'logbooks', 'todayAttendance', 'todayLogbook'));
+    // Ambil Logbook
+    $logbooks = DailyLogbook::where('internship_id', $internship->id)
+        ->latest('date')
+        ->take(5) // Ambil 5 terakhir
+        ->get();
 
-})->middleware(['auth', 'verified'])->name('dashboard');
+    // Hitung Statistik Kehadiran
+    $totalWorkingDays = $internship->start_date && $internship->end_date
+        ?\Carbon\Carbon::parse($internship->start_date)->diffInDaysFiltered(function (Carbon $date) {
+            return !$date->isWeekend();
+        }
+            , \Carbon\Carbon::now())
+            : 0;
+
+        // Prevent division by zero if internship just started today
+        $totalWorkingDays = max($totalWorkingDays, 1);
+
+        $totalPresent = Attendance::where('internship_id', $internship->id)
+            ->where('status', 'present')
+            ->count();
+
+        $totalPermit = Attendance::where('internship_id', $internship->id)
+            ->where('status', 'permit')
+            ->count();
+
+        $totalSick = Attendance::where('internship_id', $internship->id)
+            ->where('status', 'sick')
+            ->count();
+
+        $attendancePercentage = $totalWorkingDays > 0 ? round(($totalPresent / $totalWorkingDays) * 100) : 0;
+
+        return view('dashboard', [
+        'internship' => $internship,
+        'logbooks' => $logbooks,
+        'todayAttendance' => $todayAttendance, // Keep this for daily status
+        'todayLogbook' => $todayLogbook, // Keep this for daily status
+        'totalPresent' => $totalPresent,
+        'totalPermit' => $totalPermit,
+        'totalSick' => $totalSick,
+        'attendancePercentage' => $attendancePercentage
+        ]);
+    })->middleware(['auth', 'verified'])->name('dashboard');
 
 
 // Group Route untuk Mahasiswa (Logbook, Profile, dll)

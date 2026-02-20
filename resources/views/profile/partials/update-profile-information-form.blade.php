@@ -17,33 +17,36 @@
         @csrf
         @method('patch')
 
-        {{-- Profile Photo --}}
-        <div class="flex items-center gap-6 mb-6">
-            <div class="shrink-0">
-                @if($user->studentProfile && $user->studentProfile->photo)
-                    <img class="h-24 w-24 object-cover rounded-full border-4 border-slate-50 shadow-sm" src="{{ asset('storage/' . $user->studentProfile->photo) }}" alt="{{ $user->name }}" />
-                @else
-                    <div class="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center text-slate-300 border-4 border-slate-50 shadow-sm">
-                        <svg class="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                    </div>
-                @endif
+        {{-- Student Specific Fields (Photo, NIM, Kampus, Jurusan, Alamat) --}}
+        @if($user->role === 'student')
+            {{-- Profile Photo --}}
+            <div class="flex items-center gap-6 mb-6">
+                <div class="shrink-0">
+                    @if($user->studentProfile && $user->studentProfile->photo)
+                        <img class="h-24 w-24 object-cover rounded-full border-4 border-slate-50 shadow-sm" src="{{ asset('storage/' . $user->studentProfile->photo) }}" alt="{{ $user->name }}" />
+                    @else
+                        <div class="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center text-slate-300 border-4 border-slate-50 shadow-sm">
+                            <svg class="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                    @endif
+                </div>
+                <div class="grow">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Foto Profil</label>
+                    <input type="file" name="photo" class="block w-full text-sm text-slate-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-xl file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-red-50 file:text-red-700
+                        hover:file:bg-red-100
+                        cursor-pointer transition-colors
+                    " accept="image/*">
+                    <p class="mt-1 text-xs text-slate-400">JPG, JPEG, PNG (Max. 2MB)</p>
+                    <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+                </div>
             </div>
-            <div class="grow">
-                <label class="block text-sm font-medium text-slate-700 mb-2">Foto Profil</label>
-                <input type="file" name="photo" class="block w-full text-sm text-slate-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-xl file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-red-50 file:text-red-700
-                    hover:file:bg-red-100
-                    cursor-pointer transition-colors
-                " accept="image/*">
-                <p class="mt-1 text-xs text-slate-400">JPG, JPEG, PNG (Max. 2MB)</p>
-                <x-input-error class="mt-2" :messages="$errors->get('photo')" />
-            </div>
-        </div>
+        @endif
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -74,37 +77,58 @@
                 </div>
             @endif
         </div>
-                {{-- Input NIM --}}
-        <div>
-            <x-input-label for="nim" :value="__('NIM')" />
-            <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('nim', $user->studentProfile->nim ?? '')" required />
-            <x-input-error class="mt-2" :messages="$errors->get('nim')" />
-        </div>
 
-        {{-- Input Universitas --}}
-        <div class="mt-4">
-            <x-input-label for="university" :value="__('Asal Kampus')" />
-            <x-text-input id="university" name="university" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('university', $user->studentProfile->university ?? '')" required />
-            <x-input-error class="mt-2" :messages="$errors->get('university')" />
-        </div>
+        @if($user->role === 'student')
+            {{-- Student Fields --}}
+            <div>
+                <x-input-label for="nim" :value="__('NIM')" />
+                <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('nim', $user->studentProfile->nim ?? '')" required />
+                <x-input-error class="mt-2" :messages="$errors->get('nim')" />
+            </div>
 
-        {{-- Input Jurusan --}}
-        <div class="mt-4">
-            <x-input-label for="major" :value="__('Jurusan')" />
-            <x-text-input id="major" name="major" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('major', $user->studentProfile->major ?? '')" required />
-            <x-input-error class="mt-2" :messages="$errors->get('major')" />
-        </div>
+            <div class="mt-4">
+                <x-input-label for="university" :value="__('Asal Kampus')" />
+                <x-text-input id="university" name="university" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('university', $user->studentProfile->university ?? '')" required />
+                <x-input-error class="mt-2" :messages="$errors->get('university')" />
+            </div>
 
-        {{-- Input No HP --}}
+            <div class="mt-4">
+                <x-input-label for="major" :value="__('Jurusan')" />
+                <x-text-input id="major" name="major" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('major', $user->studentProfile->major ?? '')" required />
+                <x-input-error class="mt-2" :messages="$errors->get('major')" />
+            </div>
+
+            <div class="mt-4">
+                <x-input-label for="address" :value="__('Alamat Domisili')" />
+                <textarea id="address" name="address" class="border-slate-300 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm mt-1 block w-full" rows="3">{{ old('address', $user->studentProfile->address ?? '') }}</textarea>
+            </div>
+        @endif
+
+        @if($user->role === 'mentor')
+            {{-- Mentor Fields --}}
+            <div>
+                <x-input-label for="nik" :value="__('NIK')" />
+                <x-text-input id="nik" name="nik" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('nik', $user->mentorProfile->nik ?? '')" required />
+                <x-input-error class="mt-2" :messages="$errors->get('nik')" />
+            </div>
+
+            <div class="mt-4">
+                 <x-input-label for="position" :value="__('Jabatan')" />
+                <x-text-input id="position" name="position" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('position', $user->mentorProfile->position ?? '')" required />
+                <x-input-error class="mt-2" :messages="$errors->get('position')" />
+            </div>
+        @endif
+
+        {{-- Input No HP (Shared) --}}
         <div class="mt-4">
+            @php
+                $phone = '';
+                if($user->role === 'student') $phone = $user->studentProfile->phone_number ?? '';
+                elseif($user->role === 'mentor') $phone = $user->mentorProfile->phone_number ?? '';
+            @endphp
             <x-input-label for="phone_number" :value="__('Nomor HP / WhatsApp')" />
-            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('phone_number', $user->studentProfile->phone_number ?? '')" />
-        </div>
-
-        {{-- Input Alamat --}}
-        <div class="mt-4">
-            <x-input-label for="address" :value="__('Alamat Domisili')" />
-            <textarea id="address" name="address" class="border-slate-300 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm mt-1 block w-full" rows="3">{{ old('address', $user->studentProfile->address ?? '') }}</textarea>
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('phone_number', $phone)" />
+             <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
         </div>
 
         <div class="flex items-center gap-4">

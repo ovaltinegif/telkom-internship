@@ -63,7 +63,7 @@
                 <div class="space-y-6">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                         <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-                            <h3 class="font-bold text-slate-800">Informasi Mahasiswa</h3>
+                            <h3 class="font-bold text-slate-800">Informasi Intern</h3>
                         </div>
                         <div class="p-6 space-y-4">
                             <div>

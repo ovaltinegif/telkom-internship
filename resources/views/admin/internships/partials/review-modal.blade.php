@@ -41,7 +41,7 @@
                                 Review Aplikasi: <span x-text="studentName"></span>
                             </h3>
                             <div class="mt-4 mb-6">
-                                <p class="text-sm text-gray-500 mb-2 font-semibold">Dokumen Mahasiswa:</p>
+                                <p class="text-sm text-gray-500 mb-2 font-semibold">Dokumen Intern:</p>
                                 <ul class="border border-gray-200 rounded-md divide-y divide-gray-200 max-h-40 overflow-y-auto">
                                     <template x-for="doc in documents" :key="doc.id">
                                         <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
@@ -74,7 +74,7 @@
                                 <div class="mt-4">
                                      <div class="mb-4">
                                         <p class="text-sm text-gray-700">
-                                            Link <strong>Template Pakta Integritas</strong> akan otomatis dikirim ke mahasiswa saat Anda menyetujui aplikasi ini.
+                                            Link <strong>Template Pakta Integritas</strong> akan otomatis dikirim ke intern saat Anda menyetujui aplikasi ini.
                                         </p>
                                     </div>
 

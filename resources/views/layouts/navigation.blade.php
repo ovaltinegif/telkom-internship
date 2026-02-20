@@ -18,7 +18,7 @@
                     if ($roleFn('mentor')) {
                         $links = [
                             ['name' => 'Dashboard', 'route' => 'mentor.dashboard', 'active' => request()->routeIs('mentor.dashboard')],
-                            ['name' => 'Mahasiswa', 'route' => 'mentor.students.index', 'active' => request()->routeIs('mentor.students*')],
+                            ['name' => 'Intern', 'route' => 'mentor.students.index', 'active' => request()->routeIs('mentor.students*')],
                             ['name' => 'Approval', 'route' => 'mentor.approvals.index', 'active' => request()->routeIs('mentor.approvals*')],
                         ];
                     } elseif ($roleFn('admin')) {
@@ -103,7 +103,7 @@
                             </div>
                             
                             <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">Profile Settings</a>
-                            <a href="{{ route('help.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">Help Center</a>
+
                         </div>
                     @endif
                 </div>

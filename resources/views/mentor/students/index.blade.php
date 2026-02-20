@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-slate-800 leading-tight">
-            {{ __('Mahasiswa Bimbingan') }}
+            {{ __('Intern Bimbingan') }}
         </h2>
-        <p class="text-slate-500 text-sm">Kelola data dan pantau progres mahasiswa bimbingan Anda</p>
+        <p class="text-slate-500 text-sm">Kelola data dan pantau progres intern bimbingan Anda</p>
     </x-slot>
 
     <div class="py-12"> 
@@ -17,7 +17,7 @@
                             <a href="{{ route('mentor.students.index', ['status' => 'active']) }}" 
                                class="{{ $status === 'active' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
                                       whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
-                                Mahasiswa Aktif
+                                Active Intern
                                 <span class="{{ $status === 'active' ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-900' }} ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium inline-block">
                                     {{ $activeCount }}
                                 </span>
@@ -28,7 +28,7 @@
                             <a href="{{ route('mentor.students.index', ['status' => 'finished']) }}" 
                                class="{{ $status === 'finished' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
                                       whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
-                                Mahasiswa Selesai
+                                Intern Selesai
                                 <span class="{{ $status === 'finished' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-900' }} ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium inline-block">
                                     {{ $finishedCount }}
                                 </span>
@@ -72,7 +72,7 @@
                             <table class="w-full text-left text-sm">
                                 <thead class="bg-slate-50 border-b border-slate-100">
                                     <tr>
-                                        <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Mahasiswa</th>
+                                        <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Intern</th>
                                         <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Instansi / Kampus</th>
                                         <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Divisi</th>
                                         <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs text-center">Periode</th>

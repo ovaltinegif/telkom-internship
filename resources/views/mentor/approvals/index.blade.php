@@ -29,7 +29,7 @@
                             <table class="w-full text-sm text-left">
                                 <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase font-semibold text-xs tracking-wider">
                                     <tr>
-                                        <th class="px-6 py-4">Mahasiswa</th>
+                                        <th class="px-6 py-4">Intern</th>
                                         <th class="px-6 py-4">Tanggal & Waktu</th>
                                         <th class="px-6 py-4">Aktivitas</th>
                                         <th class="px-6 py-4">Bukti</th>

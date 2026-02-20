@@ -40,7 +40,7 @@
                 <div class="bg-gradient-to-br from-red-600 to-red-800 rounded-2xl p-6 text-white shadow-xl shadow-red-200 relative overflow-hidden group hover:shadow-2xl transition-all">
                     <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
                     <div class="relative z-10">
-                        <p class="text-red-100 text-sm font-medium mb-1">Mahasiswa Bimbingan</p>
+                        <p class="text-red-100 text-sm font-medium mb-1">Intern Bimbingan</p>
                         <div class="flex items-end justify-between">
                             <h3 class="text-4xl font-bold">{{ $internships->count() }}</h3>
                             <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm text-white">
@@ -75,8 +75,8 @@
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-6">
                         <div>
-                            <h3 class="text-lg font-bold text-slate-800">Daftar Mahasiswa</h3>
-                            <p class="text-sm text-slate-500">Kelola dan pantau progres mahasiswa bimbingan Anda</p>
+                            <h3 class="text-lg font-bold text-slate-800">Daftar Intern</h3>
+                            <p class="text-sm text-slate-500">Kelola dan pantau progres intern bimbingan Anda</p>
                         </div>
                     </div>
                     
@@ -87,14 +87,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                                 </svg>
                             </div>
-                            <p class="text-slate-500">Belum ada mahasiswa yang ditugaskan.</p>
+                            <p class="text-slate-500">Belum ada intern yang ditugaskan.</p>
                         </div>
                     @else
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm">
                                 <thead class="bg-slate-50 border-b border-slate-100">
                                     <tr>
-                                        <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Mahasiswa</th>
+                                        <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Intern</th>
                                         <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Divisi</th>
                                         <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs">Status</th>
                                         <th class="px-6 py-4 font-semibold text-slate-600 uppercase tracking-wider text-xs text-center">Aksi</th>

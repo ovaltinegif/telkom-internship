@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transkrip Nilai Magang - {{ $internship->student->name }}</title>
+    <title>Transkrip Nilai Intern - {{ $internship->student->name }}</title>
     <style>
         body { 
             font-family: Arial, Helvetica, sans-serif; 
@@ -114,7 +114,7 @@
                 <tr>
                     <td class="label">Perihal</td>
                     <td class="colon">:</td>
-                    <td><strong>Transkrip Nilai Magang Industri</strong></td>
+                    <td><strong>Transkrip Nilai Intern Industri</strong></td>
                 </tr>
             </table>
         </div>
@@ -126,7 +126,7 @@
     <!-- Addressee -->
     <div class="addressee">
         <p>Kepada Yth.</p>
-        <p>Ketua Program Studi / Koordinator Magang</p>
+        <p>Ketua Program Studi / Koordinator Intern</p>
         <p><strong>{{ $internship->student->studentProfile->university ?? 'Universitas' }}</strong></p>
         <p>di Tempat</p>
     </div>
@@ -134,7 +134,7 @@
     <!-- Body -->
     <div class="content">
         <p>Dengan hormat,</p>
-        <p>Sehubungan dengan telah berakhirnya pelaksanaan program Magang Industri mahasiswa berikut:</p>
+        <p>Sehubungan dengan telah berakhirnya pelaksanaan program Intern Industri intern berikut:</p>
         
         <table class="student-info">
             <tr>
@@ -151,7 +151,7 @@
             </tr>
             <tr>
                 <td class="label"></td>
-                <td class="field">Unit Magang</td>
+                <td class="field">Unit Intern</td>
                 <td class="colon">:</td>
                 <td class="val">{{ $internship->division->name }}</td>
             </tr>
@@ -215,7 +215,7 @@
             
             <!-- QR Code Validasi -->
             @php
-                $qrData = "Validasi Dokumen Magang Telkom - " . $internship->student->name . " - " . ($internship->student->studentProfile->nim ?? '') . " - Nilai Akhir: " . $internship->evaluation->final_score;
+                $qrData = "Validasi Dokumen Intern Telkom - " . $internship->student->name . " - " . ($internship->student->studentProfile->nim ?? '') . " - Nilai Akhir: " . $internship->evaluation->final_score;
             @endphp
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($qrData) }}" class="qr-code" alt="QR Code Validasi">
 

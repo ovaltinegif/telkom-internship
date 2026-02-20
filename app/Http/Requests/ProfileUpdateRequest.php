@@ -23,6 +23,8 @@ class ProfileUpdateRequest extends FormRequest
             'major' => ['nullable', 'string', 'max:100'],
             'phone_number' => ['nullable', 'string', 'max:20'],
             'address' => ['nullable', 'string'],
+            'nik' => ['nullable', 'string', 'max:20'], // Mentor
+            'position' => ['nullable', 'string', 'max:100'], // Mentor
             'photo' => ['nullable', 'image', 'max:2048'], // Max 2MB
         ];
     }

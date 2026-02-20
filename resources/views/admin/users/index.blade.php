@@ -20,11 +20,11 @@
                                 All Users
                             </a>
 
-                            {{-- Mahasiswa/SMK --}}
+                            {{-- Intern --}}
                             <a href="{{ route('admin.users.index', ['role' => 'student']) }}" 
                                class="{{ request('role') == 'student' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} 
                                       whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center">
-                                Mahasiswa/SMK
+                                Intern
                             </a>
 
                             {{-- Mentors --}}
@@ -50,7 +50,6 @@
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registered</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -99,14 +98,10 @@
                                             {{ $user->created_at->format('d M Y') }}
                                             <span class="text-xs text-gray-400 block">{{ $user->created_at->diffForHumans() }}</span>
                                         </td>
-                                        
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-md transition-colors">Edit</a>
-                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="px-6 py-12 whitespace-nowrap text-center text-sm text-gray-500 opacity-60">
+                                        <td colspan="3" class="px-6 py-12 whitespace-nowrap text-center text-sm text-gray-500 opacity-60">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto mb-2 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                             </svg>

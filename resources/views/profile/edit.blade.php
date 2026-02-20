@@ -24,11 +24,7 @@
                         @include('profile.partials.update-password-form')
                     </div>
 
-                    @if(view()->exists('profile.partials.delete-user-form'))
-                        <div class="p-8 bg-white shadow-sm sm:rounded-2xl border border-slate-100">
-                            @include('profile.partials.delete-user-form')
-                        </div>
-                    @endif
+
                 </div>
             </div>
         </div>

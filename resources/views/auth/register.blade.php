@@ -200,7 +200,7 @@
 
                        <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <x-input-label for="start_date" class="!text-xs text-gray-500" :value="__('Mulai Magang')" />
+                                <x-input-label for="start_date" class="!text-xs text-gray-500" :value="__('Mulai Intern')" />
                                 <div class="relative">
                                      <x-text-input 
                                         type="text" 
@@ -228,7 +228,7 @@
                                 </div>
                             </div>
                             <div>
-                                <x-input-label for="end_date" class="!text-xs text-gray-500" :value="__('Selesai Magang')" />
+                                <x-input-label for="end_date" class="!text-xs text-gray-500" :value="__('Selesai Intern')" />
                                 <div class="relative">
                                     <x-text-input 
                                         type="text" 
@@ -311,8 +311,8 @@
                              </select>
                        </div>
                        <div>
-                             <x-input-label for="reason" :value="__('Alasan Magang')" />
-                             <textarea name="reason" rows="4" class="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500 transition" x-bind:class="{'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500': errors.reason}" placeholder="Jelaskan mengapa Anda ingin magang di sini..." required @input="errors.reason = false"></textarea>
+                             <x-input-label for="reason" :value="__('Alasan Intern')" />
+                             <textarea name="reason" rows="4" class="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500 transition" x-bind:class="{'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500': errors.reason}" placeholder="Jelaskan mengapa Anda ingin intern di sini..." required @input="errors.reason = false"></textarea>
                        </div>
                     </div>
 

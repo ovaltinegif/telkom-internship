@@ -8,9 +8,9 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-slate-800 leading-tight">
-                    {{ __('Detail Mahasiswa') }}
+                    {{ __('Detail Intern') }}
                 </h2>
-                <p class="text-slate-500 text-sm">Lihat profil dan rekap aktivitas magang</p>
+                <p class="text-slate-500 text-sm">Lihat profil dan rekap aktivitas intern</p>
             </div>
              <a href="{{ route('mentor.students.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-slate-300 rounded-xl font-semibold text-xs text-slate-700 uppercase tracking-widest shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
                 &larr; Kembali

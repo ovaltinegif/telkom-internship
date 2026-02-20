@@ -10,8 +10,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="mb-6">
-                        <h3 class="text-lg font-bold text-slate-800">Form Penilaian Mahasiswa</h3>
-                        <p class="text-slate-500">Silakan berikan penilaian objektif untuk mahasiswa berikut:</p>
+                        <h3 class="text-lg font-bold text-slate-800">Form Penilaian Intern</h3>
+                        <p class="text-slate-500">Silakan berikan penilaian objektif untuk intern berikut:</p>
                         
                         <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
                             <div class="flex items-center gap-4">

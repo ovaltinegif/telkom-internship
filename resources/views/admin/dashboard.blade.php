@@ -22,11 +22,11 @@
 
             {{-- Stats Grid (Solid Red & Clean) --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {{-- Card 1: Total Mahasiswa --}}
+                {{-- Card 1: Total Intern --}}
                 <div class="bg-[#ce0024] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 border-l-4 border-red-800">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-red-100 text-sm font-bold uppercase tracking-wider mb-1">Total Mahasiswa</p>
+                            <p class="text-red-100 text-sm font-bold uppercase tracking-wider mb-1">Total Intern</p>
                             <h3 class="text-5xl font-extrabold">{{ $totalStudents }}</h3>
                         </div>
                         <div class="p-2 bg-white/10 rounded-lg">
@@ -57,7 +57,7 @@
                 <div class="bg-[#ce0024] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 border-l-4 border-red-800">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-red-100 text-sm font-bold uppercase tracking-wider mb-1">Magang Aktif</p>
+                            <p class="text-red-100 text-sm font-bold uppercase tracking-wider mb-1">Active Intern</p>
                             <h3 class="text-5xl font-extrabold">{{ $activeInternships }}</h3>
                         </div>
                         <div class="p-2 bg-white/10 rounded-lg">
@@ -130,7 +130,7 @@
                         </div>
                         <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">{{ $pendingApplicants }} Waiting</span>
                     </div>
-                    <p class="text-gray-500 text-sm mb-4">Mahasiswa baru menunggu review dan persetujuan.</p>
+                    <p class="text-gray-500 text-sm mb-4">Intern baru menunggu review dan persetujuan.</p>
                     
                     @if($pendingApplicants > 0)
                         <a href="{{ route('admin.internships.index', ['status' => 'pending']) }}" class="block w-full text-center py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
@@ -156,7 +156,7 @@
                         </div>
                         <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">{{ $pendingExtensions->count() }} Requests</span>
                     </div>
-                    <p class="text-gray-500 text-sm mb-4">Pengajuan perpanjangan durasi magang.</p>
+                    <p class="text-gray-500 text-sm mb-4">Pengajuan perpanjangan durasi intern.</p>
                     
                     @if($pendingExtensions->count() > 0)
                         <a href="{{ route('admin.internships.index', ['status' => 'extension']) }}" class="block w-full text-center py-2.5 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition">
