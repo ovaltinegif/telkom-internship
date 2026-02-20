@@ -134,6 +134,8 @@ Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
 
         // Detail Mahasiswa
         Route::get('/student/{id}', [MentorController::class , 'showStudent'])->name('mentor.students.show');
+        Route::get('/student/{id}/transcript', [MentorController::class , 'transcript'])->name('mentor.students.transcript');
+        Route::get('/student/{id}/monthly-report', [MentorController::class , 'monthlyReport'])->name('mentor.students.monthlyReport');
 
         // Action Approve/Reject Logbook
         Route::patch('/logbook/{id}/update', [MentorController::class , 'updateLogbook'])->name('mentor.logbook.update');
