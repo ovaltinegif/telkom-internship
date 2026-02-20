@@ -16,10 +16,10 @@ class AttendanceFactory extends Factory
             'internship_id' => Internship::factory(),
             'date' => fake()->date(),
             'status' => fake()->randomElement(['present', 'permit', 'sick']),
-            'check_in' => '08:00:00',
-            'check_out' => '17:00:00',
-            'latitude' => fake()->latitude(),
-            'longitude' => fake()->longitude(),
+            'check_in_time' => '08:00:00',
+            'check_out_time' => '17:00:00',
+            'check_in_lat' => fake()->latitude(),
+            'check_in_long' => fake()->longitude(),
         ];
     }
 }

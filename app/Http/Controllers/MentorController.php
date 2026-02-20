@@ -11,6 +11,17 @@ use Carbon\Carbon;
 
 class MentorController extends Controller
 {
+    public function dashboard()
+    {
+        $pendingLogbooks = DailyLogbook::where('status', 'pending')->count();
+
+        $internships = Internship::with('student')
+            ->where('mentor_id', Auth::id())
+            ->get();
+
+        return view('mentor.dashboard', compact('pendingLogbooks', 'internships'));
+    }
+
     /**
      * Menampilkan daftar mahasiswa yang dibimbing oleh mentor yang sedang login.
      */
@@ -20,18 +31,18 @@ class MentorController extends Controller
         $type = $request->get('type', 'all'); // all, mahasiswa, smk
 
         $query = Internship::with(['student.studentProfile', 'division'])
-                        ->where('mentor_id', Auth::id());
+            ->where('mentor_id', Auth::id());
 
         // Calculate counts for main tabs
         $activeCount = (clone $query)->where('status', 'active')->count();
         $finishedCount = (clone $query)->where('status', 'finished')->count();
 
         // Calculate counts for sub-filters (Active Only)
-        $activeMahasiswaCount = (clone $query)->where('status', 'active')->whereHas('student.studentProfile', function($q) {
+        $activeMahasiswaCount = (clone $query)->where('status', 'active')->whereHas('student.studentProfile', function ($q) {
             $q->where('education_level', '!=', 'SMK');
         })->count();
-        
-        $activeSmkCount = (clone $query)->where('status', 'active')->whereHas('student.studentProfile', function($q) {
+
+        $activeSmkCount = (clone $query)->where('status', 'active')->whereHas('student.studentProfile', function ($q) {
             $q->where('education_level', 'SMK');
         })->count();
 
@@ -41,11 +52,12 @@ class MentorController extends Controller
         // Filter based on type (only if status is active)
         if ($status === 'active' && $type !== 'all') {
             if ($type === 'smk') {
-                $query->whereHas('student.studentProfile', function($q) {
+                $query->whereHas('student.studentProfile', function ($q) {
                     $q->where('education_level', 'SMK');
                 });
-            } elseif ($type === 'mahasiswa') {
-                $query->whereHas('student.studentProfile', function($q) {
+            }
+            elseif ($type === 'mahasiswa') {
+                $query->whereHas('student.studentProfile', function ($q) {
                     $q->where('education_level', '!=', 'SMK');
                 });
             }
@@ -54,7 +66,7 @@ class MentorController extends Controller
         $internships = $query->get();
 
         return view('mentor.students.index', compact(
-            'internships', 'status', 'type', 
+            'internships', 'status', 'type',
             'activeCount', 'finishedCount',
             'activeMahasiswaCount', 'activeSmkCount'
         ));
@@ -66,9 +78,9 @@ class MentorController extends Controller
     public function approvals()
     {
         $pendingLogbooks = DailyLogbook::with(['internship.student'])
-            ->whereHas('internship', function($q) {
-                $q->where('mentor_id', Auth::id());
-            })
+            ->whereHas('internship', function ($q) {
+            $q->where('mentor_id', Auth::id());
+        })
             ->where('status', 'pending')
             ->latest()
             ->paginate(10);
@@ -80,16 +92,16 @@ class MentorController extends Controller
     {
         // Cari data magang berdasarkan ID, pastikan mentornya benar (security check)
         $internship = Internship::with([
-                            'student.studentProfile', 
-                            'dailyLogbooks' => function($query) {
-                                $query->latest(); // Urutkan logbook dari yang terbaru
-                            },
-                            'attendances' => function($query) {
-                                $query->latest(); // Urutkan absen dari yang terbaru
-                            }
-                        ])
-                        ->where('mentor_id', Auth::id())
-                        ->findOrFail($id);
+            'student.studentProfile',
+            'dailyLogbooks' => function ($query) {
+            $query->latest(); // Urutkan logbook dari yang terbaru
+        },
+            'attendances' => function ($query) {
+            $query->latest(); // Urutkan absen dari yang terbaru
+        }
+        ])
+            ->where('mentor_id', Auth::id())
+            ->findOrFail($id);
 
         return view('mentor.students.show', compact('internship'));
     }

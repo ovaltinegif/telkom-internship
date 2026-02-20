@@ -11,11 +11,7 @@ use App\Models\Attendance;
 use Carbon\Carbon;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\AdminController;
-
 use App\Http\Controllers\EvaluationController;
-
-/* |-------------------------------------------------------------------------- | Web Routes |-------------------------------------------------------------------------- */
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 
