@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Internship;
 use App\Models\DailyLogbook;
-use Illuminate\Support\Facades\Auth;    
+use Illuminate\Support\Facades\Auth;
+use App\Models\Attendance;
+use Carbon\Carbon;
 
 class MentorController extends Controller
 {
@@ -115,5 +117,49 @@ class MentorController extends Controller
         ]);
 
         return back()->with('success', 'Status logbook berhasil diperbarui.');
+    }
+
+    /**
+     * Menampilkan Transkrip Nilai Mahasiswa untuk Mentor.
+     */
+    public function transcript($id)
+    {
+        $internship = Internship::with(['evaluation', 'student.studentProfile', 'division'])
+            ->where('mentor_id', Auth::id())
+            ->findOrFail($id);
+
+        if (!$internship->evaluation) {
+            abort(404, 'Belum ada evaluasi nilai untuk mahasiswa ini.');
+        }
+
+        return view('documents.transcript', compact('internship'));
+    }
+
+    /**
+     * Generate Laporan Bulanan (View/PDF) untuk Mentor.
+     */
+    public function monthlyReport(Request $request, $id)
+    {
+        $internship = Internship::where('mentor_id', Auth::id())
+            ->findOrFail($id);
+
+        $month = $request->month ?? Carbon::now()->month;
+        $year = $request->year ?? Carbon::now()->year;
+
+        // Get attendances
+        $attendances = Attendance::where('internship_id', $internship->id)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->orderBy('date')
+            ->get();
+
+        // Get logbooks
+        $logbooks = DailyLogbook::where('internship_id', $internship->id)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->orderBy('date')
+            ->get();
+
+        return view('reports.monthly', compact('internship', 'attendances', 'logbooks', 'month', 'year'));
     }
 }

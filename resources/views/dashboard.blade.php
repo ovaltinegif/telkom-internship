@@ -242,8 +242,9 @@
                                             $now = \Carbon\Carbon::now();
                                             $startCheckIn = $now->copy()->hour(7)->minute(0)->second(0);
                                             $endCheckIn = $now->copy()->hour(9)->minute(0)->second(0);
-                                            // Optional: Allow check-in if it's strictly between 7 and 9
-                                            $isCheckInTime = $now->between($startCheckIn, $endCheckIn);
+                                            // Developer Mode: Testing Attendance
+                                            // $isCheckInTime = $now->between($startCheckIn, $endCheckIn);
+                                            $isCheckInTime = true; // Always allow check-in for testing
                                         @endphp
 
                                         @if($isCheckInTime)
@@ -327,7 +328,9 @@
                                         @php
                                             $now = \Carbon\Carbon::now();
                                             $startCheckOut = $now->copy()->hour(17)->minute(0)->second(0);
-                                            $isCheckOutTime = $now->gte($startCheckOut);
+                                            // Developer Mode: Testing Attendance
+                                            // $isCheckOutTime = $now->gte($startCheckOut);
+                                            $isCheckOutTime = true; // Always allow check-out for testing
                                         @endphp
 
                                         @if($isCheckOutTime)
