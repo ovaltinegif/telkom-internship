@@ -98,7 +98,14 @@
                                     <select name="mentor_id" id="mentor_id" class="pl-10 block w-full border-slate-300 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm transition-all py-2.5">
                                         <option value="">-- Pilih Mentor --</option>
                                         @foreach($mentors as $mentor)
-                                            <option value="{{ $mentor->id }}">{{ $mentor->name }}</option>
+                                            @php
+                                                $quota = $mentor->mentorProfile->quota ?? 5;
+                                                $active = $mentor->activeInternsCount();
+                                                $isFull = $active >= $quota;
+                                            @endphp
+                                            <option value="{{ $mentor->id }}" {{ $isFull ? 'disabled' : '' }} class="{{ $isFull ? 'text-gray-400 bg-gray-50' : '' }}">
+                                                {{ $mentor->name }} ({{ $active }}/{{ $quota }}) {{ $isFull ? '- Penuh' : '' }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>

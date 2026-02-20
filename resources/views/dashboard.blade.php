@@ -144,19 +144,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    @if($logbook->status == 'approved')
-                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                                            Disetujui
-                                                        </span>
-                                                    @elseif($logbook->status == 'rejected')
-                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 border border-rose-200">
-                                                            Ditolak
-                                                        </span>
-                                                    @else
-                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
-                                                            Menunggu
-                                                        </span>
-                                                    @endif
+                                                    <x-status-badge :status="$logbook->status" />
                                                 </td>
                                                 <td class="px-6 py-4 text-slate-500 italic text-xs">
                                                     {{ $logbook->mentor_note ?? '-' }}

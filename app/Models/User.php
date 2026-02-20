@@ -67,6 +67,18 @@ class User extends Authenticatable
 
     public function isMentor()
     {
-        return $this->mentorprofile !== 'null';
+        return $this->role === 'mentor';
+    }
+
+    public function mentorProfile()
+    {
+        return $this->hasOne(MentorProfile::class);
+    }
+
+    public function activeInternsCount()
+    {
+        return $this->hasMany(Internship::class , 'mentor_id')
+            ->whereIn('status', ['active', 'onboarding'])
+            ->count();
     }
 }

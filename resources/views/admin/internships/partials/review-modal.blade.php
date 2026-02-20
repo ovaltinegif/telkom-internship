@@ -98,7 +98,14 @@
                                             <option value="">-- Pilih Mentor --</option>
                                             @if(isset($mentors))
                                                 @foreach($mentors as $mentor)
-                                                    <option value="{{ $mentor->id }}">{{ $mentor->name }}</option>
+                                                    @php
+                                                        $quota = $mentor->mentorProfile->quota ?? 5;
+                                                        $active = $mentor->activeInternsCount();
+                                                        $isFull = $active >= $quota;
+                                                    @endphp
+                                                    <option value="{{ $mentor->id }}" {{ $isFull ? 'disabled' : '' }} class="{{ $isFull ? 'text-gray-400 bg-gray-50' : '' }}">
+                                                        {{ $mentor->name }} ({{ $active }}/{{ $quota }}) {{ $isFull ? '- Penuh' : '' }}
+                                                    </option>
                                                 @endforeach
                                             @endif
                                         </select>

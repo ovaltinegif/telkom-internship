@@ -98,6 +98,13 @@ class AdminController extends Controller
             return back()->with('error', 'Mahasiswa ini sudah memiliki program magang aktif!');
         }
 
+        // Cek Kuota Mentor
+        $mentor = User::findOrFail($request->mentor_id);
+        $quota = $mentor->mentorProfile->quota ?? 5; // Default 5 jika null
+        if ($mentor->activeInternsCount() >= $quota) {
+            return back()->with('error', 'Mentor ini sudah mencapai batas kuota (' . $quota . ' mahasiswa). Silakan pilih mentor lain.');
+        }
+
         // Simpan
         Internship::create([
             'student_id' => $request->student_id,
@@ -241,6 +248,13 @@ class AdminController extends Controller
             'mentor_id' => 'required|exists:users,id',
         ]);
 
+        // Cek Kuota Mentor
+        $mentor = User::findOrFail($request->mentor_id);
+        $quota = $mentor->mentorProfile->quota ?? 5; // Default 5
+        if ($mentor->activeInternsCount() >= $quota) {
+            return back()->with('error', 'Mentor ini sudah mencapai batas kuota (' . $quota . ' mahasiswa). Mohon pilih mentor lain.');
+        }
+
         // Hardcoded Link (per user request)
         $paktaLink = 'https://docs.google.com/document/d/1MYswMj78AfqPH9yBIeH8U9VBA5jDaRguTzwQX-9ARe8/edit?tab=t.0';
 
@@ -261,7 +275,7 @@ class AdminController extends Controller
         // Optional: Send Notification to Student
 
         return redirect()->route('admin.internships.index', ['status' => 'pending'])
-            ->with('success', 'Mahasiswa disetujui! Status berubah menjadi Onboarding.');
+            ->with('success', 'Pengajuan diterima! Mahasiswa kini statusnya Onboarding.');
     }
 
     /**
@@ -320,7 +334,7 @@ class AdminController extends Controller
             // 'division_id' => $request->division_id, // Already set during approval
         ]);
 
-        $message = 'Program magang berhasil diaktifkan. Mahasiswa kini berstatus Active dengan Mentor & Divisi terpilih.';
+        $message = 'Program magang berhasil diaktifkan. Mahasiswa kini berstatus Aktif dengan Mentor & Divisi terpilih.';
 
         // Trigger Email Notification (Account Active, Silakan Ambil ID Card)
         if ($internship->student && $internship->student->email) {

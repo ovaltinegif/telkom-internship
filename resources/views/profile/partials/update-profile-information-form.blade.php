@@ -13,9 +13,37 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        {{-- Profile Photo --}}
+        <div class="flex items-center gap-6 mb-6">
+            <div class="shrink-0">
+                @if($user->studentProfile && $user->studentProfile->photo)
+                    <img class="h-24 w-24 object-cover rounded-full border-4 border-slate-50 shadow-sm" src="{{ asset('storage/' . $user->studentProfile->photo) }}" alt="{{ $user->name }}" />
+                @else
+                    <div class="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center text-slate-300 border-4 border-slate-50 shadow-sm">
+                        <svg class="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                @endif
+            </div>
+            <div class="grow">
+                <label class="block text-sm font-medium text-slate-700 mb-2">Foto Profil</label>
+                <input type="file" name="photo" class="block w-full text-sm text-slate-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-xl file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-red-50 file:text-red-700
+                    hover:file:bg-red-100
+                    cursor-pointer transition-colors
+                " accept="image/*">
+                <p class="mt-1 text-xs text-slate-400">JPG, JPEG, PNG (Max. 2MB)</p>
+                <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+            </div>
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />

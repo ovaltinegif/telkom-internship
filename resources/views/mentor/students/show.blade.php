@@ -5,62 +5,63 @@
     @endpush
 
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-slate-800 leading-tight">
                     {{ __('Detail Mahasiswa') }}
                 </h2>
                 <p class="text-slate-500 text-sm">Lihat profil dan rekap aktivitas magang</p>
             </div>
-            <a href="{{ route('mentor.students.index') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-red-600 transition-colors bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-sm hover:shadow">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                </svg>
-                Kembali
+             <a href="{{ route('mentor.students.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-slate-300 rounded-xl font-semibold text-xs text-slate-700 uppercase tracking-widest shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
+                &larr; Kembali
             </a>
         </div>
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
             {{-- 2. PROFILE CARD --}}
-            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-bl-[100px] -z-0"></div>
-                <div class="relative z-10 flex flex-col md:flex-row justify-between gap-8">
-                    
-                    {{-- Student Info --}}
-                    <div class="flex items-start gap-6">
-                        <div class="h-24 w-24 rounded-2xl bg-gradient-to-tr from-slate-200 to-white border-2 border-white shadow-lg flex items-center justify-center text-4xl font-bold text-slate-400">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col md:flex-row items-center md:items-center gap-6">
+                {{-- Photo --}}
+                <div class="shrink-0">
+                    @if($internship->student->studentProfile && $internship->student->studentProfile->photo)
+                        <img class="h-28 w-28 rounded-full object-cover shadow-md border-4 border-slate-50" src="{{ asset('storage/' . $internship->student->studentProfile->photo) }}" alt="{{ $internship->student->name }}">
+                    @else
+                        <div class="h-28 w-28 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center text-white text-4xl font-bold shadow-md border-4 border-slate-50">
                             {{ substr($internship->student->name, 0, 1) }}
                         </div>
-                        <div class="space-y-4">
-                            <div>
-                                <h3 class="text-3xl font-bold text-slate-800">{{ $internship->student->name }}</h3>
-                                <p class="text-slate-500">{{ $internship->student->email }}</p>
-                            </div>
-                            
-                            <div class="flex flex-wrap gap-4">
-                                <div class="px-4 py-2 bg-slate-50 rounded-xl border border-slate-100">
-                                    <p class="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Universitas</p>
-                                    <p class="font-semibold text-slate-700">{{ $internship->student->studentProfile->university ?? '-' }}</p>
-                                </div>
-                                <div class="px-4 py-2 bg-blue-50 rounded-xl border border-blue-100">
-                                    <p class="text-xs text-blue-400 uppercase tracking-wider font-bold mb-1">Divisi</p>
-                                    <p class="font-bold text-blue-700">{{ $internship->division->name }}</p>
-                                </div>
-                                <div class="px-4 py-2 bg-indigo-50 rounded-xl border border-indigo-100">
-                                    <p class="text-xs text-indigo-400 uppercase tracking-wider font-bold mb-1">Total Logbook</p>
-                                    <p class="font-bold text-indigo-700">{{ $internship->dailyLogbooks->count() }} Aktivitas</p>
-                                </div>
-                            </div>
-                        </div>
+                    @endif
+                </div>
+
+                {{-- Info --}}
+                <div class="grow text-center md:text-left space-y-2">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-800">{{ $internship->student->name }}</h1>
+                        <p class="text-slate-500 font-medium">{{ $internship->student->email }}</p>
                     </div>
 
-                    {{-- Action / Grading --}}
-                    <div class="flex flex-col items-end justify-center">
+                    {{-- MERGED: INFO STATS FROM INCOMING CHANGE --}}
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-2">
+                         <div class="px-3 py-1 bg-slate-50 rounded-lg border border-slate-100">
+                            <p class="text-xs text-slate-400 uppercase tracking-wider font-bold mb-0.5">Universitas</p>
+                            <p class="font-semibold text-slate-700 text-sm">{{ $internship->student->studentProfile->university ?? '-' }}</p>
+                        </div>
+                        <div class="px-3 py-1 bg-blue-50 rounded-lg border border-blue-100">
+                            <p class="text-xs text-blue-400 uppercase tracking-wider font-bold mb-0.5">Divisi</p>
+                            <p class="font-bold text-blue-700 text-sm">{{ $internship->division->name }}</p>
+                        </div>
+                         <div class="px-3 py-1 bg-indigo-50 rounded-lg border border-indigo-100">
+                            <p class="text-xs text-indigo-400 uppercase tracking-wider font-bold mb-0.5">Total Logbook</p>
+                            <p class="font-bold text-indigo-700 text-sm">{{ $internship->dailyLogbooks->count() }} Aktivitas</p>
+                        </div>
+                    </div>
+                    </div>
+
+                {{-- Action / Grading --}}
+                <div class="shrink-0 md:ml-auto flex flex-col items-center md:items-end justify-center">
                         @if($internship->evaluation)
-                             <div class="text-right">
+                             <div class="text-left">
                                 <span class="block text-xs text-slate-400 uppercase font-bold tracking-wider mb-2">Nilai Akhir</span>
                                 <span class="inline-flex items-center px-5 py-2 bg-emerald-100 text-emerald-800 rounded-xl font-bold text-xl border border-emerald-200 shadow-sm">
                                     {{ $internship->evaluation->final_score }}
@@ -87,15 +88,13 @@
                                     </svg>
                                     Input Nilai Terkunci
                                 </button>
-                                <p class="text-xs text-slate-400 mt-2 text-right">
+                                <p class="text-xs text-slate-400 mt-2 text-left">
                                     Terbuka dalam {{ ceil($daysRemaining - 7) }} hari lagi
                                 </p>
                             @endif
                         @endif
                     </div>
                 </div>
-            </div>
-
 
             {{-- 3. TRANSKRIP NILAI --}}
             @if($internship->evaluation)
@@ -312,7 +311,6 @@
 
     {{-- SCRIPT JAVA SCRIPT UNTUK SWEETALERT --}}
     <script>
-        // ... (Script remains roughly the same, styles updated by UI library automatically) ...
         @if(session('success'))
             Swal.fire({
                 icon: 'success',
