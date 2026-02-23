@@ -16,10 +16,10 @@
         <li><strong>Tanggal Selesai:</strong> {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}</li>
     </ul>
 
-    <p>Status akun Anda sekarang <strong>AKTIF</strong>. Anda sekarang dapat login dan mengakses menu <strong>Logbook Harian</strong> untuk mencatat aktivitas magang Anda.</p>
+    <p>Status akun Anda saat ini adalah <strong>ONBOARDING</strong>. Untuk mengaktifkan status magang Anda, silakan login ke dashboard untuk <strong>mengunduh, menandatangani, dan mengunggah kembali</strong> dokumen Pakta Integritas sebagai syarat aktivasi.</p>
 
     <p>
-        <a href="{{ route('login') }}" style="background-color: #dc2626; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Login ke Dashboard</a>
+        <a href="{{ route('login') }}" style="background-color: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Login ke Dashboard</a>
     </p>
 
     <p>Semangat dan sukses untuk magang Anda!</p>

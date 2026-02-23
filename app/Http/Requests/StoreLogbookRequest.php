@@ -22,9 +22,19 @@ class StoreLogbookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'required|date',
+            'date' => 'required|date|same:today',
             'activity' => 'required|string',
-            'evidence' => 'nullable|file|mimes:jpg,png,pdf,jpeg|max:5120', // Maksimal 5MB
+            'evidence' => 'nullable|file|mimes:jpg,png,pdf,jpeg|max:2048', // Maksimal 2MB sesuai permintaan
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'today' => now()->toDateString(),
+        ]);
     }
 }

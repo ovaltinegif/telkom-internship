@@ -57,7 +57,7 @@ class LogbookController extends Controller
 
         // Cek apakah sudah isi logbook HARI INI
         $todayLogbook = DailyLogbook::where('internship_id', $internship->id)
-            ->whereDate('date', now())
+            ->whereDate('date', now()->toDateString())
             ->exists();
 
         if ($todayLogbook) {
@@ -115,6 +115,10 @@ class LogbookController extends Controller
      */
     public function uploadImage(Request $request)
     {
+        $request->validate([
+            'file' => 'required|image|max:2048', // Maksimal 2MB, harus gambar
+        ]);
+
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('logbook-images', 'public');
             return response()->json([

@@ -117,14 +117,7 @@
                                             <p class="text-white font-bold text-lg">Belum Check-In</p>
                                         </div>
                                         
-                                        @php
-                                            $now = \Carbon\Carbon::now();
-                                            $startCheckIn = $now->copy()->hour(7)->minute(0)->second(0);
-                                            $endCheckIn = $now->copy()->hour(9)->minute(0)->second(0);
-                                            // Developer Mode: Testing Attendance
-                                            // $isCheckInTime = $now->between($startCheckIn, $endCheckIn);
-                                            $isCheckInTime = $now->between($startCheckIn, $endCheckIn); 
-                                        @endphp
+                                        {{-- isCheckInTime variable is now passed from DashboardController --}}
 
                                         @if($isCheckInTime)
                                             <form action="{{ route('attendance.checkIn') }}" method="POST" id="checkInForm" class="w-full">
@@ -204,14 +197,7 @@
                                             <p class="text-2xl font-mono text-emerald-400 font-bold mt-1">{{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i:s') }}</p>
                                         </div>
 
-                                        @php
-                                            $now = \Carbon\Carbon::now();
-                                            $startCheckOut = $now->copy()->hour(17)->minute(0)->second(0);
-                                            $endCheckOut = $now->copy()->hour(19)->minute(0)->second(0);
-                                            // Developer Mode: Testing Attendance
-                                            // $isCheckOutTime = $now->gte($startCheckOut);
-                                            $isCheckOutTime = $now->between($startCheckOut, $endCheckOut);
-                                        @endphp
+                                        {{-- isCheckOutTime variable is now passed from DashboardController --}}
 
                                         @if($isCheckOutTime)
                                             <form action="{{ route('attendance.checkOut') }}" method="POST" id="checkOutForm" class="w-full">

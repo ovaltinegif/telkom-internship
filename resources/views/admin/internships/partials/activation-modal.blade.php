@@ -28,6 +28,25 @@
                             <div class="mt-2 text-sm text-gray-500">
                                 <p class="mb-4">Pastikan mahasiswa sudah mengupload Pakta Integritas yang ditandatangani sebelum mengaktifkan status magang.</p>
                                 <p class="mb-4">Mentor dan Divisi sudah ditentukan pada tahap sebelumnya.</p>
+                                
+                                <div class="space-y-4 border-t pt-4">
+                                    <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                                        <span>📅</span> Jadwal Induksi Mahasiswa
+                                    </h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="induction_date" class="block text-xs font-bold text-slate-700 uppercase mb-1">Tanggal Induksi</label>
+                                            <input type="date" name="induction_date" id="induction_date" required 
+                                                class="w-full rounded-lg border-slate-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm">
+                                        </div>
+                                        <div>
+                                            <label for="induction_time" class="block text-xs font-bold text-slate-700 uppercase mb-1">Waktu Induksi</label>
+                                            <input type="time" name="induction_time" id="induction_time" required 
+                                                class="w-full rounded-lg border-slate-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-sm">
+                                        </div>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 italic">Jadwal ini akan dikirimkan otomatis ke email mahasiswa setelah diaktivasi.</p>
+                                </div>
                             </div>
                         </div>
                     </div>

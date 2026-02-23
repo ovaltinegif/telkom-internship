@@ -342,17 +342,27 @@ class AdminController extends Controller
             return back()->with('error', 'Mahasiswa belum mengupload Pakta Integritas yang sudah ditandatangani.');
         }
 
+        $request->validate([
+            'induction_date' => 'required|date',
+            'induction_time' => 'required',
+        ]);
+
         $internship->update([
             'status' => 'active',
-            // 'mentor_id' => $request->mentor_id, // Already set during approval
-            // 'division_id' => $request->division_id, // Already set during approval
         ]);
+
+        $inductionData = [
+            'date' => $request->induction_date,
+            'time' => $request->induction_time,
+            'location' => 'Ruang Kompeten Unit Shared Service & General Support Witel Semarang Jateng Utara Lantai 2 GMP Pahlawan, Jl. Pahlawan No. 10, Kota Semarang',
+            'activity' => 'Induksi Peserta Magang & Pengambilan ID Card',
+        ];
 
         $message = 'Program magang berhasil diaktifkan. Mahasiswa kini berstatus Aktif dengan Mentor & Divisi terpilih.';
 
         // Trigger Email Notification (Queued)
         if ($internship->student && $internship->student->email) {
-            \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipActive($internship));
+            \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipActive($internship, $inductionData));
             $message .= ' Email notifikasi telah dimasukkan ke antrean.';
         }
 

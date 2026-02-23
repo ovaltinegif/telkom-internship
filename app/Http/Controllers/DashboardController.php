@@ -80,6 +80,16 @@ class DashboardController extends Controller
 
         $attendancePercentage = $totalWorkingDays > 0 ? round(($totalPresent / $totalWorkingDays) * 100) : 0;
 
+        // Attendance Window Logic (for buttons visibility)
+        $isCheckInTime = $now->between(
+            $now->copy()->setTime(7, 0),
+            $now->copy()->setTime(9, 0)
+        );
+        $isCheckOutTime = $now->between(
+            $now->copy()->setTime(17, 0),
+            $now->copy()->setTime(19, 0)
+        );
+
         return view('dashboard', [
             'internship' => $internship,
             'logbooks' => $logbooks,
@@ -88,7 +98,9 @@ class DashboardController extends Controller
             'totalPresent' => $totalPresent,
             'totalPermit' => $totalPermit,
             'totalSick' => $totalSick,
-            'attendancePercentage' => $attendancePercentage
+            'attendancePercentage' => $attendancePercentage,
+            'isCheckInTime' => $isCheckInTime,
+            'isCheckOutTime' => $isCheckOutTime,
         ]);
     }
 }
