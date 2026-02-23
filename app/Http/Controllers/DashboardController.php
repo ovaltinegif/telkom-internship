@@ -25,16 +25,11 @@ class DashboardController extends Controller
         }
 
         // 3. Jika MAHASISWA (Student)
-        $internship = Internship::with(['documents', 'division', 'mentor'])->where('student_id', $user->id)->latest()->first();
+        $internship = Internship::with(['documents', 'division', 'mentor.mentorProfile'])->where('student_id', $user->id)->latest()->first();
 
         // Jika belum ada data magang ATAU status belum active/finished
         if (!$internship || !in_array($internship->status, ['active', 'finished'])) {
             return view('pending', ['internship' => $internship]);
-        }
-
-        // Jika FINISHED -> Redirect ke Activity (Logbook), jangan tampilkan Dashboard
-        if ($internship->status === 'finished') {
-            return redirect()->route('logbooks.index');
         }
 
         // Logic Reset per Jam 7 Pagi (Day starts at 07:00)

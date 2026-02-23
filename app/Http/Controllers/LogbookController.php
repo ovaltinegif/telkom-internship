@@ -8,6 +8,7 @@ use App\Http\Requests\StoreLogbookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Models\Attendance;
 
@@ -48,6 +49,13 @@ class LogbookController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $internship = Internship::where('student_id', $user->id)->first();
+
+        if ($internship && $internship->status === 'finished') {
+            return redirect()->route('dashboard')->with('error', 'Masa magang Anda telah selesai. Anda tidak dapat lagi mengisi logbook.');
+        }
+
         $internship = Internship::where('student_id', Auth::id())->active()->first();
 
         // Cek apakah mahasiswa punya magang aktif
@@ -72,6 +80,13 @@ class LogbookController extends Controller
      */
     public function store(StoreLogbookRequest $request)
     {
+        $user = Auth::user();
+        $internship = Internship::where('student_id', $user->id)->first();
+
+        if ($internship && $internship->status === 'finished') {
+            return redirect()->back()->with('error', 'Masa magang Anda telah selesai. Anda tidak dapat lagi mengisi logbook.');
+        }
+
         // 2. Cari Data Internship milik User yang sedang login
         // Asumsinya 1 user mahasiswa punya 1 data internship
         $internship = Internship::where('student_id', Auth::id())->active()->first();
@@ -125,5 +140,44 @@ class LogbookController extends Controller
                 'url' => Storage::url($path),
             ]);
         }
+    }
+
+    /**
+     * Export Logbook ke PDF.
+     */
+    public function exportPdf()
+    {
+        $internship = Internship::with(['student', 'mentor', 'division'])
+            ->where('student_id', Auth::id())
+            ->first();
+
+        if (!$internship) {
+            return redirect()->route('dashboard')->with('error', 'Data magang tidak ditemukan.');
+        }
+
+        $logbooks = DailyLogbook::where('internship_id', $internship->id)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        $pdf = Pdf::loadView('logbooks.pdf', compact('internship', 'logbooks'));
+
+        return $pdf->download('Logbook_Magang_' . Auth::user()->name . '.pdf');
+    }
+
+    /**
+     * Export Logbook ke Excel.
+     */
+    public function exportExcel()
+    {
+        $internship = Internship::where('student_id', Auth::id())->first();
+
+        if (!$internship) {
+            return redirect()->route('dashboard')->with('error', 'Data magang tidak ditemukan.');
+        }
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\LogbooksExport($internship),
+            'Logbook_Magang_' . Auth::user()->name . '.xlsx'
+        );
     }
 }

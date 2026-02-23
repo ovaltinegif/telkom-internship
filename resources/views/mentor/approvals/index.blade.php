@@ -25,10 +25,26 @@
                             </a>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        <form action="{{ route('mentor.logbook.massApprove') }}" method="POST" id="massApproveForm">
+                            @csrf
+                            @method('PATCH')
+
+                            <div class="mb-4 flex justify-end">
+                                <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Setujui yang Dipilih
+                                </button>
+                            </div>
+
+                            <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left">
                                 <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 uppercase font-semibold text-xs tracking-wider">
                                     <tr>
+                                        <th class="px-6 py-4 w-10 text-center">
+                                            <input type="checkbox" id="selectAll" class="rounded border-slate-300 text-red-600 focus:ring-red-500">
+                                        </th>
                                         <th class="px-6 py-4">Intern</th>
                                         <th class="px-6 py-4">Tanggal & Waktu</th>
                                         <th class="px-6 py-4">Aktivitas</th>
@@ -39,6 +55,9 @@
                                 <tbody class="divide-y divide-slate-100">
                                     @foreach($pendingLogbooks as $logbook)
                                         <tr class="hover:bg-slate-50/50 transition-colors">
+                                            <td class="px-6 py-4 text-center">
+                                                <input type="checkbox" name="logbook_ids[]" value="{{ $logbook->id }}" class="logbook-checkbox rounded border-slate-300 text-red-600 focus:ring-red-500">
+                                            </td>
                                             <td class="px-6 py-4">
                                                 <div class="font-bold text-slate-800">{{ $logbook->internship->student->name }}</div>
                                                 <div class="text-xs text-slate-500">{{ $logbook->internship->division->name ?? '-' }}</div>
@@ -90,9 +109,19 @@
                         <div class="mt-6">
                             {{ $pendingLogbooks->links() }}
                         </div>
+                    </form>
                     @endif
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.logbook-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    </script>
 </x-app-layout>

@@ -21,6 +21,10 @@ class AttendanceController extends Controller
             return back()->with('error', 'Status magang belum aktif atau tidak ditemukan.');
         }
 
+        if ($internship->status === 'finished') {
+            return redirect()->back()->with('error', 'Masa magang Anda telah selesai. Anda tidak dapat lagi mengisi presensi atau logbook.');
+        }
+
         // Time Validation: 07:00 - 09:00
         $now = Carbon::now();
         $startCheckIn = $now->copy()->hour(7)->minute(0)->second(0);
@@ -77,6 +81,10 @@ class AttendanceController extends Controller
     {
         $internship = Internship::where('student_id', Auth::id())->first();
 
+        if ($internship && $internship->status === 'finished') {
+            return redirect()->back()->with('error', 'Masa magang Anda telah selesai. Anda tidak dapat lagi mengisi presensi atau logbook.');
+        }
+
         // Cari absen hari ini yang belum di-checkout (Logic Reset 7 Pagi)
         $dateCheck = Carbon::now()->hour < 7 ?Carbon::yesterday() : Carbon::today();
 
@@ -116,6 +124,10 @@ class AttendanceController extends Controller
 
         if (!$internship) {
             return back()->with('error', 'Status magang tidak aktif atau tidak ditemukan.');
+        }
+
+        if ($internship->status === 'finished') {
+            return redirect()->back()->with('error', 'Masa magang Anda telah selesai. Anda tidak dapat lagi mengisi presensi atau logbook.');
         }
 
         // Check if attendance exists for date

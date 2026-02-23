@@ -13,7 +13,11 @@ class MentorController extends Controller
 {
     public function dashboard()
     {
-        $pendingLogbooks = DailyLogbook::where('status', 'pending')->count();
+        $pendingLogbooks = DailyLogbook::whereHas('internship', function ($q) {
+            $q->where('mentor_id', Auth::id());
+        })
+            ->where('status', 'pending')
+            ->count();
 
         $internships = Internship::with('student')
             ->where('mentor_id', Auth::id())
@@ -112,8 +116,7 @@ class MentorController extends Controller
     public function updateLogbook(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:approved,rejected',
-            'mentor_note' => 'nullable|string|max:255',
+            'status' => 'required|in:approved',
         ]);
 
         $logbook = DailyLogbook::findOrFail($id);
@@ -125,10 +128,9 @@ class MentorController extends Controller
 
         $logbook->update([
             'status' => $request->status,
-            'mentor_note' => $request->mentor_note,
         ]);
 
-        return back()->with('success', 'Status logbook berhasil diperbarui.');
+        return back()->with('success', 'Logbook berhasil disetujui.');
     }
 
     /**
@@ -173,5 +175,26 @@ class MentorController extends Controller
             ->get();
 
         return view('reports.monthly', compact('internship', 'attendances', 'logbooks', 'month', 'year'));
+    }
+
+    /**
+     * Setujui banyak logbook sekaligus (Mass Approve).
+     */
+    public function massApproveLogbooks(Request $request)
+    {
+        $request->validate([
+            'logbook_ids' => 'required|array',
+            'logbook_ids.*' => 'exists:daily_logbooks,id',
+        ]);
+
+        // Security: Hanya update logbook yang memang milik mahasiswa bimbingan mentor ini
+        $affected = DailyLogbook::whereIn('id', $request->logbook_ids)
+            ->whereHas('internship', function ($q) {
+            $q->where('mentor_id', Auth::id());
+        })
+            ->where('status', 'pending')
+            ->update(['status' => 'approved']);
+
+        return back()->with('success', "$affected logbook berhasil disetujui secara massal.");
     }
 }

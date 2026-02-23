@@ -15,11 +15,21 @@
                  @php
                     $roleFn = fn($r) => auth()->user()->role === $r;
                     $links = [];
+                    
                     if ($roleFn('mentor')) {
+                        $pendingCount = \App\Models\DailyLogbook::whereHas('internship', function($q) {
+                            $q->where('mentor_id', auth()->id());
+                        })->where('status', 'pending')->count();
+
                         $links = [
                             ['name' => 'Dashboard', 'route' => 'mentor.dashboard', 'active' => request()->routeIs('mentor.dashboard')],
                             ['name' => 'Intern', 'route' => 'mentor.students.index', 'active' => request()->routeIs('mentor.students*')],
-                            ['name' => 'Approval', 'route' => 'mentor.approvals.index', 'active' => request()->routeIs('mentor.approvals*')],
+                            [
+                                'name' => 'Approval', 
+                                'route' => 'mentor.approvals.index', 
+                                'active' => request()->routeIs('mentor.approvals*'),
+                                'badge' => $pendingCount > 0 ? $pendingCount : null
+                            ],
                         ];
                     } elseif ($roleFn('admin')) {
                          $links = [
@@ -50,8 +60,13 @@
 
                 @foreach($links as $link)
                     <a href="{{ $link['route'] === '#' ? '#' : route($link['route']) }}" 
-                       class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 {{ $link['active'] ? 'text-red-700 bg-red-50 shadow-sm border border-red-100' : 'text-slate-500 hover:text-red-600 hover:bg-slate-50' }}">
+                       class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2 {{ $link['active'] ? 'text-red-700 bg-red-50 shadow-sm border border-red-100' : 'text-slate-500 hover:text-red-600 hover:bg-slate-50' }}">
                         {{ $link['name'] }}
+                        @if(isset($link['badge']) && $link['badge'])
+                            <span class="bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-sm shadow-red-500/30">
+                                {{ $link['badge'] }}
+                            </span>
+                        @endif
                     </a>
                 @endforeach
             </div>

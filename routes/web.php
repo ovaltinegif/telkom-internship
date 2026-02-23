@@ -29,6 +29,8 @@ Route::get('/dashboard', [DashboardController::class , 'index'])->middleware(['a
 // Group Route untuk Mahasiswa (Logbook, Profile, dll)
 Route::middleware('auth')->group(function () {
     // route logbook
+    Route::get('/logbooks/export-pdf', [LogbookController::class , 'exportPdf'])->name('logbooks.exportPdf');
+    Route::get('/logbooks/export-excel', [LogbookController::class , 'exportExcel'])->name('logbooks.exportExcel');
     Route::controller(LogbookController::class)->group(function () {
             Route::get('/activity', 'index')->name('logbooks.index');
             Route::get('/logbooks/create', 'create')->name('logbooks.create');
@@ -59,7 +61,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/attendance/permission', 'permission')->name('attendance.permission');
             Route::get('/attendance/report', 'downloadReport')->name('attendance.report');
         }
-        );    });
+        );
+    });
 
 
 // Group Route Khusus Mentor (Dashboard Mentor)
@@ -77,6 +80,7 @@ Route::prefix('mentor')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/student/{id}/monthly-report', [MentorController::class , 'monthlyReport'])->name('mentor.students.monthlyReport');
 
     // Action Approve/Reject Logbook
+    Route::patch('/logbooks/mass-approve', [MentorController::class , 'massApproveLogbooks'])->name('mentor.logbook.massApprove');
     Route::patch('/logbook/{id}/update', [MentorController::class , 'updateLogbook'])->name('mentor.logbook.update');
 
     // Halaman Approval (List Pending Logbook)
@@ -119,7 +123,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
             Route::patch('/internships/{id}/approve-extension', 'approveExtension')->name('admin.internships.approveExtension');
             Route::patch('/internships/{id}/reject-extension', 'rejectExtension')->name('admin.internships.rejectExtension');
         }
-        );    });
+        );
+    });
 
 
 require __DIR__ . '/auth.php';
