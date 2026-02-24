@@ -1,149 +1,174 @@
-<section>
-    <header class="mb-6">
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
+<section class="p-8 sm:p-10">
+    <header class="mb-10 flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-black text-slate-800 dark:text-slate-200 tracking-tight">
+                {{ __('Informasi Profil') }}
+            </h2>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                {{ __("Kelola informasi dasar dan detail akun Anda.") }}
+            </p>
+        </div>
+        <div class="hidden sm:block">
+            <div class="w-12 h-12 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 shadow-sm border border-red-100 dark:border-red-500/20 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+            </div>
+        </div>
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+    <form method="post" action="{{ route('profile.update') }}" class="space-y-10" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
-        {{-- Student Specific Fields (Photo, NIM, Kampus, Jurusan, Alamat) --}}
-        @if($user->role === 'student')
-            {{-- Profile Photo --}}
-            <div class="flex items-center gap-6 mb-6">
-                <div class="shrink-0">
-                    @if($user->studentProfile && $user->studentProfile->photo)
-                        <img class="h-24 w-24 object-cover rounded-full border-4 border-slate-50 shadow-sm" src="{{ asset('storage/' . $user->studentProfile->photo) }}" alt="{{ $user->name }}" />
-                    @else
-                        <div class="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center text-slate-300 border-4 border-slate-50 shadow-sm">
-                            <svg class="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
+        {{-- Section: Personal Details --}}
+        <div class="space-y-6">
+            <div class="flex items-center gap-3 px-1">
+                <span class="w-1.5 h-6 bg-red-600 rounded-full"></span>
+                <h3 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest">Informasi Dasar</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Profile Photo --}}
+                @if($user->role === 'student')
+                <div class="md:col-span-2 flex items-center gap-8 p-6 bg-slate-50 dark:bg-slate-950 rounded-[2rem] border border-slate-100 dark:border-slate-800 group transition-all duration-300">
+                    <div class="shrink-0 relative">
+                        @if($user->studentProfile && $user->studentProfile->photo)
+                            <img class="h-24 w-24 object-cover rounded-[1.5rem] border-4 border-white dark:border-slate-800 shadow-xl group-hover:scale-105 transition-transform" src="{{ asset('storage/' . $user->studentProfile->photo) }}" alt="{{ $user->name }}" />
+                        @else
+                            <div class="h-24 w-24 rounded-[1.5rem] bg-white dark:bg-slate-900 flex items-center justify-center text-slate-200 dark:text-slate-800 border-4 border-white dark:border-slate-800 shadow-xl">
+                                <svg class="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="grow space-y-3">
+                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">Foto Profil</label>
+                        <input type="file" name="photo" class="block w-full text-xs text-slate-500 dark:text-slate-400
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-xl file:border-0
+                            file:text-[10px] file:font-black file:uppercase file:tracking-widest
+                            file:bg-slate-900 dark:file:bg-slate-100 file:text-white dark:file:text-slate-900
+                            hover:file:bg-black dark:hover:file:bg-white
+                            cursor-pointer transition-all
+                        " accept="image/*">
+                        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Batas ukuran 2MB (JPG, JPEG, atau PNG)</p>
+                        <x-input-error class="mt-2" :messages="$errors->get('photo')" />
+                    </div>
+                </div>
+                @endif
+
+                <div class="md:col-span-2">
+                    <x-input-label for="name" :value="__('Nama Lengkap')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                    <input id="name" name="name" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name" />
+                    <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                </div>
+
+                <div>
+                    <x-input-label for="email" :value="__('Email Address')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                    <input id="email" name="email" type="email" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium bg-slate-50/50 dark:bg-slate-950" value="{{ old('email', $user->email) }}" required autocomplete="username" />
+                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
+
+                    @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+                        <div class="mt-2 p-3 bg-amber-50 dark:bg-amber-500/10 rounded-xl border border-amber-100 dark:border-amber-500/20">
+                            <p class="text-[11px] text-amber-800 dark:text-amber-400 font-medium">
+                                {{ __('Email Anda belum diverifikasi.') }}
+                                <button form="send-verification" class="underline font-bold hover:text-amber-900 dark:hover:text-amber-300 focus:outline-none transition-colors ml-1">
+                                    {{ __('Klik di sini untuk mengirim ulang.') }}
+                                </button>
+                            </p>
+                            @if (session('status') === 'verification-link-sent')
+                                <p class="mt-1 font-bold text-[10px] text-emerald-600 uppercase tracking-wider">
+                                    {{ __('Link verifikasi baru telah dikirim.') }}
+                                </p>
+                            @endif
                         </div>
                     @endif
                 </div>
-                <div class="grow">
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Foto Profil</label>
-                    <input type="file" name="photo" class="block w-full text-sm text-slate-500
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-xl file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-red-50 file:text-red-700
-                        hover:file:bg-red-100
-                        cursor-pointer transition-colors
-                    " accept="image/*">
-                    <p class="mt-1 text-xs text-slate-400">JPG, JPEG, PNG (Max. 2MB)</p>
-                    <x-input-error class="mt-2" :messages="$errors->get('photo')" />
-                </div>
-            </div>
-        @endif
 
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
-
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
+                    @php
+                        $phone = '';
+                        if($user->role === 'student') $phone = $user->studentProfile->phone_number ?? '';
+                        elseif($user->role === 'mentor') $phone = $user->mentorProfile->phone_number ?? '';
+                    @endphp
+                    <x-input-label for="phone_number" :value="__('Nomor WhatsApp')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                    <input id="phone_number" name="phone_number" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('phone_number', $phone) }}" placeholder="08xxxxxxxxxx" />
+                    <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
                 </div>
-            @endif
+            </div>
         </div>
 
-        @if($user->role === 'student')
-            {{-- Student Fields --}}
-            <div>
-                <x-input-label for="nim" :value="__('NIM')" />
-                <x-text-input id="nim" name="nim" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('nim', $user->studentProfile->nim ?? '')" required />
-                <x-input-error class="mt-2" :messages="$errors->get('nim')" />
+        {{-- Section: Role Specific Details --}}
+        <div class="space-y-6">
+            <div class="flex items-center gap-3 px-1">
+                <span class="w-1.5 h-6 bg-red-600 rounded-full"></span>
+                <h3 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest">Detail {{ ucfirst($user->role) }}</h3>
             </div>
 
-            <div class="mt-4">
-                <x-input-label for="university" :value="__('Asal Kampus')" />
-                <x-text-input id="university" name="university" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('university', $user->studentProfile->university ?? '')" required />
-                <x-input-error class="mt-2" :messages="$errors->get('university')" />
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @if($user->role === 'student')
+                    <div>
+                        <x-input-label for="nim" :value="__('NIM / Nomor Induk')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                        <input id="nim" name="nim" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('nim', $user->studentProfile->nim ?? '') }}" required />
+                        <x-input-error class="mt-2" :messages="$errors->get('nim')" />
+                    </div>
 
-            <div class="mt-4">
-                <x-input-label for="major" :value="__('Jurusan')" />
-                <x-text-input id="major" name="major" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('major', $user->studentProfile->major ?? '')" required />
-                <x-input-error class="mt-2" :messages="$errors->get('major')" />
-            </div>
+                    <div>
+                        <x-input-label for="university" :value="__('Asal Kampus / Sekolah')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                        <input id="university" name="university" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('university', $user->studentProfile->university ?? '') }}" required />
+                        <x-input-error class="mt-2" :messages="$errors->get('university')" />
+                    </div>
 
-            <div class="mt-4">
-                <x-input-label for="address" :value="__('Alamat Domisili')" />
-                <textarea id="address" name="address" class="border-slate-300 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm mt-1 block w-full" rows="3">{{ old('address', $user->studentProfile->address ?? '') }}</textarea>
-            </div>
-        @endif
+                    <div class="md:col-span-2">
+                        <x-input-label for="major" :value="__('Program Studi / Jurusan')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                        <input id="major" name="major" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('major', $user->studentProfile->major ?? '') }}" required />
+                        <x-input-error class="mt-2" :messages="$errors->get('major')" />
+                    </div>
 
-        @if($user->role === 'mentor')
-            {{-- Mentor Fields --}}
-            <div>
-                <x-input-label for="nik" :value="__('NIK')" />
-                <x-text-input id="nik" name="nik" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('nik', $user->mentorProfile->nik ?? '')" required />
-                <x-input-error class="mt-2" :messages="$errors->get('nik')" />
-            </div>
+                    <div class="md:col-span-2">
+                        <x-input-label for="address" :value="__('Alamat Domisili')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                        <textarea id="address" name="address" rows="3" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-4 px-5 text-slate-700 dark:text-slate-200 font-medium">{{ old('address', $user->studentProfile->address ?? '') }}</textarea>
+                        <x-input-error class="mt-2" :messages="$errors->get('address')" />
+                    </div>
+                @endif
 
-            <div class="mt-4">
-                 <x-input-label for="position" :value="__('Jabatan')" />
-                <x-text-input id="position" name="position" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('position', $user->mentorProfile->position ?? '')" required />
-                <x-input-error class="mt-2" :messages="$errors->get('position')" />
-            </div>
-        @endif
+                @if($user->role === 'mentor')
+                    <div>
+                        <x-input-label for="nik" :value="__('NIK / NIK Komersial')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                        <input id="nik" name="nik" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('nik', $user->mentorProfile->nik ?? '') }}" required />
+                        <x-input-error class="mt-2" :messages="$errors->get('nik')" />
+                    </div>
 
-        {{-- Input No HP (Shared) --}}
-        <div class="mt-4">
-            @php
-                $phone = '';
-                if($user->role === 'student') $phone = $user->studentProfile->phone_number ?? '';
-                elseif($user->role === 'mentor') $phone = $user->mentorProfile->phone_number ?? '';
-            @endphp
-            <x-input-label for="phone_number" :value="__('Nomor HP / WhatsApp')" />
-            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-red-500 focus:ring-red-500" :value="old('phone_number', $phone)" />
-             <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
+                    <div>
+                        <x-input-label for="position" :value="__('Jabatan saat ini')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
+                        <input id="position" name="position" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('position', $user->mentorProfile->position ?? '') }}" required />
+                        <x-input-error class="mt-2" :messages="$errors->get('position')" />
+                    </div>
+                @endif
+            </div>
         </div>
 
-        <div class="flex items-center gap-4">
-            <button type="submit" class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-red-600 to-red-500 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-wider hover:from-red-500 hover:to-red-400 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-md shadow-red-200">
-                {{ __('Save Changes') }}
+        <div class="pt-6 border-t border-slate-50 dark:border-slate-800 flex items-center gap-6 transition-colors duration-300">
+            <button type="submit" class="px-10 py-4 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-red-200 dark:shadow-red-900/40">
+                {{ __('Simpan Perubahan') }}
             </button>
 
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)" 
+                    class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+                    <div class="w-5 h-5 bg-emerald-100 dark:bg-emerald-500/20 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider">{{ __('Berhasil Disimpan') }}</span>
+                </div>
             @endif
         </div>
     </form>

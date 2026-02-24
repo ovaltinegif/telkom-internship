@@ -563,22 +563,30 @@
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full">
                 <form action="{{ route('attendance.report') }}" method="GET" target="_blank" class="p-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Laporan Bulanan</h3>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Bulan</label>
-                            <select name="month" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                @for($i = 1; $i <= 12; $i++)
-                                    <option value="{{ $i }}" {{ date('n') == $i ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $i, 10)) }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Tahun</label>
-                            <select name="year" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                <option value="{{ date('Y') }}" selected>{{ date('Y') }}</option>
-                                <option value="{{ date('Y') - 1 }}">{{ date('Y') - 1 }}</option>
-                            </select>
-                        </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Pilih Periode Laporan</label>
+                        @php
+                            $start = \Carbon\Carbon::parse($internship->start_date)->startOfMonth();
+                            $end = \Carbon\Carbon::now()->startOfMonth();
+                            $current = $end->copy();
+                            $options = [];
+                            
+                            while ($current >= $start) {
+                                $options[] = [
+                                    'month' => $current->format('n'),
+                                    'year' => $current->format('Y'),
+                                    'label' => $current->translatedFormat('F Y')
+                                ];
+                                $current->subMonth();
+                            }
+                        @endphp
+                        <select name="period_selector" onchange="const vals = this.value.split('-'); document.getElementById('report_month').value = vals[0]; document.getElementById('report_year').value = vals[1];" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                            @foreach($options as $option)
+                                <option value="{{ $option['month'] }}-{{ $option['year'] }}">{{ $option['label'] }}</option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="month" id="report_month" value="{{ date('n') }}">
+                        <input type="hidden" name="year" id="report_year" value="{{ date('Y') }}">
                     </div>
                     <div class="flex justify-end gap-3">
                         <button type="button" onclick="closeModal('monthlyReportModal')" class="py-2 px-4 border rounded-md text-gray-700 hover:bg-gray-50">Batal</button>

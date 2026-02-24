@@ -31,20 +31,36 @@
                             </div>
                             <x-input-error :messages="$errors->get('date')" class="mt-2" />
                         </div>
+                        
+                        {{-- Section Judul & Aktivitas (Grouped) --}}
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between px-1">
+                                <x-input-label :value="__('Detail Aktivitas Logbook')" class="text-slate-700 font-bold text-lg" />
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Wajib Diisi</span>
+                            </div>
+                            
+                            <div class="bg-white border-2 border-slate-100 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md focus-within:border-red-500/20 focus-within:shadow-red-500/5 transition-all duration-300">
+                                {{-- Area Input Judul --}}
+                                <div class="px-8 pt-8 pb-4 border-b border-slate-50 bg-slate-50/30">
+                                    <input id="title" type="text" name="title" value="{{ old('title') }}" required
+                                        class="w-full border-0 focus:ring-0 p-0 text-2xl font-black text-slate-800 placeholder:text-slate-300 bg-transparent transition-all"
+                                        placeholder="Tulis Judul Aktivitas..." />
+                                    <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                                </div>
 
-                        {{-- Input Aktivitas (Whiteboard / Trix Editor) --}}
-                        <div class="space-y-2">
-                            <x-input-label for="activity" :value="__('Whiteboard Aktivitas')" class="text-slate-700 font-semibold text-lg" />
-                            <p class="text-sm text-slate-500 mb-2">Tuliskan detail kegiatanmu, ide, atau catatan penting hari ini.</p>
-                            
-                            <input id="activity" type="hidden" name="activity" value="{{ old('activity') }}">
-                            <trix-editor input="activity" 
-                                class="trix-content w-full min-h-[400px] bg-white border-2 border-slate-200 focus:border-red-500 focus:ring-red-500 rounded-2xl shadow-sm transition-all p-6 text-lg text-slate-700 leading-relaxed"
-                                placeholder="Mulai menulis di sini..."
-                                style="min-height: 400px;">
-                            </trix-editor>
-                            
-                            <x-input-error :messages="$errors->get('activity')" class="mt-2" />
+                                {{-- Area Trix Editor --}}
+                                <div class="p-2">
+                                    <input id="activity" type="hidden" name="activity" value="{{ old('activity') }}">
+                                    <trix-editor input="activity" 
+                                        class="trix-content w-full min-h-[400px] border-0 focus:ring-0 px-6 py-4 text-slate-700 leading-relaxed text-lg"
+                                        placeholder="Ceritakan detail kegiatanmu, tantangan, atau hasil pekerjaan hari ini..."
+                                        style="min-height: 400px;">
+                                    </trix-editor>
+                                    <div class="px-6 pb-4">
+                                        <x-input-error :messages="$errors->get('activity')" class="mt-1" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- Input Bukti --}}

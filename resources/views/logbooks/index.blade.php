@@ -6,7 +6,7 @@
         <p class="text-slate-500 text-sm">Riwayat lengkap aktivitas magang kamu</p>
     </x-slot>
 
-    <div class="py-12" x-data="{ activeTab: 'logbook', showModal: false, modalContent: '', modalDate: '' }">
+    <div class="py-12" x-data="{ activeTab: 'logbook', showModal: false, modalContent: '', modalDate: '', modalTitle: '' }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             {{-- Tabs Navigation --}}
@@ -65,6 +65,7 @@
                                 <thead class="text-xs text-slate-500 uppercase bg-slate-50/50 border-b border-slate-100">
                                     <tr>
                                         <th class="px-6 py-4 font-semibold">Tanggal</th>
+                                        <th class="px-6 py-4 font-semibold">Judul</th>
                                         <th class="px-6 py-4 font-semibold">Aktivitas</th>
                                         <th class="px-6 py-4 font-semibold">Bukti</th>
                                         <th class="px-6 py-4 font-semibold">Status</th>
@@ -77,12 +78,15 @@
                                             <td class="px-6 py-4 font-medium text-slate-900">
                                                 {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
                                             </td>
-                                            <td class="px-6 py-4 text-slate-600 max-w-lg">
+                                            <td class="px-6 py-4 font-bold text-slate-800">
+                                                {{ $logbook->title ?? '-' }}
+                                            </td>
+                                            <td class="px-6 py-4 text-slate-600 max-w-sm">
                                                 <div class="line-clamp-2" title="{{ strip_tags($logbook->activity) }}">
-                                                    {{ Str::limit(strip_tags($logbook->activity), 100) }}
+                                                    {{ Str::limit(strip_tags($logbook->activity), 80) }}
                                                 </div>
                                                 <button 
-                                                    @click="showModal = true; modalContent = {{ json_encode($logbook->activity) }}; modalDate = '{{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}'"
+                                                    @click="showModal = true; modalContent = {{ json_encode($logbook->activity) }}; modalDate = '{{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}'; modalTitle = '{{ addslashes($logbook->title) }}'"
                                                     class="text-red-600 hover:text-red-700 text-xs font-medium mt-1 inline-flex items-center gap-1 transition-colors">
                                                     Lihat Selengkapnya
                                                 </button>
@@ -307,7 +311,7 @@
                                 <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <h3 class="text-lg font-bold leading-6 text-slate-900" id="modal-title">
+                                            <h3 class="text-lg font-bold leading-6 text-slate-900" id="modal-title" x-text="modalTitle || 'Detail Aktivitas'">
                                                 Detail Aktivitas
                                             </h3>
                                             <div class="mt-1 text-sm text-slate-500" x-text="modalDate"></div>

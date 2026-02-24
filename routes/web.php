@@ -42,22 +42,20 @@ Route::middleware('auth')->group(function () {
         // route documents
         Route::controller(DocumentController::class)->group(function () {
             Route::get('/documents/transcript', 'transcript')->name('documents.transcript');
-            Route::get('/documents', function () {
-                    return redirect()->route('dashboard'); }
-                )->name('documents.index');
-                Route::post('/documents/extension', 'storeExtension')->name('documents.storeExtension');
-                Route::post('/documents/final-report', 'storeFinalReport')->name('documents.storeFinalReport');
-                Route::post('/documents/pakta-integritas', 'storePaktaIntegritas')->name('documents.storePaktaIntegritas');
-            }
-            );
+            Route::get('/documents', 'index')->name('documents.index');
+            Route::post('/documents/extension', 'storeExtension')->name('documents.storeExtension');
+            Route::post('/documents/final-report', 'storeFinalReport')->name('documents.storeFinalReport');
+            Route::post('/documents/pakta-integritas', 'storePaktaIntegritas')->name('documents.storePaktaIntegritas');
+        }
+        );
 
-            // route profile
-            Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
-            Route::patch('/profile', [ProfileController::class , 'update'])->name('profile.update');
-            Route::delete('/profile', [ProfileController::class , 'destroy'])->name('profile.destroy');
+        // route profile
+        Route::get('/profile', [ProfileController::class , 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class , 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class , 'destroy'])->name('profile.destroy');
 
-            // route attendance atau absen
-            Route::controller(AttendanceController::class)->group(function () {
+        // route attendance atau absen
+        Route::controller(AttendanceController::class)->group(function () {
             Route::post('/attendance/check-in', 'checkIn')->name('attendance.checkIn');
             Route::post('/attendance/check-out', 'checkOut')->name('attendance.checkOut');
             Route::post('/attendance/permission', 'permission')->name('attendance.permission');

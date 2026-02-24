@@ -32,6 +32,7 @@ class LogbooksExport implements FromCollection, WithHeadings, WithMapping, Shoul
         return [
             'No',
             'Hari / Tanggal',
+            'Judul',
             'Aktivitas',
             'Status',
         ];
@@ -44,6 +45,7 @@ class LogbooksExport implements FromCollection, WithHeadings, WithMapping, Shoul
         return [
             $this->rowNumber,
             \Carbon\Carbon::parse($logbook->date)->isoFormat('dddd, D MMMM Y'),
+            $logbook->title ?? '-',
             strip_tags($logbook->activity),
             ucfirst($logbook->status),
         ];

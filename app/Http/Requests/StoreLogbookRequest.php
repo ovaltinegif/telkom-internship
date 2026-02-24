@@ -23,6 +23,7 @@ class StoreLogbookRequest extends FormRequest
     {
         return [
             'date' => 'required|date|same:today',
+            'title' => 'required|string|max:255',
             'activity' => 'required|string',
             'evidence' => 'nullable|file|mimes:jpg,png,pdf,jpeg|max:2048', // Maksimal 2MB sesuai permintaan
         ];

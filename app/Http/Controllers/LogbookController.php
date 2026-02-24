@@ -121,6 +121,7 @@ class LogbookController extends Controller
         DailyLogbook::create([
             'internship_id' => $internship->id,
             'date' => $targetDate,
+            'title' => $request->title,
             'activity' => $request->activity,
             'evidence' => $evidencePath,
             'status' => 'pending', // Default status menunggu persetujuan mentor

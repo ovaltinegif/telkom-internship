@@ -7,20 +7,56 @@
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             font-size: 12px;
-            color: #333;
+            color: #000;
             line-height: 1.5;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #ed1c24;
-            padding-bottom: 10px;
+        .kop-surat {
+            width: 100%;
+            border-bottom: 4px double #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
-        .header h1 {
+        .kop-surat table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .kop-surat td {
+            vertical-align: middle;
+        }
+        .kop-logo {
+            width: 120px;
+            text-align: center;
+        }
+        .kop-text {
+            text-align: center;
+        }
+        .kop-text h1 {
             margin: 0;
-            color: #ed1c24;
-            font-size: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+        }
+        .kop-text h2 {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+        .kop-text p {
+            margin: 5px 0 0 0;
+            font-size: 12px;
+            color: #000;
+        }
+        .document-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .document-title h3 {
+            margin: 0;
+            font-size: 16px;
             text-transform: uppercase;
+            text-decoration: underline;
+            color: #000;
         }
         .info-table {
             width: 100%;
@@ -39,7 +75,7 @@
             margin-top: 10px;
         }
         .main-table th, .main-table td {
-            border: 1px solid #ddd;
+            border: 1px solid #000;
             padding: 8px;
             text-align: left;
         }
@@ -48,7 +84,7 @@
             font-weight: bold;
             text-transform: uppercase;
             font-size: 11px;
-            color: #555;
+            color: #000;
         }
         .status-badge {
             font-size: 10px;
@@ -66,9 +102,10 @@
         }
         .footer {
             margin-top: 40px;
-            text-align: right;
+            text-align: left;
             font-size: 10px;
-            color: #777;
+            color: #000;
+            font-style: italic;
         }
         .page-break {
             page-break-after: always;
@@ -76,9 +113,23 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Logbook Kegiatan Magang</h1>
-        <p>Telkom Indonesia - Internship Management System</p>
+    <div class="kop-surat">
+        <table>
+            <tr>
+                <td class="kop-logo">
+                    <img src="{{ public_path('images/logo-telkom.png') }}" style="width: 100px;">
+                </td>
+                <td class="kop-text">
+                    <h1>PT TELKOM INDONESIA (PERSERO) Tbk</h1>
+                    <h2>Witel Semarang - Shared Service & General Support</h2>
+                    <p>Jl. Pahlawan No. 10, Semarang, Jawa Tengah 50241</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="document-title">
+        <h3>Logbook Kegiatan Magang</h3>
     </div>
 
     <table class="info-table">
@@ -92,7 +143,7 @@
             <td class="info-label">Mentor</td>
             <td>: {{ $internship->mentor->name ?? '-' }}</td>
             <td class="info-label">Periode</td>
-            <td>: {{ \Carbon\Carbon::parse($internship->start_date)->format('d M Y') }} - {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}</td>
+            <td>: {{ \Carbon\Carbon::parse($internship->start_date)->isoFormat('D MMMM YYYY') }} - {{ \Carbon\Carbon::parse($internship->end_date)->isoFormat('D MMMM YYYY') }}</td>
         </tr>
     </table>
 
@@ -111,10 +162,15 @@
                     <td style="text-align: center;">{{ $index + 1 }}</td>
                     <td>
                         {{ \Carbon\Carbon::parse($logbook->date)->isoFormat('dddd') }},<br>
-                        {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
+                        {{ \Carbon\Carbon::parse($logbook->date)->isoFormat('D MMMM YYYY') }}
                     </td>
                     <td>
-                        {!! $logbook->activity !!}
+                        <div style="font-weight: bold; margin-bottom: 5px; font-size: 12px; color: #000;">
+                            {{ $logbook->title ?? '-' }}
+                        </div>
+                        <div style="color: #444;">
+                            {!! $logbook->activity !!}
+                        </div>
                     </td>
                     <td style="text-align: center;">
                         @if($logbook->status == 'approved')
@@ -133,7 +189,7 @@
     </table>
 
     <div class="footer">
-        Dicetak otomatis melalui IMS Telkom pada {{ now()->format('d/m/Y H:i') }} WIB
+        Dokumen ini dicetak otomatis melalui Internship Management System (IMS) Telkom Witel Semarang pada {{ now()->isoFormat('D MMMM YYYY, HH:mm') }} WIB
     </div>
 </body>
 </html>

@@ -4,13 +4,13 @@
     $status = strtolower($status ?? '');
     
     $classes = match($status) {
-        'active' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
-        'pending' => 'bg-amber-100 text-amber-800 border-amber-200',
-        'onboarding' => 'bg-blue-100 text-blue-800 border-blue-200',
-        'finished' => 'bg-slate-100 text-slate-800 border-slate-200',
-        'rejected' => 'bg-red-100 text-red-800 border-red-200',
-        'extension' => 'bg-purple-100 text-purple-800 border-purple-200',
-        default => 'bg-gray-100 text-gray-800 border-gray-200',
+        'active' => 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20',
+        'pending' => 'bg-amber-100 dark:bg-amber-500/10 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-500/20',
+        'onboarding' => 'bg-blue-100 dark:bg-blue-500/10 text-blue-800 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
+        'finished' => 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700',
+        'rejected' => 'bg-red-100 dark:bg-red-500/10 text-red-800 dark:text-red-400 border-red-200 dark:border-red-500/20',
+        'extension' => 'bg-purple-100 dark:bg-purple-500/10 text-purple-800 dark:text-purple-400 border-purple-200 dark:border-purple-500/20',
+        default => 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-400 border-gray-200 dark:border-slate-700',
     };
 
     $label = match($status) {

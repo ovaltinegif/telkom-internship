@@ -32,117 +32,118 @@
              x-transition:leave="ease-in duration-200"
              x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
              x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-[32em] w-full font-sans">
+             class="inline-block align-bottom bg-white dark:bg-slate-900 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full font-sans border border-transparent dark:border-slate-800">
             
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="bg-white dark:bg-slate-900 px-6 pt-6 pb-4 sm:p-8 sm:pb-6 transition-colors duration-300">
                     <div class="sm:flex sm:items-start">
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                Review Aplikasi: <span x-text="studentName"></span>
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 transition-colors" id="modal-title">
+                                Review Aplikasi: <span class="text-red-600 dark:text-red-400" x-text="studentName"></span>
                             </h3>
-                            <div class="mt-4 mb-6">
-                                <p class="text-sm text-gray-500 mb-2 font-semibold">Dokumen Intern:</p>
-                                <ul class="border border-gray-200 rounded-md divide-y divide-gray-200 max-h-40 overflow-y-auto">
-                                    <template x-for="doc in documents" :key="doc.id">
-                                        <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                                            <div class="w-0 flex-1 flex items-center">
-                                                <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
-                                                </svg>
-                                                <span class="ml-2 flex-1 w-0 truncate" x-text="doc.name"></span>
-                                            </div>
-                                            <div class="ml-4 flex-shrink-0">
-                                                <a :href="'/storage/' + doc.file_path" 
-                                                   target="_blank" 
-                                                   rel="noopener noreferrer"
-                                                   class="font-medium text-indigo-600 hover:text-indigo-500 inline-flex items-center">
-                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                                    Lihat
-                                                </a>
-                                            </div>
-                                        </li>
-                                    </template>
-                                </ul>
-                            </div>
 
-                            <hr class="my-4">
-
-                            <!-- Approve Form -->
-                            <form id="approve-form" :action="'{{ route('admin.internships.approve', 'PLACEHOLDER_ID') }}'.replace('PLACEHOLDER_ID', internshipId)" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <div class="mt-4">
-                                     <div class="mb-4">
-                                        <p class="text-sm text-gray-700">
-                                            Link <strong>Template Pakta Integritas</strong> akan otomatis dikirim ke intern saat Anda menyetujui aplikasi ini.
-                                        </p>
-                                    </div>
-
-                                    {{-- Division Selection --}}
-                                    <div class="mb-4">
-                                        <label for="division_id_review" class="block text-sm font-medium text-gray-700 mb-1">Pilih Divisi</label>
-                                        <select name="division_id" id="division_id_review" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            <option value="">-- Pilih Divisi --</option>
-                                            @if(isset($divisions))
-                                                @foreach($divisions as $division)
-                                                    <option value="{{ $division->id }}">{{ $division->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-
-                                    {{-- Mentor Selection --}}
-                                    <div class="mb-4">
-                                        <label for="mentor_id_review" class="block text-sm font-medium text-gray-700 mb-1">Pilih Mentor</label>
-                                        <select name="mentor_id" id="mentor_id_review" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            <option value="">-- Pilih Mentor --</option>
-                                            @if(isset($mentors))
-                                                @foreach($mentors as $mentor)
-                                                    @php
-                                                        $quota = $mentor->mentorProfile->quota ?? 5;
-                                                        $active = $mentor->activeInternships()->count();
-                                                        $isFull = $active >= $quota;
-                                                    @endphp
-                                                    <option value="{{ $mentor->id }}" {{ $isFull ? 'disabled' : '' }} class="{{ $isFull ? 'text-gray-400 bg-gray-50' : '' }}">
-                                                        {{ $mentor->name }} ({{ $active }}/{{ $quota }}) {{ $isFull ? '- Penuh' : '' }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-
-                                    <p class="text-sm text-gray-600 mt-2">
-                                        Klik tombol <strong>Approve</strong> untuk menyetujui mahasiswa.
-                                    </p>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3 transition-colors">Dokumen Intern:</p>
+                                    <ul class="border border-slate-200 dark:border-slate-800 rounded-xl divide-y divide-slate-100 dark:divide-slate-800 max-h-48 overflow-y-auto bg-slate-50/50 dark:bg-slate-950/30 transition-colors">
+                                        <template x-for="doc in documents" :key="doc.id">
+                                            <li class="pl-4 pr-5 py-4 flex items-center justify-between text-sm hover:bg-white dark:hover:bg-slate-800 transition-colors">
+                                                <div class="w-0 flex-1 flex items-center">
+                                                    <div class="h-8 w-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mr-3 transition-colors">
+                                                        <svg class="h-4 w-4 text-slate-500 dark:text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                    <span class="font-bold text-slate-700 dark:text-slate-200 truncate transition-colors" x-text="doc.name"></span>
+                                                </div>
+                                                <div class="ml-4 flex-shrink-0">
+                                                    <a :href="'/storage/' + doc.file_path" 
+                                                       target="_blank" 
+                                                       rel="noopener noreferrer"
+                                                       class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all">
+                                                        <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                        Lihat
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        </template>
+                                    </ul>
                                 </div>
-                            </form>
-                            
-                            
-                            <!-- Reject Form (Hidden) -->
-                            <form id="reject-form" :action="'{{ route('admin.internships.reject', 'PLACEHOLDER_ID') }}'.replace('PLACEHOLDER_ID', internshipId)" method="POST" class="hidden">
-                                @csrf
-                                @method('PATCH')
-                            </form>
 
+                                <div class="border-t border-slate-100 dark:border-slate-800 pt-6 transition-colors">
+                                    <!-- Approve Form -->
+                                    <form id="approve-form" :action="'{{ route('admin.internships.approve', 'PLACEHOLDER_ID') }}'.replace('PLACEHOLDER_ID', internshipId)" method="POST" class="space-y-6">
+                                        @csrf
+                                        @method('PATCH')
+                                        
+                                        <div class="p-4 bg-emerald-50 dark:bg-emerald-500/5 rounded-xl border border-emerald-100 dark:border-emerald-500/20 transition-colors">
+                                            <p class="text-xs font-bold text-emerald-800 dark:text-emerald-400">
+                                                <svg class="inline-block w-4 h-4 mr-1.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                Persetujuan akan otomatis mengirim link <strong>Template Pakta Integritas</strong> kepada mahasiswa.
+                                            </p>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            {{-- Division Selection --}}
+                                            <div class="space-y-1.5">
+                                                <label for="division_id_review" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Pilih Divisi</label>
+                                                <select name="division_id" id="division_id_review" required class="block w-full px-4 py-2.5 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:border-red-500 focus:ring-red-500 sm:text-sm font-bold transition-all">
+                                                    <option value="">-- Pilih Divisi --</option>
+                                                    @if(isset($divisions))
+                                                        @foreach($divisions as $division)
+                                                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+
+                                            {{-- Mentor Selection --}}
+                                            <div class="space-y-1.5">
+                                                <label for="mentor_id_review" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Pilih Mentor</label>
+                                                <select name="mentor_id" id="mentor_id_review" required class="block w-full px-4 py-2.5 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:border-red-500 focus:ring-red-500 sm:text-sm font-bold transition-all">
+                                                    <option value="">-- Pilih Mentor --</option>
+                                                    @if(isset($mentors))
+                                                        @foreach($mentors as $mentor)
+                                                            @php
+                                                                $quota = $mentor->mentorProfile->quota ?? 5;
+                                                                $active = $mentor->activeInternships()->count();
+                                                                $isFull = $active >= $quota;
+                                                            @endphp
+                                                            <option value="{{ $mentor->id }}" {{ $isFull ? 'disabled' : '' }} class="{{ $isFull ? 'text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-900' : '' }}">
+                                                                {{ $mentor->name }} ({{ $active }}/{{ $quota }}) {{ $isFull ? '- Penuh' : '' }}
+                                                            </option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    
+                                    <!-- Reject Form (Hidden) -->
+                                    <form id="reject-form" :action="'{{ route('admin.internships.reject', 'PLACEHOLDER_ID') }}'.replace('PLACEHOLDER_ID', internshipId)" method="POST" class="hidden">
+                                        @csrf
+                                        @method('PATCH')
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 flex justify-between items-center">
+                <div class="bg-slate-50 dark:bg-slate-950/50 px-6 py-4 sm:px-8 flex flex-col-reverse sm:flex-row justify-between items-center gap-4 transition-colors">
                      <!-- Reject Button (Left) -->
                     <button type="button" @click="confirmReject(internshipId)"
-                        class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm">
-                        Reject (Tolak)
+                        class="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all active:scale-95">
+                        Reject Application
                     </button>
 
                     <!-- Approve & Cancel (Right) -->
-                    <div class="flex flex-row-reverse">
+                    <div class="flex flex-row-reverse w-full sm:w-auto gap-3">
                          <button type="submit" form="approve-form"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="flex-1 sm:flex-none inline-flex justify-center items-center px-8 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20 transition-all active:scale-95">
                             Approve
                         </button>
                         <button type="button" @click="open = false" 
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="flex-1 sm:flex-none inline-flex justify-center items-center px-8 py-2.5 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95">
                             Cancel
                         </button>
                     </div>

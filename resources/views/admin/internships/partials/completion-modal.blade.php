@@ -18,45 +18,57 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         <div x-show="open" 
-             class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+             class="inline-block align-bottom bg-white dark:bg-slate-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full border border-transparent dark:border-slate-800">
             
             <form :action="'/admin/internships/' + internshipId + '/complete'" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
                 
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-completion-title">
-                        Kirim Dokumen Kelulusan: <span x-text="studentName"></span>
+                <div class="bg-white dark:bg-slate-900 px-6 pt-6 pb-4 sm:p-8 sm:pb-6 transition-colors duration-300">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6 transition-colors" id="modal-completion-title">
+                        Kirim Dokumen Kelulusan: <span class="text-red-600 dark:text-red-400" x-text="studentName"></span>
                     </h3>
                     
-                    <div class="mt-4">
+                    <div class="space-y-6">
                         <!-- Certificate (Always Required) -->
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Sertifikat Kelulusan</label>
-                            <input type="file" name="sertifikat_kelulusan" required accept=".pdf"
-                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                            <p class="mt-1 text-xs text-gray-500">File PDF, Max 2MB.</p>
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Sertifikat Kelulusan</label>
+                            <div class="relative group">
+                                <input type="file" name="sertifikat_kelulusan" required accept=".pdf"
+                                    class="block w-full text-xs text-slate-500 dark:text-slate-400 
+                                    file:mr-4 file:py-2.5 file:px-6 file:rounded-xl file:border-0 
+                                    file:text-xs file:font-bold file:bg-blue-50 dark:file:bg-blue-500/10 
+                                    file:text-blue-700 dark:file:text-blue-400 
+                                    hover:file:bg-blue-100 dark:hover:file:bg-blue-500/20 transition-all">
+                            </div>
+                            <p class="mt-1 text-[10px] text-slate-400 dark:text-slate-500 italic">Format: PDF (Max. 2MB)</p>
                         </div>
 
                         <!-- PKL Assessment (Visible for all, optional for University) -->
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest transition-colors">
                                 Laporan Penilaian PKL 
-                                <span x-text="isSmk ? '(Wajib untuk SMK)' : '(Tidak Wajib untuk Mahasiswa)'" 
-                                      :class="isSmk ? 'text-red-600 font-bold ml-1' : 'text-gray-500 italic ml-1'"></span>
+                                <span x-text="isSmk ? '(Wajib - SMK)' : '(Opsional)'" 
+                                      :class="isSmk ? 'text-red-600 dark:text-red-400 ml-1' : 'text-slate-400 dark:text-slate-500 ml-1'"></span>
                             </label>
-                            <input type="file" name="laporan_penilaian_pkl" :required="isSmk" accept=".pdf"
-                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100">
-                            <p class="mt-1 text-xs text-gray-500">File PDF, Max 2MB.</p>
+                            <div class="relative group">
+                                <input type="file" name="laporan_penilaian_pkl" :required="isSmk" accept=".pdf"
+                                    class="block w-full text-xs text-slate-500 dark:text-slate-400 
+                                    file:mr-4 file:py-2.5 file:px-6 file:rounded-xl file:border-0 
+                                    file:text-xs file:font-bold file:bg-amber-50 dark:file:bg-amber-500/10 
+                                    file:text-amber-700 dark:file:text-amber-400 
+                                    hover:file:bg-amber-100 dark:hover:file:bg-amber-500/20 transition-all">
+                            </div>
+                            <p class="mt-1 text-[10px] text-slate-400 dark:text-slate-500 italic">Format: PDF (Max. 2MB)</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                <div class="bg-slate-50 dark:bg-slate-950/50 px-6 py-4 sm:px-8 flex flex-col-reverse sm:flex-row-reverse gap-3 transition-colors">
+                    <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-200 dark:shadow-blue-900/20 transition-all active:scale-95">
                         Kirim Dokumen
                     </button>
-                    <button type="button" @click="open = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    <button type="button" @click="open = false" class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-2.5 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95">
                         Batal
                     </button>
                 </div>

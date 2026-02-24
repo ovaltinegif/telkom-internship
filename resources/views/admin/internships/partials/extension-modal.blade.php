@@ -22,37 +22,38 @@
          class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             
-            <div @click.away="open = false" class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div @click.away="open = false" class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-transparent dark:border-slate-800">
+                <div class="bg-white dark:bg-slate-900 px-6 pt-6 pb-4 sm:p-8 sm:pb-6 transition-colors duration-300">
                     <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <div class="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-500/10 sm:mx-0 sm:h-12 sm:w-12 transition-colors">
+                            <svg class="h-7 w-7 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Review Perpanjangan Magang</h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500">
-                                    Pengajuan oleh <span class="font-bold text-gray-800" x-text="name"></span>
-                                </p>
-                                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                                    <span class="bg-gray-100 px-2 py-0.5 rounded" x-text="university"></span>
-                                    <span>&bull;</span>
-                                    <span class="bg-gray-100 px-2 py-0.5 rounded" x-text="major"></span>
+                        <div class="mt-4 text-center sm:ml-6 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2 transition-colors" id="modal-title">Review Perpanjangan</h3>
+                            <div class="mt-2 space-y-6">
+                                <div class="space-y-3">
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                                        Pengajuan oleh <span class="text-slate-900 dark:text-slate-100 font-bold" x-text="name"></span>
+                                    </p>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-lg text-xs font-bold transition-colors" x-text="university"></span>
+                                        <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-lg text-xs font-bold transition-colors" x-text="major"></span>
+                                    </div>
                                 </div>
                                 
-                                <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-sm text-gray-500">Selesai Saat Ini:</span>
-                                        <span class="text-sm font-semibold text-gray-800" x-text="current_end_date"></span>
-                                    </div>
+                                <div class="p-4 bg-slate-50 dark:bg-slate-950/30 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-3 transition-colors">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-sm text-gray-500">Surat Pengajuan:</span>
-                                        <a :href="doc_url" target="_blank" class="text-sm font-medium text-amber-600 hover:text-amber-500 flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Selesai Saat Ini</span>
+                                        <span class="text-sm font-bold text-slate-700 dark:text-slate-200" x-text="current_end_date"></span>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-3 border-t border-slate-200/50 dark:border-slate-800/50">
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Surat Pengajuan</span>
+                                        <a :href="doc_url" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-bold hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-all">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                             </svg>
                                             Lihat Dokumen
                                         </a>
@@ -60,39 +61,41 @@
                                 </div>
 
                                 {{-- Approval Form --}}
-                                <form id="extension-modal-approve-form" :action="`{{ url('/admin/internships') }}/${id}/approve-extension`" method="POST" class="mt-4">
+                                <form id="extension-modal-approve-form" :action="`{{ url('/admin/internships') }}/${id}/approve-extension`" method="POST" class="space-y-4">
                                     @csrf
                                     @method('PATCH')
                                     
-                                    <label for="new_end_date" class="block text-sm font-medium text-gray-700">Tanggal Selesai Baru</label>
-                                    <input type="date" name="new_end_date" id="new_end_date" required
-                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm">
-                                    
-                                    <div class="mt-5 sm:flex sm:flex-row-reverse">
-                                        <button type="button" onclick="submitExtensionModalApprove()" class="inline-flex w-full justify-center rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 sm:ml-3 sm:w-auto">
-                                            Setujui & Perbarui
-                                        </button>
-                                        <button type="button" @click="open = false" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                                            Batal
-                                        </button>
+                                    <div class="space-y-1.5">
+                                        <label for="new_end_date" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Tanggal Selesai Baru</label>
+                                        <input type="date" name="new_end_date" id="new_end_date" required
+                                               class="block w-full px-4 py-2.5 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:border-amber-500 focus:ring-amber-500 text-sm font-bold transition-all">
                                     </div>
                                 </form>
 
-                                {{-- Rejection Form (Separate) --}}
-                                <div class="mt-6 border-t border-gray-100 pt-4">
-                                    <p class="text-xs text-gray-400 mb-2">Jika dokumen tidak valid, Anda dapat menolak pengajuan ini.</p>
-                                    <form id="extension-modal-reject-form" :action="`{{ url('/admin/internships') }}/${id}/reject-extension`" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="button" onclick="submitExtensionModalReject()" 
-                                                class="text-sm text-red-600 hover:text-red-500 font-medium underline">
-                                            Tolak Pengajuan
-                                        </button>
-                                    </form>
-                                </div>
-
+                                {{-- Reject Form (Simplified) --}}
+                                <form id="extension-modal-reject-form" :action="`{{ url('/admin/internships') }}/${id}/reject-extension`" method="POST" class="hidden">
+                                    @csrf
+                                    @method('PATCH')
+                                </form>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-950/50 px-6 py-4 sm:px-8 flex flex-col-reverse sm:flex-row-reverse gap-3 transition-colors">
+                    <button type="button" onclick="submitExtensionModalApprove()" 
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-amber-200 dark:shadow-amber-900/20 transition-all active:scale-95">
+                        Setujui & Perbarui
+                    </button>
+                    <button type="button" @click="open = false" 
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-8 py-2.5 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95">
+                        Batal
+                    </button>
+                    <div class="flex-1 flex items-center justify-center sm:justify-start">
+                        <button type="button" onclick="submitExtensionModalReject()" 
+                                class="text-xs font-bold text-red-600 dark:text-red-400 hover:underline transition-all">
+                            Tolak Pengajuan
+                        </button>
                     </div>
                 </div>
             </div>
