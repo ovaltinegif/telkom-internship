@@ -1,6 +1,8 @@
 <x-app-layout>
     <div class="py-12" x-data="{ 
         showModal: false, 
+        showPreview: false,
+        previewUrl: '',
         selectedLogbook: { name: '', title: '', date: '', activity: '' } 
     }">
     {{-- 1. LOAD LIBRARY SWEETALERT --}}
@@ -270,11 +272,12 @@
                                     </td>
                                     <td class="px-8 py-6 align-top">
                                         @if($logbook->evidence)
-                                            <a href="{{ asset('storage/' . $logbook->evidence) }}" target="_blank" 
+                                            <button type="button" 
+                                                    @click="previewUrl = '{{ Storage::url($logbook->evidence) }}'; showPreview = true;"
                                                class="inline-flex items-center gap-2 text-[10px] font-black text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl transition-all shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-red-600 dark:hover:text-red-400 group-hover:scale-105 active:scale-95">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                                 Berkas
-                                            </a>
+                                            </button>
                                         @else
                                             <span class="text-slate-400 dark:text-slate-600 text-[10px] font-black uppercase tracking-widest transition-colors italic">N/A</span>
                                         @endif
@@ -511,6 +514,92 @@
                     <button type="button" 
                             @click="showModal = false"
                             class="px-10 py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-slate-900/20 dark:shadow-none hover:bg-black dark:hover:bg-slate-50">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Attachment Preview Modal --}}
+    <div x-show="showPreview" 
+         class="fixed inset-0 z-[1100] overflow-y-auto" 
+         style="display: none;"
+         x-cloak>
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div x-show="showPreview" 
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 transition-opacity bg-slate-900/90 backdrop-blur-xl" 
+                 @click="showPreview = false"></div>
+
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div x-show="showPreview"
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 class="inline-block w-full overflow-hidden text-left align-bottom transition-all transform bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl sm:my-8 sm:align-middle sm:max-w-4xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
+                
+                <!-- Header -->
+                <div class="px-8 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 shadow-sm border border-red-100 dark:border-red-500/20 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black text-slate-800 dark:text-slate-200 transition-colors leading-tight">Pratinjau Lampiran</h3>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-500 font-black uppercase tracking-widest transition-colors mt-0.5">Dokumen Bukti Kegiatan Intern</p>
+                        </div>
+                    </div>
+                    <button @click="showPreview = false" class="w-10 h-10 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all shadow-sm">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p-4 transition-colors bg-white dark:bg-slate-900 h-[70vh] flex items-center justify-center">
+                    <template x-if="previewUrl.match(/\.(jpeg|jpg|gif|png|webp)$/i)">
+                        <img :src="previewUrl" class="max-w-full max-h-full object-contain rounded-2xl shadow-lg border border-slate-100 dark:border-slate-800" alt="Preview">
+                    </template>
+                    <template x-if="previewUrl.match(/\.(pdf)$/i)">
+                        <iframe :src="previewUrl" class="w-full h-full rounded-2xl border border-slate-100 dark:border-slate-800 shadow-inner"></iframe>
+                    </template>
+                    <template x-if="!previewUrl.match(/\.(jpeg|jpg|gif|png|webp|pdf)$/i)">
+                        <div class="text-center p-12">
+                            <div class="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-3xl flex items-center justify-center mx-auto mb-6 text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-black text-slate-800 dark:text-slate-200">Pratinjau Tidak Tersedia</h4>
+                            <p class="text-slate-500 dark:text-slate-500 font-medium max-w-xs mx-auto mt-2 mb-8">Format file ini tidak dapat dipratinjau langsung. Silakan unduh untuk melihat detailnya.</p>
+                            <a :href="previewUrl" download class="inline-flex items-center gap-2 px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-500/30 active:scale-95">
+                                Unduh File
+                            </a>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-8 py-4 bg-slate-50/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800 flex justify-end transition-colors gap-3">
+                    <a :href="previewUrl" target="_blank" class="px-6 py-2.5 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 shadow-sm">
+                        Buka di Tab Baru
+                    </a>
+                    <button type="button" 
+                            @click="showPreview = false"
+                            class="px-8 py-2.5 bg-slate-900 dark:bg-white hover:bg-black dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-slate-900/20 dark:shadow-none">
                         Tutup
                     </button>
                 </div>

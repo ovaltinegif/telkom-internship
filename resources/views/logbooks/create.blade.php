@@ -190,14 +190,31 @@
             border-bottom: none;
             border-radius: 0.5rem;
             transition: all 0.2s;
+            color: #475569; /* slate-600 */
         }
 
         trix-toolbar .trix-button:hover {
             background-color: #f1f5f9;
         }
 
+        .dark trix-toolbar .trix-button {
+            color: #f8fafc; /* slate-50 */
+        }
+
         .dark trix-toolbar .trix-button:hover {
             background-color: #334155; /* slate-700 */
+            color: #ffffff;
+        }
+        
+        /* Ensure Trix SVG icons are visible in dark mode */
+        .dark trix-toolbar .trix-button::before {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+        }
+        
+        .dark trix-toolbar .trix-button--active::before {
+            filter: none; /* Keep original for active red state if needed, or refine */
+            opacity: 1;
         }
 
         trix-toolbar .trix-button--active {

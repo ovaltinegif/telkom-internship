@@ -11,8 +11,8 @@
                 <div class="p-8 text-gray-900 dark:text-slate-100">
                     
                     {{-- Standard Tabs Navigation --}}
-                    <div class="border-b border-gray-200 dark:border-slate-800 mb-8 overflow-x-auto transition-colors">
-                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <div class="border-b border-gray-200 dark:border-slate-800 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors">
+                        <nav class="-mb-px flex space-x-8 overflow-x-auto w-full md:w-auto" aria-label="Tabs">
                             {{-- Applicants --}}
                             <a href="{{ route('admin.internships.index', ['status' => 'pending']) }}" 
                                class="{{ $status === 'pending' ? 'border-red-500 text-red-600 dark:text-red-400' : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 hover:border-gray-300' }} 
@@ -48,6 +48,9 @@
                                class="{{ $status === 'finished' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 hover:border-gray-300' }} 
                                       whitespace-nowrap py-4 px-1 border-b-2 font-bold text-sm flex items-center transition-all">
                                 Finished
+                                <span class="{{ $status === 'finished' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400' }} ml-3 py-0.5 px-2.5 rounded-full text-xs font-bold transition-all">
+                                    {{ $finishedCount }}
+                                </span>
                             </a>
 
                             {{-- Extension Requests (Conditional) --}}
@@ -62,6 +65,24 @@
                             </a>
                             @endif
                         </nav>
+
+                        {{-- Sub Filter for Interns --}}
+                        <div class="inline-flex bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-1" role="group">
+                            <a href="{{ route('admin.internships.index', ['status' => $status, 'student_type' => 'mahasiswa']) }}" 
+                               class="px-4 py-1.5 text-xs font-bold rounded-lg transition-all 
+                               {{ !$studentType || $studentType == 'mahasiswa' 
+                                  ? 'bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 shadow-sm' 
+                                  : 'text-gray-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700' }}">
+                                Mahasiswa
+                            </a>
+                            <a href="{{ route('admin.internships.index', ['status' => $status, 'student_type' => 'smk']) }}" 
+                               class="px-4 py-1.5 text-xs font-bold rounded-lg transition-all 
+                               {{ $studentType == 'smk' 
+                                  ? 'bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 shadow-sm' 
+                                  : 'text-gray-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700' }}">
+                                SMK
+                            </a>
+                        </div>
                     </div>
 
                     <div class="overflow-x-auto">

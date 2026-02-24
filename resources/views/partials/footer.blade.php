@@ -3,8 +3,8 @@
         
         <!-- Logo Section -->
         <div class="flex-shrink-0 group">
-            <img src="{{ asset('images/logo-telkom.png') }}" alt="Telkom Indonesia" class="h-[75px] w-auto dark:hidden transition-all">
-            <img src="{{ asset('images/logo-telkom-white.png') }}" alt="Telkom Indonesia Logo" class="h-[75px] w-auto hidden dark:block transition-all">
+            <img src="{{ asset('images/logo-telkom.png') }}" alt="Telkom Indonesia" class="h-20 w-auto dark:hidden transition-all">
+            <img src="{{ asset('images/logo-telkom-white.png') }}" alt="Telkom Indonesia Logo" class="h-20 w-auto hidden dark:block transition-all">
         </div>
 
         <!-- Vertical Divider (Hidden on Mobile) -->

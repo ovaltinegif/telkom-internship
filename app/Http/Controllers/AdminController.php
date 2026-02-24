@@ -144,6 +144,7 @@ class AdminController extends Controller
                 }
                 );
             })
+            ->where('role', '!=', 'admin') // Exclude admins from the management database
             ->whereDoesntHave('internship', function ($query) {
             $query->where('status', 'rejected');
         })
@@ -203,11 +204,13 @@ class AdminController extends Controller
     public function internships(Request $request)
     {
         $status = $request->query('status', 'pending'); // Default to 'pending' (Applicants)
+        $studentType = $request->query('student_type');
 
         // Counts for Tabs
         $pendingCount = Internship::where('status', 'pending')->count();
         $onboardingCount = Internship::where('status', 'onboarding')->count();
         $activeCount = Internship::where('status', 'active')->count();
+        $finishedCount = Internship::where('status', 'finished')->count();
 
         // Count Pending Extensions
         $extensionCount = \App\Models\InternshipExtension::where('status', 'pending')->count();
@@ -222,26 +225,48 @@ class AdminController extends Controller
             $internships = Internship::whereHas('extensions', function ($q) {
                 $q->where('status', 'pending');
             })
+                ->when($studentType, function ($query) use ($studentType) {
+                return $query->whereHas('student.studentProfile', function ($q) use ($studentType) {
+                        if ($studentType === 'smk') {
+                            $q->where('student_type', 'siswa')->orWhere('education_level', 'SMK');
+                        }
+                        elseif ($studentType === 'mahasiswa') {
+                            $q->where('student_type', 'mahasiswa')->where('education_level', '!=', 'SMK');
+                        }
+                    }
+                    );
+                })
                 ->with(['student.studentProfile', 'mentor', 'division', 'extensions' => function ($q) {
                 $q->where('status', 'pending');
             }])
                 ->latest()
                 ->paginate(10)
-                ->appends(['status' => $status]);
+                ->appends(['status' => $status, 'student_type' => $studentType]);
         }
         else {
             $internships = Internship::with(['student.studentProfile', 'mentor', 'division'])
                 ->where('status', $status)
+                ->when($studentType, function ($query) use ($studentType) {
+                return $query->whereHas('student.studentProfile', function ($q) use ($studentType) {
+                        if ($studentType === 'smk') {
+                            $q->where('student_type', 'siswa')->orWhere('education_level', 'SMK');
+                        }
+                        elseif ($studentType === 'mahasiswa') {
+                            $q->where('student_type', 'mahasiswa')->where('education_level', '!=', 'SMK');
+                        }
+                    }
+                    );
+                })
                 ->latest()
                 ->paginate(10)
-                ->appends(['status' => $status]);
+                ->appends(['status' => $status, 'student_type' => $studentType]);
         }
 
         // Pass Divisions and Mentors for Dropdowns in Review Modal
         $divisions = Division::all();
         $mentors = User::where('role', 'mentor')->get();
 
-        return view('admin.internships.index', compact('internships', 'status', 'pendingCount', 'onboardingCount', 'activeCount', 'extensionCount', 'divisions', 'mentors'));
+        return view('admin.internships.index', compact('internships', 'status', 'studentType', 'pendingCount', 'onboardingCount', 'activeCount', 'finishedCount', 'extensionCount', 'divisions', 'mentors'));
     }
 
     /**

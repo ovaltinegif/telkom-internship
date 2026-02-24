@@ -42,7 +42,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
             transition: all 0.3s ease;
         }
-        .logo img { height: 100px; width: auto; transition: all 0.3s ease; }
+        .logo img { height: 80px; width: auto; transition: all 0.3s ease; }
         .main-website-btn {
             background-color: #D6001C; color: #fff; text-decoration: none;
             padding: 10px 25px; border-radius: 20px; font-weight: bold; font-size: 14px;
@@ -112,8 +112,9 @@
 <body class="bg-white text-slate-800 transition-colors duration-300">
 
     <header class="bg-white border-b border-slate-50">
-        <div class="logo">
-            <img src="{{ asset('images/logo-telkom.png') }}" alt="Telkom Indonesia Logo">
+        <div class="flex-shrink-0 group">
+            <img src="{{ asset('images/logo-telkom.png') }}" alt="Telkom Indonesia" class="h-20 w-auto dark:hidden transition-all">
+            <img src="{{ asset('images/logo-telkom-white.png') }}" alt="Telkom Indonesia Logo" class="h-20 w-auto hidden dark:block transition-all">
         </div>
         <a href="/" class="main-website-btn">Main Website</a>
     </header>

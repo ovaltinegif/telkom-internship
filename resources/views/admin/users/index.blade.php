@@ -34,12 +34,6 @@
                                 Mentors
                             </a>
 
-                            {{-- Admins --}}
-                            <a href="{{ route('admin.users.index', ['role' => 'admin']) }}" 
-                               class="{{ request('role') == 'admin' ? 'border-red-500 text-red-600 dark:text-red-400' : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 hover:border-gray-300' }} 
-                                      whitespace-nowrap py-4 px-1 border-b-2 font-bold text-sm flex items-center transition-all">
-                                Admins
-                            </a>
                         </nav>
                         
                         {{-- Sub Filter for Interns --}}

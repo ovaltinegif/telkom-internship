@@ -33,10 +33,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-24 transition-all duration-300">
                 
-                <!-- Left: Logo -->
                 <div class="shrink-0 flex items-center gap-4">
                     <a href="#" class="flex items-center gap-3 group">
-                       <img src="{{ asset('images/logo-telkom.png') }}" class="h-24 w-auto" alt="Telkom Indonesia">
+                       <img src="{{ asset('images/logo-telkom.png') }}" class="h-20 w-auto" alt="Telkom Indonesia">
                     </a>
                 </div>
 
