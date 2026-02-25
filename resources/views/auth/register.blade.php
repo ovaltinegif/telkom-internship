@@ -549,10 +549,6 @@
                             this.showError('Password tidak sama.');
                             return;
                         }
-
-                        // Check Email via AJAX before proceeding
-                        await this.checkEmailAvailability();
-                        if (this.emailAlreadyExists) return;
                     }
 
                     // Validate Step 2 selection
