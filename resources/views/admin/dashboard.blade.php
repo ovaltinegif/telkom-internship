@@ -123,7 +123,7 @@
                             Review Applications
                         </a>
                     @else
-                        <button onclick="Swal.fire('Info', 'Tidak ada aplikasi pending saat ini.', 'info')" class="block w-full text-center py-2.5 bg-gray-300 dark:bg-slate-800 text-gray-500 dark:text-slate-600 font-semibold rounded-lg cursor-not-allowed">
+                        <button onclick="showInfoModal('Info', 'Tidak ada aplikasi pending saat ini.')" class="block w-full text-center py-2.5 bg-gray-300 dark:bg-slate-800 text-gray-500 dark:text-slate-600 font-semibold rounded-lg cursor-not-allowed">
                             Review Applications
                         </button>
                     @endif
@@ -149,7 +149,7 @@
                             Review Extensions
                         </a>
                     @else
-                        <button onclick="Swal.fire('Info', 'Tidak ada pengajuan perpanjangan saat ini.', 'info')" class="block w-full text-center py-2.5 bg-gray-300 dark:bg-slate-800 text-gray-500 dark:text-slate-600 font-semibold rounded-lg cursor-not-allowed">
+                        <button onclick="showInfoModal('Info', 'Tidak ada pengajuan perpanjangan saat ini.')" class="block w-full text-center py-2.5 bg-gray-300 dark:bg-slate-800 text-gray-500 dark:text-slate-600 font-semibold rounded-lg cursor-not-allowed">
                             Review Extensions
                         </button>
                     @endif
@@ -163,40 +163,49 @@
                     <a href="{{ route('admin.internships.index') }}" class="text-sm text-red-600 dark:text-red-400 font-semibold hover:text-red-800">View All</a>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 dark:bg-slate-950 text-gray-500 dark:text-slate-400 text-xs uppercase font-semibold">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+                        <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
                             <tr>
-                                <th class="px-6 py-4">Student</th>
-                                <th class="px-6 py-4">Division</th>
-                                <th class="px-6 py-4">Status</th>
-                                <th class="px-6 py-4">Date</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Student</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Division</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Status</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Date</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-slate-800">
+                        <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors">
                             @forelse($recentInternships as $internship)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition duration-200">
-                                <td class="px-6 py-4">
-                                    <div class="font-medium text-gray-900 dark:text-slate-200">{{ $internship->student->name }}</div>
-                                    <div class="text-xs text-gray-500 dark:text-slate-400">{{ $internship->student->email }}</div>
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-slate-900 dark:text-slate-100 transition-colors">{{ $internship->student->name }}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400 transition-colors">{{ $internship->student->email }}</div>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600 dark:text-slate-400">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                     {{ $internship->division->name ?? '-' }}
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold
-                                        {{ $internship->status == 'active' ? 'bg-green-100 dark:bg-emerald-500/10 text-green-700 dark:text-emerald-400' : 
-                                          ($internship->status == 'pending' ? 'bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400' : 
-                                          ($internship->status == 'finished' ? 'bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400' : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-400')) }}">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border shadow-sm transition-colors cursor-default
+                                        {{ $internship->status == 'active' ? 'bg-green-100 dark:bg-emerald-500/10 text-green-700 dark:text-emerald-400 border-green-200 dark:border-emerald-800/50' : 
+                                          ($internship->status == 'pending' ? 'bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800/50' : 
+                                          ($internship->status == 'finished' ? 'bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800/50' : 'bg-gray-100 dark:bg-slate-800/50 text-gray-700 dark:text-slate-400 border-gray-200 dark:border-slate-700/50')) }}">
                                         {{ ucfirst($internship->status) }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-slate-500">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                     {{ $internship->created_at->format('d M Y') }}
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">No recent activity found.</td>
+                                <td colspan="4" class="px-6 py-12 text-center text-gray-500 dark:text-slate-400 min-h-[160px]">
+                                    <div class="flex flex-col items-center justify-center h-full gap-2">
+                                        <div class="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mb-2 transition-colors shadow-inner">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-slate-300 dark:text-slate-600 transition-colors">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-base font-bold text-slate-500 dark:text-slate-500 transition-colors">No recent activity found.</p>
+                                    </div>
+                                </td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -209,4 +218,22 @@
     
     @include('admin.internships.partials.extension-modal')
 
+    @push('scripts')
+    <script>
+        function showInfoModal(title, text) {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: 'info',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                }
+            });
+        }
+    </script>
+    @endpush
 </x-app-layout>

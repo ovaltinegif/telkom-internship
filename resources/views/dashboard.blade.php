@@ -201,41 +201,43 @@
                             </div>
                         </div>
                         <div x-show="show" x-transition class="border-t border-slate-100 dark:border-slate-800">
-                            <table class="w-full text-sm text-left">
-                                <thead class="bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
-                                    <tr>
-                                        <th class="px-6 py-4 w-12 text-center">No</th>
-                                        <th class="px-6 py-4">Komponen Penilaian</th>
-                                        <th class="px-6 py-4 w-32 text-center">Nilai Angka</th>
-                                        <th class="px-6 py-4 w-32 text-center">Predikat</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-                                    <tr>
-                                        <td class="px-6 py-4 text-center">1</td>
-                                        <td class="px-6 py-4">Kedisiplinan & Etika Kerja</td>
-                                        <td class="px-6 py-4 text-center font-medium">{{ $internship->evaluation->discipline_score }}</td>
-                                        <td class="px-6 py-4 text-center">{{ $internship->evaluation->discipline_score >= 85 ? 'A' : ($internship->evaluation->discipline_score >= 70 ? 'B' : 'C') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 text-center">2</td>
-                                        <td class="px-6 py-4">Kemampuan Teknis & Hasil Kerja</td>
-                                        <td class="px-6 py-4 text-center font-medium">{{ $internship->evaluation->technical_score }}</td>
-                                        <td class="px-6 py-4 text-center">{{ $internship->evaluation->technical_score >= 85 ? 'A' : ($internship->evaluation->technical_score >= 70 ? 'B' : 'C') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 text-center">3</td>
-                                        <td class="px-6 py-4">Komunikasi & Kerjasama Tim</td>
-                                        <td class="px-6 py-4 text-center font-medium">{{ $internship->evaluation->soft_skill_score }}</td>
-                                        <td class="px-6 py-4 text-center">{{ $internship->evaluation->soft_skill_score >= 85 ? 'A' : ($internship->evaluation->soft_skill_score >= 70 ? 'B' : 'C') }}</td>
-                                    </tr>
-                                    <tr class="bg-red-50/30 dark:bg-red-500/5">
-                                        <td colspan="2" class="px-6 py-4 text-right font-bold text-slate-800 dark:text-slate-200">Nilai Akhir Rata-Rata</td>
-                                        <td class="px-6 py-4 text-center font-bold text-lg text-red-600 dark:text-red-400 border-x border-red-100 dark:border-red-500/10">{{ $internship->evaluation->final_score }}</td>
-                                        <td class="px-6 py-4 text-center font-bold text-lg text-red-600 dark:text-red-400">{{ $internship->evaluation->final_score >= 85 ? 'A' : ($internship->evaluation->final_score >= 70 ? 'B' : 'C') }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+                                    <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors w-12">No</th>
+                                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Komponen Penilaian</th>
+                                            <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors w-32">Nilai Angka</th>
+                                            <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors w-32">Predikat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors mb-0 border-b border-gray-200 dark:border-slate-800">
+                                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center">1</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">Kedisiplinan & Etika Kerja</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center font-medium">{{ $internship->evaluation->discipline_score }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center">{{ $internship->evaluation->discipline_score >= 85 ? 'A' : ($internship->evaluation->discipline_score >= 70 ? 'B' : 'C') }}</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center">2</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">Kemampuan Teknis & Hasil Kerja</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center font-medium">{{ $internship->evaluation->technical_score }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center">{{ $internship->evaluation->technical_score >= 85 ? 'A' : ($internship->evaluation->technical_score >= 70 ? 'B' : 'C') }}</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center">3</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">Komunikasi & Kerjasama Tim</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center font-medium">{{ $internship->evaluation->soft_skill_score }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors text-center">{{ $internship->evaluation->soft_skill_score >= 85 ? 'A' : ($internship->evaluation->soft_skill_score >= 70 ? 'B' : 'C') }}</td>
+                                        </tr>
+                                        <tr class="bg-red-50/30 dark:bg-red-500/5 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
+                                            <td colspan="2" class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 dark:text-slate-100 transition-colors text-right font-bold w-full">Nilai Akhir Rata-Rata</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-red-600 dark:text-red-400 transition-colors text-center font-bold text-lg border-x border-red-100 dark:border-red-500/10">{{ $internship->evaluation->final_score }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-red-600 dark:text-red-400 transition-colors text-center font-bold text-lg">{{ $internship->evaluation->final_score >= 85 ? 'A' : ($internship->evaluation->final_score >= 70 ? 'B' : 'C') }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -593,10 +595,16 @@
             icon: 'question',
             showCancelButton: true,
             reverseButtons: true,
-            confirmButtonColor: '#10b981', // Emerald 500
-            cancelButtonColor: '#6b7280',
             confirmButtonText: 'Ya, Check In!',
-            cancelButtonText: 'Batal'
+            cancelButtonText: 'Batal',
+            buttonsStyling: false,
+            customClass: {
+                popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                title: 'text-slate-900 dark:text-slate-100 font-bold',
+                htmlContainer: 'text-slate-600 dark:text-slate-400',
+                confirmButton: 'px-6 py-2.5 mx-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
@@ -605,6 +613,12 @@
                     allowOutsideClick: false,
                     didOpen: () => {
                         Swal.showLoading();
+                    },
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                        title: 'text-slate-900 dark:text-slate-100 font-bold',
+                        htmlContainer: 'text-slate-600 dark:text-slate-400',
                     }
                 });
                 getLocationAndSubmit();
@@ -626,11 +640,29 @@
                         icon: 'error',
                         title: 'Gagal',
                         text: 'Gagal mengambil lokasi. Pastikan GPS aktif.',
+                        buttonsStyling: false,
+                        customClass: {
+                            popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                            title: 'text-slate-900 dark:text-slate-100 font-bold',
+                            htmlContainer: 'text-slate-600 dark:text-slate-400',
+                            confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                        }
                     });
                 }
             );
         } else { 
-            Swal.fire('Error', 'Browser tidak mendukung Geolocation.', 'error');
+            Swal.fire({
+                title: 'Error',
+                text: 'Browser tidak mendukung Geolocation.',
+                icon: 'error',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                }
+            });
         }
     }
 
@@ -642,10 +674,16 @@
             icon: 'warning',
             showCancelButton: true,
             reverseButtons: true,
-            confirmButtonColor: '#f43f5e', // Rose 500
-            cancelButtonColor: '#6b7280',
             confirmButtonText: 'Ya, Check Out',
-            cancelButtonText: 'Masih lembur'
+            cancelButtonText: 'Masih lembur',
+            buttonsStyling: false,
+            customClass: {
+                popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                title: 'text-slate-900 dark:text-slate-100 font-bold',
+                htmlContainer: 'text-slate-600 dark:text-slate-400',
+                confirmButton: 'px-6 py-2.5 mx-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('checkOutForm').submit();

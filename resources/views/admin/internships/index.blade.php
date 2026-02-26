@@ -324,10 +324,16 @@
                 text: "Durasi magang akan diperbarui sesuai tanggal yang diajukan.",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#6b7280',
                 confirmButtonText: 'Ya, Setujui',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('approve-extension-form-' + id).submit();
@@ -341,10 +347,16 @@
                 text: "Pengajuan perpanjangan akan ditolak dan status kembali menjadi aktif.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6b7280',
                 confirmButtonText: 'Ya, Tolak',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('reject-extension-form-' + id).submit();
@@ -359,7 +371,13 @@
                     icon: 'warning',
                     title: 'Perhatian',
                     text: 'Mohon isi tanggal selesai baru.',
-                    confirmButtonColor: '#f59e0b'
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                        title: 'text-slate-900 dark:text-slate-100 font-bold',
+                        htmlContainer: 'text-slate-600 dark:text-slate-400',
+                        confirmButton: 'px-6 py-2.5 mx-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition-all active:scale-95',
+                    }
                 });
                 return;
             }
@@ -369,10 +387,16 @@
                 text: "Apakah Anda yakin ingin menyetujui perpanjangan ini?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#6b7280',
                 confirmButtonText: 'Ya, Setujui',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('extension-modal-approve-form').submit();
@@ -386,10 +410,16 @@
                 text: "Apakah Anda yakin ingin menolak perpanjangan ini? Dokumen akan dihapus.",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6b7280',
                 confirmButtonText: 'Ya, Tolak',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('extension-modal-reject-form').submit();
@@ -403,7 +433,13 @@
                 title: 'Berhasil!',
                 text: '{{ session('success') }}',
                 timer: 3000,
-                showConfirmButton: false
+                showConfirmButton: false,
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                }
             });
         @endif
 
@@ -412,6 +448,13 @@
                 icon: 'error',
                 title: 'Gagal!',
                 text: '{{ session('error') }}',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                }
             });
         @endif
     </script>

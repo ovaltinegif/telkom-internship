@@ -79,88 +79,79 @@
                                 </div>
                             </div>
 
-                            <div class="overflow-x-auto -mx-8">
-                            <table class="w-full text-sm text-left border-collapse">
-                                <thead class="bg-slate-50/50 dark:bg-slate-950/30 border-y border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-500 uppercase font-black text-[10px] tracking-widest transition-colors">
-                                    <tr>
-                                         <th class="px-8 py-5 w-10 text-center">
-                                             <input type="checkbox" id="selectAll" @change="selectAll($event)" class="w-5 h-5 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-red-600 focus:ring-red-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 transition-all cursor-pointer shadow-sm">
-                                         </th>
-                                        <th class="px-8 py-5">Intern</th>
-                                        <th class="px-8 py-5">Tanggal Aktivitas</th>
-                                        <th class="px-8 py-5">Judul Laporan</th>
-                                        <th class="px-8 py-5 text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                                    @foreach($pendingLogbooks as $logbook)
-                                        <tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all duration-300">
-                                             <td class="px-8 py-6 text-center">
-                                                 <input type="checkbox"
-                                                        name="logbook_ids[]"
-                                                        value="{{ $logbook->id }}"
-                                                        @change="if($el.checked) { if(!selectedIds.includes('{{ $logbook->id }}')) selectedIds.push('{{ $logbook->id }}') } else { selectedIds = selectedIds.filter(id => id !== '{{ $logbook->id }}') }"
-                                                        x-model="selectedIds"
-                                                        class="logbook-checkbox w-5 h-5 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-red-600 focus:ring-red-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 transition-all cursor-pointer shadow-sm">
-                                             </td>
-                                            <td class="px-8 py-6">
-                                                <div class="font-black text-slate-800 dark:text-slate-200 text-base leading-tight transition-colors">{{ $logbook->internship->student->name }}</div>
-                                                <div class="text-[10px] text-slate-500 dark:text-slate-500 font-black uppercase tracking-widest mt-1 transition-colors">{{ $logbook->internship->division->name ?? '-' }}</div>
-                                            </td>
-                                            <td class="px-8 py-6 whitespace-nowrap">
-                                                <div class="flex flex-col">
-                                                    <span class="text-sm font-black text-slate-700 dark:text-slate-300 transition-colors tracking-tight">{{ \Carbon\Carbon::parse($logbook->date)->translatedFormat('d F Y') }}</span>
-                                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-tighter mt-0.5 transition-colors">{{ \Carbon\Carbon::parse($logbook->date)->diffForHumans() }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-8 py-6">
-                                                <div class="flex flex-col gap-1.5">
-                                                    <span class="text-sm font-bold text-slate-800 dark:text-slate-200 line-clamp-1 transition-colors" title="{{ $logbook->title }}">
-                                                        {{ $logbook->title ?? '-' }}
-                                                    </span>
-                                                     @if($logbook->evidence)
-                                                        <button type="button" 
-                                                                @click="previewUrl = '{{ Storage::url($logbook->evidence) }}'; showPreview = true;"
-                                                                class="inline-flex items-center gap-1.5 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-[10px] font-black uppercase tracking-wider transition-colors drop-shadow-sm">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5">
-                                                                <path fill-rule="evenodd" d="M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.242 4.242l7-7a3 3 0 000-4.242zM12.439 5.44a1 1 0 011.414 1.414l-7 7a1 1 0 01-1.414-1.414l7-7z" clip-rule="evenodd" />
-                                                            </svg>
-                                                            Lihat Lampiran
-                                                        </button>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                            <td class="px-8 py-6 whitespace-nowrap text-center">
-                                                <div class="flex items-center justify-center gap-3">
-                                                    {{-- Approve Button --}}
-                                                    <button type="button"
-                                                            onclick="approveLogbook({{ $logbook->id }})"
-                                                            class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/20 active:scale-95">
-                                                        Setujui
-                                                    </button>
-
-                                                    {{-- Detail Button --}}
-                                                     <button type="button"
-                                                             @click="showModal = true; selectedLogbook = {
-                                                                name: '{{ addslashes($logbook->internship->student->name) }}',
-                                                                title: '{{ addslashes($logbook->title) }}',
-                                                                date: '{{ \Carbon\Carbon::parse($logbook->date)->translatedFormat('d F Y') }}',
-                                                                activity: {{ json_encode($logbook->activity) }}
-                                                             }"
-                                                             class="p-2.5 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 bg-slate-50 dark:bg-slate-800 rounded-xl transition-all shadow-sm active:scale-95"
-                                                             title="Lihat Detail Aktivitas">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                            </svg>
-                                                     </button>
-                                                </div>
-                                            </td>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+                                    <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-4 w-10 text-center">
+                                                <input type="checkbox" id="selectAll" @change="selectAll($event)" class="w-5 h-5 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-red-600 focus:ring-red-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 transition-all cursor-pointer shadow-sm">
+                                            </th>
+                                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Intern</th>
+                                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Tanggal Aktivitas</th>
+                                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Judul Laporan</th>
+                                            <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Aksi</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors">
+                                        @foreach($pendingLogbooks as $logbook)
+                                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <input type="checkbox"
+                                                           name="logbook_ids[]"
+                                                           value="{{ $logbook->id }}"
+                                                           @change="if($el.checked) { if(!selectedIds.includes('{{ $logbook->id }}')) selectedIds.push('{{ $logbook->id }}') } else { selectedIds = selectedIds.filter(id => id !== '{{ $logbook->id }}') }"
+                                                           x-model="selectedIds"
+                                                           class="logbook-checkbox w-5 h-5 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-red-600 focus:ring-red-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 transition-all cursor-pointer shadow-sm">
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors">{{ $logbook->internship->student->name }}</div>
+                                                    <div class="text-xs font-bold uppercase tracking-widest mt-0.5 transition-colors text-slate-500 dark:text-slate-500">{{ $logbook->internship->division->name ?? '-' }}</div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="flex flex-col">
+                                                        <span class="text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors">{{ \Carbon\Carbon::parse($logbook->date)->translatedFormat('d F Y') }}</span>
+                                                        <span class="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widers mt-0.5 transition-colors">{{ \Carbon\Carbon::parse($logbook->date)->diffForHumans() }}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <div class="flex flex-col gap-1.5">
+                                                        <span class="text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors w-48 overflow-hidden overflow-ellipsis" title="{{ $logbook->title }}">
+                                                            {{ $logbook->title ?? '-' }}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                                    <div class="flex items-center justify-center gap-3">
+                                                        {{-- Approve Button --}}
+                                                        <button type="button"
+                                                                onclick="approveLogbook({{ $logbook->id }})"
+                                                                class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/20 active:scale-95">
+                                                            Setujui
+                                                        </button>
+    
+                                                        {{-- Detail Button --}}
+                                                         <button type="button"
+                                                                 @click="showModal = true; selectedLogbook = {
+                                                                    name: '{{ addslashes($logbook->internship->student->name) }}',
+                                                                    title: '{{ addslashes($logbook->title) }}',
+                                                                    date: '{{ \Carbon\Carbon::parse($logbook->date)->translatedFormat('d F Y') }}',
+                                                                    activity: {{ json_encode($logbook->activity) }},
+                                                                    evidence: {{ $logbook->evidence ? "'" . Storage::url($logbook->evidence) . "'" : 'null' }}
+                                                                 }"
+                                                                 class="p-2.5 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 bg-slate-50 dark:bg-slate-800 rounded-xl transition-all shadow-sm active:scale-95"
+                                                                 title="Lihat Detail Aktivitas">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                </svg>
+                                                         </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         <div class="mt-8 px-4">
                             {{ $pendingLogbooks->links() }}
                         </div>
@@ -173,7 +164,7 @@
 
     {{-- Detail Modal --}}
     <div x-show="showModal" 
-         class="fixed inset-0 z-[100] overflow-y-auto" 
+         class="fixed inset-0 z-[1100] overflow-y-auto" 
          style="display: none;"
          x-cloak>
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -196,7 +187,7 @@
                  x-transition:leave="ease-in duration-200"
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 class="inline-block w-full overflow-hidden text-left align-bottom transition-all transform bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl sm:my-8 sm:align-middle sm:max-w-3xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
+                 class="inline-block w-full overflow-hidden text-left align-bottom transition-all transform bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl sm:my-8 sm:align-middle sm:max-w-4xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
                 
                 <!-- Header -->
                 <div class="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50 transition-colors">
@@ -220,114 +211,57 @@
 
                 <div class="p-8 transition-colors bg-white dark:bg-slate-900">
                     <!-- Content -->
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-3 px-1">
-                            <span class="w-2 h-2 bg-red-600 dark:bg-red-500 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></span>
-                            <h4 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest transition-colors">Deskripsi Aktivitas</h4>
-                        </div>
-                        <div class="p-8 bg-slate-50/50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-800 rounded-[2rem] text-slate-700 dark:text-slate-300 leading-relaxed text-base overflow-y-auto max-h-[50vh] shadow-inner trix-content prose prose-slate dark:prose-invert max-w-none transition-colors" 
-                             x-html="selectedLogbook.activity">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="px-8 py-6 bg-slate-50/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800 flex justify-end transition-colors">
-                    <button type="button" 
-                            @click="showModal = false"
-                            class="px-10 py-3 bg-slate-900 dark:bg-white hover:bg-black dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-slate-900/20 dark:shadow-none">
-                        Tutup
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Attachment Preview Modal --}}
-    <div x-show="showPreview" 
-         class="fixed inset-0 z-[1100] overflow-y-auto" 
-         style="display: none;"
-         x-cloak>
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div x-show="showPreview" 
-                 x-transition:enter="ease-out duration-300"
-                 x-transition:enter-start="opacity-0"
-                 x-transition:enter-end="opacity-100"
-                 x-transition:leave="ease-in duration-200"
-                 x-transition:leave-start="opacity-100"
-                 x-transition:leave-end="opacity-0"
-                 class="fixed inset-0 transition-opacity bg-slate-900/90 backdrop-blur-xl" 
-                 @click="showPreview = false"></div>
-
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-            <div x-show="showPreview"
-                 x-transition:enter="ease-out duration-300"
-                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                 x-transition:leave="ease-in duration-200"
-                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 class="inline-block w-full overflow-hidden text-left align-bottom transition-all transform bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl sm:my-8 sm:align-middle sm:max-w-4xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
-                
-                <!-- Header -->
-                <div class="px-8 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 shadow-sm border border-red-100 dark:border-red-500/20 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-black text-slate-800 dark:text-slate-200 transition-colors leading-tight">Pratinjau Lampiran</h3>
-                            <p class="text-[10px] text-slate-500 dark:text-slate-500 font-black uppercase tracking-widest transition-colors mt-0.5">Dokumen Bukti Kegiatan Intern</p>
-                        </div>
-                    </div>
-                    <button @click="showPreview = false" class="w-10 h-10 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all shadow-sm">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="p-4 transition-colors bg-white dark:bg-slate-900 h-[70vh] flex items-center justify-center">
-                    <template x-if="previewUrl.match(/\.(jpeg|jpg|gif|png|webp)$/i)">
-                        <img :src="previewUrl" class="max-w-full max-h-full object-contain rounded-2xl shadow-lg border border-slate-100 dark:border-slate-800" alt="Preview">
-                    </template>
-                    <template x-if="previewUrl.match(/\.(pdf)$/i)">
-                        <iframe :src="previewUrl" class="w-full h-full rounded-2xl border border-slate-100 dark:border-slate-800 shadow-inner"></iframe>
-                    </template>
-                    <template x-if="!previewUrl.match(/\.(jpeg|jpg|gif|png|webp|pdf)$/i)">
-                        <div class="text-center p-12">
-                            <div class="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-3xl flex items-center justify-center mx-auto mb-6 text-slate-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                </svg>
+                    <div class="space-y-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 px-1">
+                                <span class="w-2 h-2 bg-red-600 dark:bg-red-500 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.5)]"></span>
+                                <h4 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest transition-colors">Deskripsi Aktivitas</h4>
                             </div>
-                            <h4 class="text-xl font-black text-slate-800 dark:text-slate-200">Pratinjau Tidak Tersedia</h4>
-                            <p class="text-slate-500 dark:text-slate-500 font-medium max-w-xs mx-auto mt-2 mb-8">Format file ini tidak dapat dipratinjau langsung. Silakan unduh untuk melihat detailnya.</p>
-                            <a :href="previewUrl" download class="inline-flex items-center gap-2 px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-red-500/30 active:scale-95">
-                                Unduh File
-                            </a>
+                            <div class="p-6 bg-slate-50/50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-800 rounded-[1.5rem] text-slate-700 dark:text-slate-300 leading-relaxed text-base overflow-y-auto max-h-[40vh] shadow-inner trix-content prose prose-slate dark:prose-invert max-w-none transition-colors" 
+                                 x-html="selectedLogbook.activity">
+                            </div>
                         </div>
-                    </template>
+
+                        <!-- Lampiran Section -->
+                        <div x-show="selectedLogbook.evidence" style="display: none;" class="space-y-4">
+                            <div class="flex items-center gap-3 px-1">
+                                <span class="w-2 h-2 bg-blue-600 dark:bg-blue-500 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.5)]"></span>
+                                <h4 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest transition-colors">Lampiran Aktivitas</h4>
+                            </div>
+                            <div class="p-4 border-2 border-slate-100 dark:border-slate-800 rounded-[1.5rem] bg-white dark:bg-slate-900 transition-colors">
+                                <template x-if="selectedLogbook.evidence && selectedLogbook.evidence.match(/\.(jpeg|jpg|gif|png|webp)$/i)">
+                                    <div class="flex justify-center bg-slate-50 dark:bg-slate-950/50 rounded-xl p-2 border border-slate-100 dark:border-slate-800">
+                                        <img :src="selectedLogbook.evidence" class="max-h-[50vh] w-auto object-contain rounded-lg shadow-sm" alt="Preview Lampiran">
+                                    </div>
+                                </template>
+                                <template x-if="selectedLogbook.evidence && selectedLogbook.evidence.match(/\.(pdf)$/i)">
+                                    <iframe :src="selectedLogbook.evidence" class="w-full h-[60vh] rounded-xl border border-slate-100 dark:border-slate-800 shadow-inner"></iframe>
+                                </template>
+                                <template x-if="selectedLogbook.evidence && !selectedLogbook.evidence.match(/\.(jpeg|jpg|gif|png|webp|pdf)$/i)">
+                                    <div class="text-center p-8 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-100 dark:border-slate-800">
+                                        <div class="w-16 h-16 bg-blue-50 dark:bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">File Lampiran</h5>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Format file ini tidak dapat dipratinjau langsung. Silakan unduh untuk melihat detailnya.</p>
+                                        <a :href="selectedLogbook.evidence" target="_blank" class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-md active:scale-95">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                                            Unduh File
+                                        </a>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Footer -->
-                <div class="px-8 py-4 bg-slate-50/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800 flex justify-end transition-colors gap-3">
-                    <a :href="previewUrl" target="_blank" class="px-6 py-2.5 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95 shadow-sm">
-                        Buka di Tab Baru
-                    </a>
-                    <button type="button" 
-                            @click="showPreview = false"
-                            class="px-8 py-2.5 bg-slate-900 dark:bg-white hover:bg-black dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-slate-900/20 dark:shadow-none">
-                        Tutup
-                    </button>
-                </div>
+
             </div>
         </div>
     </div>
+
 
     {{-- Single Approval Form (Hidden) --}}
     <form id="singleApproveForm" method="POST" style="display: none;">
@@ -344,10 +278,16 @@
                 icon: 'warning',
                 showCancelButton: true,
                 reverseButtons: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#64748b',
                 confirmButtonText: 'Ya, Setujui Semua',
                 cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('massApproveForm').submit();
@@ -362,10 +302,16 @@
                 icon: 'question',
                 showCancelButton: true,
                 reverseButtons: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#64748b',
                 confirmButtonText: 'Ya, Setujui',
                 cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     const form = document.getElementById('singleApproveForm');

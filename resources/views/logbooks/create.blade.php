@@ -261,8 +261,15 @@
                 title: 'Upload Gambar?',
                 text: "Untuk saat ini, silakan gunakan kolom 'Bukti Kegiatan' di bawah untuk mengupload foto atau dokumen.",
                 icon: 'info',
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Baik, saya mengerti'
+                icon: 'info',
+                confirmButtonText: 'Baik, saya mengerti',
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                    title: 'text-slate-900 dark:text-slate-100 font-bold',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400',
+                    confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                }
             });
         });
 
@@ -315,7 +322,13 @@
                     title: 'Whiteboard Kosong!',
                     text: 'Ceritakan aktivitasmu hari ini di whiteboard. Jangan biarkan kosong ya!',
                     icon: 'warning',
-                    confirmButtonColor: '#ef4444'
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                        title: 'text-slate-900 dark:text-slate-100 font-bold',
+                        htmlContainer: 'text-slate-600 dark:text-slate-400',
+                        confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    }
                 });
                 return;
             }
@@ -327,17 +340,29 @@
                     icon: 'question',
                     showCancelButton: true,
                     reverseButtons: true,
-                    confirmButtonColor: '#ef4444', // Red 500
-                    cancelButtonColor: '#64748b', // Slate 500
                     confirmButtonText: 'Ya, Simpan!',
-                    cancelButtonText: 'Batal'
+                    cancelButtonText: 'Batal',
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                        title: 'text-slate-900 dark:text-slate-100 font-bold',
+                        htmlContainer: 'text-slate-600 dark:text-slate-400',
+                        confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                        cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
                             title: 'Menyimpan...',
                             text: 'Mohon tunggu sebentar',
                             allowOutsideClick: false,
-                            didOpen: () => Swal.showLoading()
+                            didOpen: () => Swal.showLoading(),
+                            buttonsStyling: false,
+                            customClass: {
+                                popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                                title: 'text-slate-900 dark:text-slate-100 font-bold',
+                                htmlContainer: 'text-slate-600 dark:text-slate-400',
+                            }
                         });
                         form.submit();
                     }

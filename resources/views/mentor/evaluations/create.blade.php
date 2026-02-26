@@ -129,10 +129,16 @@
                     icon: 'question',
                     showCancelButton: true,
                     reverseButtons: true,
-                    confirmButtonColor: '#e11d48', // Red 600
-                    cancelButtonColor: '#64748b',  // Slate 500
                     confirmButtonText: 'Ya, Simpan!',
-                    cancelButtonText: 'Cek Lagi'
+                    cancelButtonText: 'Cek Lagi',
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                        title: 'text-slate-900 dark:text-slate-100 font-bold',
+                        htmlContainer: 'text-slate-600 dark:text-slate-400',
+                        confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                        cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
@@ -153,10 +159,16 @@
                     icon: 'warning',
                     showCancelButton: true,
                     reverseButtons: true,
-                    confirmButtonColor: '#64748b', // Slate 500 (Primary action is to leave)
-                    cancelButtonColor: '#e11d48',  // Red 600 (Cancel the leaving)
                     confirmButtonText: 'Ya, Batalkan',
-                    cancelButtonText: 'Lanjut Mengisi'
+                    cancelButtonText: 'Lanjut Mengisi',
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                        title: 'text-slate-900 dark:text-slate-100 font-bold',
+                        htmlContainer: 'text-slate-600 dark:text-slate-400',
+                        confirmButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                        cancelButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = redirectUrl;

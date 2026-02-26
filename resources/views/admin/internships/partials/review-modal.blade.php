@@ -156,10 +156,16 @@
                             text: "Apakah Anda yakin ingin MENOLAK pengajuan ini? Notifikasi akan dikirim ke mahasiswa.",
                             icon: 'warning',
                             showCancelButton: true,
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '#3085d6',
                             confirmButtonText: 'Ya, Tolak!',
-                            cancelButtonText: 'Batal'
+                            cancelButtonText: 'Batal',
+                            buttonsStyling: false,
+                            customClass: {
+                                popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                                title: 'text-slate-900 dark:text-slate-100 font-bold',
+                                htmlContainer: 'text-slate-600 dark:text-slate-400',
+                                confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+                                cancelButton: 'px-6 py-2.5 mx-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 font-bold rounded-xl transition-all active:scale-95',
+                            }
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 document.getElementById('reject-form').submit();

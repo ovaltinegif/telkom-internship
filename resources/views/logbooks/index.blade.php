@@ -61,27 +61,27 @@
                         </div>
     
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-widest bg-slate-50/50 dark:bg-slate-950/50 border-y border-slate-100 dark:border-slate-800 transition-colors">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+                                <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
                                     <tr>
-                                        <th class="px-6 py-5 font-black">Tanggal</th>
-                                        <th class="px-6 py-5 font-black">Judul</th>
-                                        <th class="px-6 py-5 font-black">Aktivitas</th>
-                                        <th class="px-6 py-5 font-black">Bukti</th>
-                                        <th class="px-6 py-5 font-black">Status</th>
-                                        <th class="px-6 py-5 font-black">Catatan Mentor</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Tanggal</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Judul</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Aktivitas</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Bukti</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Status</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Catatan Mentor</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors">
                                     @forelse($logbooks as $logbook)
                                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                                            <td class="px-6 py-4 font-medium text-slate-900 dark:text-slate-100">
-                                                {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
+                                                <span class="font-bold">{{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}</span>
                                             </td>
-                                            <td class="px-6 py-4 font-bold text-slate-800 dark:text-slate-100">
-                                                {{ $logbook->title ?? '-' }}
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
+                                                <span class="font-bold">{{ $logbook->title ?? '-' }}</span>
                                             </td>
-                                            <td class="px-6 py-4 text-slate-600 dark:text-slate-300 max-w-sm">
+                                            <td class="px-6 py-4 text-sm text-slate-700 dark:text-slate-300 transition-colors max-w-sm">
                                                 <div class="line-clamp-2" title="{{ strip_tags($logbook->activity) }}">
                                                     {{ Str::limit(strip_tags($logbook->activity), 80) }}
                                                 </div>
@@ -91,30 +91,30 @@
                                                     Lihat Selengkapnya
                                                 </button>
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 @if($logbook->evidence)
                                                     <a href="{{ Storage::url($logbook->evidence) }}" target="_blank" class="text-red-600 dark:text-red-400 hover:underline">Lihat</a>
                                                 @else
                                                     <span class="text-slate-400 dark:text-slate-500">-</span>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 <x-status-badge :status="$logbook->status" />
                                             </td>
-                                            <td class="px-6 py-4 text-slate-500 dark:text-slate-400 italic text-xs">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors italic">
                                                 {{ $logbook->mentor_note ?? '-' }}
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="px-6 py-12 text-center">
-                                                <div class="flex flex-col items-center gap-3">
-                                                    <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-slate-300 dark:text-slate-600">
+                                            <td colspan="6" class="px-6 py-12 text-center text-gray-500 dark:text-slate-400 min-h-[160px]">
+                                                <div class="flex flex-col items-center justify-center h-full gap-2">
+                                                    <div class="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mb-2 transition-colors shadow-inner">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-slate-300 dark:text-slate-600 transition-colors">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                                                         </svg>
                                                     </div>
-                                                    <p class="text-slate-500 dark:text-slate-400 font-medium tracking-wide">Belum ada aktivitas yang dicatat.</p>
+                                                    <p class="text-base font-bold text-slate-500 dark:text-slate-500 transition-colors">Belum ada aktivitas yang dicatat.</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -140,23 +140,23 @@
                         </div>
     
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-widest bg-slate-50/50 dark:bg-slate-950/50 border-y border-slate-100 dark:border-slate-800 transition-colors">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+                                <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
                                     <tr>
-                                        <th class="px-6 py-5 font-black">Tanggal</th>
-                                        <th class="px-6 py-5 font-black">Jenis Izin</th>
-                                        <th class="px-6 py-5 font-black">Waktu</th>
-                                        <th class="px-6 py-5 font-black">Alasan</th>
-                                        <th class="px-6 py-5 font-black">Status</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Tanggal</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Jenis Izin</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Waktu</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Alasan</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors">
                                     @forelse($permissions as $permit)
                                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                                            <td class="px-6 py-4 font-medium text-slate-900 dark:text-slate-100">
-                                                {{ \Carbon\Carbon::parse($permit->date)->format('d M Y') }}
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
+                                                <span class="font-bold">{{ \Carbon\Carbon::parse($permit->date)->format('d M Y') }}</span>
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 @if($permit->permit_type == 'full')
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50">
                                                         Full Day
@@ -169,17 +169,17 @@
                                                     <span class="text-slate-500 dark:text-slate-400">-</span>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 text-slate-600 dark:text-slate-300 font-mono text-xs">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors font-mono">
                                                 @if($permit->permit_type == 'temporary' && $permit->permit_start_time)
                                                     {{ \Carbon\Carbon::parse($permit->permit_start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($permit->permit_end_time)->format('H:i') }}
                                                 @else
                                                     -
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 text-slate-600 dark:text-slate-300 max-w-xs truncate" title="{{ $permit->note }}">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors max-w-xs truncate" title="{{ $permit->note }}">
                                                 {{ Str::limit($permit->note, 50) }}
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
                                                     Tercatat
                                                 </span>
@@ -187,8 +187,15 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
-                                                Belum ada riwayat izin.
+                                            <td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-slate-400 min-h-[160px]">
+                                                <div class="flex flex-col items-center justify-center h-full gap-2">
+                                                    <div class="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mb-2 transition-colors shadow-inner">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-slate-300 dark:text-slate-600 transition-colors">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <p class="text-base font-bold text-slate-500 dark:text-slate-500 transition-colors">Belum ada riwayat izin.</p>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforelse
@@ -210,63 +217,70 @@
                         </div>
     
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-widest bg-slate-50/50 dark:bg-slate-950/50 border-y border-slate-100 dark:border-slate-800 transition-colors">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+                                <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
                                     <tr>
-                                        <th class="px-6 py-5 font-black">Tanggal</th>
-                                        <th class="px-6 py-5 font-black">Waktu Masuk</th>
-                                        <th class="px-6 py-5 font-black">Waktu Keluar</th>
-                                        <th class="px-6 py-5 font-black">Lokasi</th>
-                                        <th class="px-6 py-5 font-black">Status</th>
-                                        <th class="px-6 py-5 font-black">Durasi</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Tanggal</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Waktu Masuk</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Waktu Keluar</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Lokasi</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Status</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Durasi</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors">
                                     @forelse($attendances as $attendance)
                                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                                            <td class="px-6 py-4 font-medium text-slate-900 dark:text-slate-100">
-                                                {{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
+                                                <span class="font-bold">{{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}</span>
                                             </td>
-                                            <td class="px-6 py-4 text-slate-600 dark:text-slate-300 font-mono text-xs">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors font-mono">
                                                 {{ $attendance->check_in_time ? \Carbon\Carbon::parse($attendance->check_in_time)->format('H:i:s') : '-' }}
                                             </td>
-                                            <td class="px-6 py-4 text-slate-600 dark:text-slate-300 font-mono text-xs">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors font-mono">
                                                 {{ $attendance->check_out_time ? \Carbon\Carbon::parse($attendance->check_out_time)->format('H:i:s') : '-' }}
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 @if($attendance->check_in_lat && $attendance->check_in_long)
-                                                    <a href="https://www.google.com/maps?q={{ $attendance->check_in_lat }},{{ $attendance->check_in_long }}" target="_blank" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-xs font-medium">
+                                                    <a href="https://www.google.com/maps?q={{ $attendance->check_in_lat }},{{ $attendance->check_in_long }}" target="_blank" class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400 flex items-center gap-1 text-xs font-bold transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                                             <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.62.829.799 1.654 1.38 2.274 1.766a11.267 11.267 0 00.758.433l.017.007.006.003.002.001.309.066zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
                                                         </svg>
                                                         Lihat Peta
                                                     </a>
                                                 @else
-                                                    <span class="text-slate-400 text-xs">-</span>
+                                                    <span class="text-slate-400 dark:text-slate-500">-</span>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
                                                     Hadir
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-slate-500 text-xs">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 @if($attendance->check_in_time && $attendance->check_out_time)
                                                     @php
                                                         $start = \Carbon\Carbon::parse($attendance->check_in_time);
                                                         $end = \Carbon\Carbon::parse($attendance->check_out_time);
                                                         $diff = $start->diff($end);
                                                     @endphp
-                                                    {{ $diff->h }} Jam {{ $diff->i }} Menit
+                                                    <span class="font-bold">{{ $diff->h }} Jam {{ $diff->i }} Menit</span>
                                                 @else
-                                                    -
+                                                    <span class="text-slate-400 dark:text-slate-500">-</span>
                                                 @endif
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
-                                                Belum ada riwayat absensi.
+                                            <td colspan="6" class="px-6 py-12 text-center text-gray-500 dark:text-slate-400 min-h-[160px]">
+                                                <div class="flex flex-col items-center justify-center h-full gap-2">
+                                                    <div class="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mb-2 transition-colors shadow-inner">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-slate-300 dark:text-slate-600 transition-colors">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <p class="text-base font-bold text-slate-500 dark:text-slate-500 transition-colors">Belum ada riwayat absensi.</p>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforelse

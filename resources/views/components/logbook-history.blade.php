@@ -32,26 +32,26 @@
 
         {{-- Logbook Table --}}
         <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
-                <thead class="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-widest bg-slate-50/50 dark:bg-slate-950/50 border-y border-slate-100 dark:border-slate-800 transition-colors">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
+                <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
                     <tr>
-                        <th class="px-6 py-5 font-black">Tanggal</th>
-                        <th class="px-6 py-5 font-black">Aktivitas</th>
-                        <th class="px-6 py-5 font-black">Bukti</th>
-                        <th class="px-6 py-5 font-black">Status</th>
-                        <th class="px-6 py-5 font-black">Catatan Mentor</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Tanggal</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Aktivitas</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Bukti</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Status</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Catatan Mentor</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 transition-colors">
+                <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors">
                     @forelse($logbooks as $logbook)
-                        <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all duration-200">
-                            <td class="px-6 py-4 font-medium text-slate-900 dark:text-slate-100">
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors font-bold">
                                 {{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}
                             </td>
-                            <td class="px-6 py-4 text-slate-600 dark:text-slate-300 max-w-xs truncate" title="{{ strip_tags($logbook->activity) }}">
+                            <td class="px-6 py-4 text-sm text-slate-700 dark:text-slate-300 transition-colors max-w-xs truncate" title="{{ strip_tags($logbook->activity) }}">
                                 {{ Str::limit(strip_tags($logbook->activity), 40) }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                 @if($logbook->evidence)
                                     <a href="{{ Storage::url($logbook->evidence) }}" target="_blank" class="inline-flex items-center gap-1.5 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-bold transition-all transform hover:scale-105">
                                         <div class="p-1.5 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 group-hover:bg-red-600 group-hover:text-white dark:group-hover:bg-red-600 dark:group-hover:text-white transition-all">
@@ -61,24 +61,24 @@
                                         </div>
                                     </a>
                                 @else
-                                    <span class="text-slate-300 dark:text-slate-700 text-[10px] font-black uppercase tracking-tighter">N/A</span>
+                                    <span class="text-slate-400 dark:text-slate-500">-</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                 <x-status-badge :status="$logbook->status" />
                             </td>
-                            <td class="px-6 py-4 text-slate-500 dark:text-slate-400 italic text-xs">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors italic">
                                 {{ $logbook->mentor_note ?? '-' }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-slate-500 dark:text-slate-500">
-                                <div class="flex flex-col items-center justify-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-slate-300 dark:text-slate-700">
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-slate-400 min-h-[160px]">
+                                <div class="flex flex-col items-center justify-center h-full gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-slate-300 dark:text-slate-700 transition-colors">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                     </svg>
-                                    <p>Belum ada logbook yang diisi.</p>
+                                    <p class="text-base font-bold text-slate-500 dark:text-slate-500 transition-colors">Belum ada logbook yang diisi.</p>
                                     @if(Auth::user()->internship && Auth::user()->internship->status === 'active')
                                         <a href="{{ route('logbooks.create') }}" class="text-red-600 dark:text-red-400 font-semibold hover:underline">Yuk isi logbook pertamamu!</a>
                                     @endif
