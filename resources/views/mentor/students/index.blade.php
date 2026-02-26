@@ -9,9 +9,9 @@
     <div class="py-12 bg-gray-50 dark:bg-slate-950 min-h-screen transition-colors duration-300"> 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none sm:rounded-[2.5rem] border border-slate-100 dark:border-slate-800 transition-colors duration-300">
-                <div class="px-10 pt-10 pb-2">
+                <div class="p-10">
                     {{-- Tabs Navigation & Filters --}}
-                    <div class="border-b border-slate-200 dark:border-slate-800 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors">
+                    <div class="border-b border-slate-200 dark:border-slate-800 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors">
                         <nav class="-mb-px flex space-x-10 overflow-x-auto w-full md:w-auto" aria-label="Tabs">
                             {{-- Active Tab --}}
                             <a href="{{ route('mentor.students.index', ['status' => 'active']) }}" 
@@ -61,9 +61,7 @@
                             </div>
                         @endif
                     </div>
-                </div>
-
-                <div class="p-10">
+                <!-- Merged container padding applies naturally here -->
                     
                     @if($internships->isEmpty())
                         <div class="text-center py-24 flex flex-col items-center justify-center">

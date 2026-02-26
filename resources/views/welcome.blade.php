@@ -35,7 +35,7 @@
                 
                 <div class="shrink-0 flex items-center gap-4">
                     <a href="#" class="flex items-center gap-3 group">
-                       <img src="{{ asset('images/logo-telkom.png') }}" class="h-20 w-auto" alt="Telkom Indonesia">
+                       <img src="{{ asset('images/logo-telkom.png') }}" class="h-10 w-auto" alt="Telkom Indonesia">
                     </a>
                 </div>
 
@@ -152,9 +152,45 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row items-center gap-16">
                 <!-- Image Side with Carousel -->
-                <div class="w-full lg:w-1/2 mb-10 lg:mb-0" ...>
-                    <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[4/3] group" data-aos="fade-right">
-                        ...
+                <div class="w-full lg:w-1/2 mb-10 lg:mb-0">
+                    <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-red-900/5 aspect-[4/3] group" 
+                         data-aos="fade-right" 
+                         x-data="{ currentSlide: 0, slides: ['{{ asset('images/gallery-04.jpg') }}', '{{ asset('images/gallery-05.jpg') }}', '{{ asset('images/gallery-08.jpg') }}'], autoplayInterval: null }" 
+                         x-init="autoplayInterval = setInterval(() => currentSlide = (currentSlide + 1) % slides.length, 3500)"
+                         @mouseenter="clearInterval(autoplayInterval)"
+                         @mouseleave="autoplayInterval = setInterval(() => currentSlide = (currentSlide + 1) % slides.length, 3500)">
+                         
+                        <template x-for="(slide, index) in slides" :key="index">
+                            <img :src="slide" alt="Benefit" 
+                                 class="absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out transform" 
+                                 :class="currentSlide === index ? 'opacity-100 scale-105' : 'opacity-0 scale-100'" />
+                        </template>
+                        
+                        <!-- Overlay gradient for aesthetics -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent pointer-events-none transition-opacity duration-300"></div>
+                        
+                        <!-- Prev/Next Buttons -->
+                        <button @click="currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1" 
+                                class="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/90 hover:scale-110 hover:text-red-600 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all duration-500 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 z-10 shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                            </svg>
+                        </button>
+                        <button @click="currentSlide = (currentSlide + 1) % slides.length" 
+                                class="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/90 hover:scale-110 hover:text-red-600 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all duration-500 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 z-10 shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Indicators -->
+                        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10 bg-slate-900/40 px-4 py-2.5 rounded-full backdrop-blur-sm border border-white/20 shadow-lg">
+                            <template x-for="(slide, index) in slides" :key="index">
+                                <button @click="currentSlide = index" 
+                                        class="h-2 rounded-full transition-all duration-500 ease-in-out" 
+                                        :class="currentSlide === index ? 'bg-white w-8 shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'bg-white/50 w-2 hover:bg-white/90 hover:w-3'"></button>
+                            </template>
+                        </div>
                     </div>
                 </div>
                 
