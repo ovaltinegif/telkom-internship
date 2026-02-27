@@ -8,16 +8,16 @@
         body { 
             font-family: Arial, Helvetica, sans-serif; 
             font-size: 11pt; 
-            line-height: 1.5; 
+            line-height: 1.4; 
             color: #000; 
-            padding: 40px 60px; 
+            padding: 20px 40px; 
             max-width: 800px; 
             margin: 0 auto; 
             background: white;
         }
         
         /* Header Section */
-        .header-container { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .header-container { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
         .header-left table { width: 100%; border-collapse: collapse; }
         .header-left td { padding: 2px 0; vertical-align: top; }
         .header-left .label { width: 80px; }
@@ -27,21 +27,21 @@
         .logo p { font-size: 8pt; margin: 5px 0 0; font-style: italic; text-align: right; color: #555; }
 
         /* Addressee */
-        .addressee { margin-bottom: 30px; }
+        .addressee { margin-bottom: 20px; }
         .addressee p { margin: 2px 0; }
 
         /* Body */
-        .content { text-align: justify; margin-bottom: 20px; }
+        .content { text-align: justify; margin-bottom: 15px; }
         
         /* Student Info Table */
-        .student-info { width: 100%; margin: 20px 0; border-collapse: collapse; }
+        .student-info { width: 100%; margin: 10px 0; border-collapse: collapse; }
         .student-info td { padding: 4px 10px; vertical-align: top; }
         .student-info .label { width: 20px; text-align: center; font-weight: bold; }
         .student-info .field { width: 150px; font-weight: bold; }
         .student-info .val { font-weight: bold; }
 
         /* Grades Table */
-        .grades-table { width: 100%; border-collapse: collapse; margin: 20px 0 30px; }
+        .grades-table { width: 100%; border-collapse: collapse; margin: 15px 0 20px; page-break-inside: avoid; }
         .grades-table th, .grades-table td { border: 1px solid #000; padding: 8px; text-align: center; font-size: 10pt; }
         .grades-table th { background-color: #f9f9f9; font-weight: bold; }
         .grades-table td.text-left { text-align: left; }
@@ -53,7 +53,7 @@
         .rules-list li { margin-bottom: 5px; }
 
         /* Footer / Signature */
-        .footer { margin-top: 40px; }
+        .footer { margin-top: 100px; page-break-inside: avoid; }
         .signature-block { width: 250px; float: left; } /* Or right based on image? Image 3 shows signature at bottom left? No, bottom left usually. Let's check Image 3 again. It has signature on left side? Mentors usually sign on right or left. I'll put it on the left as per standard or image. Wait, image 3 has signature on LEFT. "Hormat Kami, QR, Nama". OK. */
         
         .signature-block p { margin: 0; }
@@ -66,8 +66,13 @@
 
         /* Print Controls */
         @media print {
-            body { padding: 0; margin: 20px; box-shadow: none; }
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+            body { padding: 0 !important; margin: 0 !important; box-shadow: none; font-size: 10pt; line-height: 1.3; }
             .print-btn { display: none; }
+            .watermark { font-size: 70pt; }
         }
 
         .print-btn {

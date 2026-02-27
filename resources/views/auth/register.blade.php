@@ -166,7 +166,7 @@
                     <div class="mt-8 flex justify-start w-full max-w-4xl px-4">
                          <button type="button" 
                                 @click="prevStep()" 
-                                class="flex items-center text-gray-600 hover:text-gray-900 font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                                class="flex items-center px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200">
                             <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                             Kembali
                         </button>
@@ -427,7 +427,7 @@
                 </div>
 
                 <div class="flex gap-4">
-                     <button type="button" @click="prevStep()" class="px-8 py-3 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg shadow-sm hover:bg-gray-50 transition">
+                     <button type="button" @click="prevStep()" class="flex items-center justify-center px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-1 active:translate-y-0 active:shadow-sm transition-all duration-200">
                         Cek Lagi
                     </button>
                     <button type="submit" class="px-8 py-3 bg-red-600 text-white font-bold rounded-lg shadow-lg hover:bg-red-700 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">

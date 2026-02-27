@@ -32,7 +32,7 @@
                             </div>
                             <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight transition-colors">Semua Beres!</h3>
                             <p class="text-slate-500 dark:text-slate-500 font-medium mt-2">Tidak ada logbook yang perlu disetujui saat ini.</p>
-                            <a href="{{ route('mentor.dashboard') }}" class="mt-8 px-6 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold rounded-xl transition-all shadow-sm active:scale-95">
+                            <a href="{{ route('mentor.dashboard') }}" class="mt-8 inline-flex items-center px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-25 transition-all duration-200">
                                 &larr; Kembali ke Dashboard
                             </a>
                         </div>

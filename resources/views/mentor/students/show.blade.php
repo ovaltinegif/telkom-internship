@@ -45,7 +45,7 @@
                 <div class="grow text-center md:text-left space-y-4">
                     <div>
                         <h1 class="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight transition-colors">{{ $internship->student->name }}</h1>
-                        <p class="text-slate-500 dark:text-slate-500 font-black uppercase tracking-widest text-[10px] mt-1 transition-colors">{{ $internship->student->email }}</p>
+                        <p class="text-slate-500 dark:text-slate-500 font-black tracking-widest text-[10px] mt-1 transition-colors">{{ $internship->student->email }}</p>
                     </div>
 
                     {{-- MERGED: INFO STATS FROM INCOMING CHANGE --}}
@@ -408,22 +408,63 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 mb-8">
-                        <div>
-                            <label class="block text-[10px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-widest mb-2 transition-colors">Bulan</label>
-                            <select name="month" class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 shadow-sm focus:border-red-500 focus:ring-red-500 font-bold text-sm transition-colors">
-                                @for($i = 1; $i <= 12; $i++)
-                                    <option value="{{ $i }}" {{ date('n') == $i ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $i, 10)) }}</option>
-                                @endfor
-                            </select>
+                    <div class="mb-8 relative">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 ml-1">Pilih Periode Laporan</label>
+                        @php
+                            $firstLogbook = $internship->dailyLogbooks()->oldest('date')->first();
+                            $start = $firstLogbook 
+                                ? \Carbon\Carbon::parse($firstLogbook->date)->startOfMonth() 
+                                : \Carbon\Carbon::parse($internship->start_date)->startOfMonth();
+                            
+                            $end = \Carbon\Carbon::now()->startOfMonth();
+                            $internshipEnd = \Carbon\Carbon::parse($internship->end_date)->startOfMonth();
+                            if ($end > $internshipEnd) {
+                                $end = $internshipEnd;
+                            }
+
+                            $current = $end->copy();
+                            $options = [];
+                            
+                            while ($current >= $start) {
+                                $options[] = [
+                                    'month' => $current->format('n'),
+                                    'year' => $current->format('Y'),
+                                    'label' => $current->translatedFormat('F Y')
+                                ];
+                                $current->subMonth();
+                            }
+                            
+                            if (empty($options)) {
+                                $options[] = [
+                                    'month' => date('n'),
+                                    'year' => date('Y'),
+                                    'label' => \Carbon\Carbon::now()->translatedFormat('F Y')
+                                ];
+                            }
+                        @endphp
+                        <div class="relative group mt-3 mb-6">
+                            {{-- Base Layer (Shadow/Overlap effect) --}}
+                            <div class="absolute inset-0 bg-blue-100 dark:bg-blue-500/20 rounded-2xl transform translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2 border border-blue-200 dark:border-blue-500/30"></div>
+                            
+                            {{-- Top Layer (Interactive) --}}
+                            <div class="relative bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-colors">
+                                <select name="period_selector" onchange="const vals = this.value.split('-'); this.form.querySelector('[name=month]').value = vals[0]; this.form.querySelector('[name=year]').value = vals[1];" 
+                                    class="w-full bg-transparent border-none focus:ring-0 text-sm py-4 pl-5 pr-12 font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest cursor-pointer !appearance-none relative z-10 transition-colors [&::-ms-expand]:hidden" style="background-image: none;">
+                                    @foreach($options as $option)
+                                        <option value="{{ $option['month'] }}-{{ $option['year'] }}" class="font-bold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200">{{ $option['label'] }}</option>
+                                    @endforeach
+                                </select>
+                                
+                                {{-- Chevron Icon Custom --}}
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-blue-500 bg-gradient-to-l from-white dark:from-slate-900 via-white dark:via-slate-900 to-transparent pl-4">
+                                    <svg class="h-5 w-5 opacity-70 group-hover:opacity-100 group-hover:translate-y-0.5 transition-all text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-widest mb-2 transition-colors">Tahun</label>
-                            <select name="year" class="block w-full rounded-2xl border-slate-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 shadow-sm focus:border-red-500 focus:ring-red-500 font-bold text-sm transition-colors">
-                                <option value="{{ date('Y') }}" selected>{{ date('Y') }}</option>
-                                <option value="{{ date('Y') - 1 }}">{{ date('Y') - 1 }}</option>
-                            </select>
-                        </div>
+                        <input type="hidden" name="month" value="{{ $options[0]['month'] ?? date('n') }}">
+                        <input type="hidden" name="year" value="{{ $options[0]['year'] ?? date('Y') }}">
                     </div>
 
                     <div class="flex justify-end gap-3">

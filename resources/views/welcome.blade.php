@@ -34,8 +34,8 @@
             <div class="flex justify-between items-center min-h-[100px] transition-all duration-300">
                 
                 <div class="shrink-0 flex items-center gap-4">
-                    <a href="#" class="flex items-center gap-3 group transition-transform duration-300 hover:scale-105">
-                       <img src="{{ asset('images/logo-telkom.png') }}" class="h-[76px] w-auto" alt="Telkom Indonesia">
+                    <a href="#" class="flex items-center gap-3 group">
+                       <img src="{{ asset('images/logo-telkom.png') }}" class="h-10 w-auto" alt="Telkom Indonesia">
                     </a>
                 </div>
 
@@ -155,7 +155,7 @@
                 <div class="w-full lg:w-1/2 mb-10 lg:mb-0">
                     <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-red-900/5 aspect-[4/3] group" 
                          data-aos="fade-right" 
-                         x-data="{ currentSlide: 0, slides: ['{{ asset('images/gallery-04.jpg') }}', '{{ asset('images/gallery-05.jpg') }}', '{{ asset('images/gallery-08.jpg') }}'], autoplayInterval: null }" 
+                         x-data="{ currentSlide: 0, slides: ['{{ asset('images/gallery-04.jpg') }}', '{{ asset('images/gallery-05.jpg') }}', '{{ asset('images/gallery-08.jpg') }}', '{{ asset('images/gallery-11.jpg') }}'], autoplayInterval: null }" 
                          x-init="autoplayInterval = setInterval(() => currentSlide = (currentSlide + 1) % slides.length, 3500)"
                          @mouseenter="clearInterval(autoplayInterval)"
                          @mouseleave="autoplayInterval = setInterval(() => currentSlide = (currentSlide + 1) % slides.length, 3500)">
@@ -171,68 +171,68 @@
                         
                         <!-- Prev/Next Buttons -->
                         <button @click="currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1" 
-                                class="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/90 hover:scale-110 hover:text-red-600 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all duration-500 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 z-10 shadow-lg">
+                                class="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/90 hover:scale-110 hover:text-red-600 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all duration-500 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 z-10 shadow-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                             </svg>
                         </button>
                         <button @click="currentSlide = (currentSlide + 1) % slides.length" 
-                                class="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/90 hover:scale-110 hover:text-red-600 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all duration-500 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 z-10 shadow-lg">
+                                class="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/90 hover:scale-110 hover:text-red-600 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all duration-500 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 z-10 shadow-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                             </svg>
                         </button>
                         
                         <!-- Indicators -->
-                        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10 bg-slate-900/40 px-4 py-2.5 rounded-full backdrop-blur-sm border border-white/20 shadow-lg">
+                        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10 bg-slate-900/40 px-4 py-2.5 rounded-full backdrop-blur-sm border border-white/20">
                             <template x-for="(slide, index) in slides" :key="index">
                                 <button @click="currentSlide = index" 
                                         class="h-2 rounded-full transition-all duration-500 ease-in-out" 
-                                        :class="currentSlide === index ? 'bg-white w-8 shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'bg-white/50 w-2 hover:bg-white/90 hover:w-3'"></button>
+                                        :class="currentSlide === index ? 'bg-white w-8' : 'bg-white/50 w-2 hover:bg-white/90 hover:w-3'"></button>
                             </template>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Content Side -->
-                <div class="w-full lg:w-1/2 text-left" data-aos="fade-left">
-                    <h2 class="text-4xl md:text-5xl font-black text-[#e60000] mb-8 tracking-tight">Manfaat Internship di Telkom</h2>
-                    <p class="text-slate-600 text-lg leading-relaxed mb-10 font-medium">
+                <div class="w-full lg:w-1/2 text-left lg:pl-8 xl:pl-12" data-aos="fade-left">
+                    <h2 class="text-4xl md:text-5xl font-black text-[#e60000] mb-6 tracking-tight leading-tight">Manfaat Internship di Telkom Witel Semarang Jateng Utara</h2>
+                    <p class="text-slate-600 text-lg leading-relaxed mb-10 font-medium max-w-xl">
                         Program Internship dan Kerja Praktik Witel Semarang Jateng Utara mengundang mahasiswa untuk terlibat langsung dalam proyek industri dan budaya kerja yang kolaboratif.
                     </p>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                          <!-- Benefit 1 -->
-                        <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-50 text-center transition-all hover:-translate-y-1">
-                            <div class="h-12 w-12 mx-auto mb-6 text-[#e60000]">
+                        <div class="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-50 text-center transition-all hover:-translate-y-1">
+                            <div class="h-12 w-12 mx-auto mb-4 text-[#e60000]">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                                 </svg>
                             </div>
-                            <h3 class="font-black text-red-600 text-sm mb-3 uppercase tracking-wide">Eksplorasi Langsung</h3>
-                            <p class="text-xs text-slate-500 font-medium">Bangun relasi dan jaringan luas tidak hanya dengan teman satu program.</p>
+                            <h3 class="font-black text-red-600 text-[13px] mb-2 uppercase tracking-wide">Eksplorasi Langsung</h3>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed">Bangun relasi dan jaringan luas tidak hanya dengan teman satu program.</p>
                         </div>
                         
                          <!-- Benefit 2 -->
-                         <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-50 text-center transition-all hover:-translate-y-1">
-                            <div class="h-12 w-12 mx-auto mb-6 text-[#e60000]">
+                         <div class="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-50 text-center transition-all hover:-translate-y-1">
+                            <div class="h-12 w-12 mx-auto mb-4 text-[#e60000]">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
                                 </svg>
                             </div>
-                            <h3 class="font-black text-red-600 text-sm mb-3 uppercase tracking-wide">Koneksi Profesional</h3>
-                            <p class="text-xs text-slate-500 font-medium">Dapatkan pengalaman praktis dengan terlibat langsung dalam berbagai tantangan.</p>
+                            <h3 class="font-black text-red-600 text-[13px] mb-2 uppercase tracking-wide">Koneksi Profesional</h3>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed">Dapatkan pengalaman praktis dengan terlibat langsung dalam berbagai tantangan.</p>
                         </div>
 
                          <!-- Benefit 3 -->
-                         <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-50 text-center transition-all hover:-translate-y-1">
-                            <div class="h-12 w-12 mx-auto mb-6 text-[#e60000]">
+                         <div class="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-50 text-center transition-all hover:-translate-y-1">
+                            <div class="h-12 w-12 mx-auto mb-4 text-[#e60000]">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                                 </svg>
                             </div>
-                            <h3 class="font-black text-red-600 text-sm mb-3 uppercase tracking-wide">Bimbingan Ahli</h3>
-                            <p class="text-xs text-slate-500 font-medium">Bimbingan dan wawasan eksklusif dari mentor yang sangat berpengalaman.</p>
+                            <h3 class="font-black text-red-600 text-[13px] mb-2 uppercase tracking-wide">Bimbingan Ahli</h3>
+                            <p class="text-xs text-slate-500 font-medium leading-relaxed">Bimbingan dan wawasan eksklusif dari mentor yang sangat berpengalaman.</p>
                         </div>
                     </div>
                 </div>

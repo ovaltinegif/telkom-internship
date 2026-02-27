@@ -89,11 +89,11 @@
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-800">
                             <thead class="bg-gray-50 dark:bg-slate-950/50 transition-colors">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Intern</th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Pendidikan</th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Divisi</th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Mentor</th>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Intern</th>
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Pendidikan</th>
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Divisi</th>
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Mentor</th>
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">
                                         @if($status === 'active')
                                             Sisa Durasi
                                         @elseif($status === 'extension')
@@ -102,25 +102,27 @@
                                             Durasi
                                         @endif
                                     </th>
-                                    <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Aksi</th>
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest transition-colors">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-slate-800 transition-colors">
                                 @forelse ($internships as $internship)
                                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                                        <td class="px-6 py-5 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center text-white font-bold shadow-md border border-white dark:border-slate-800 transition-colors">
-                                                    {{ substr($internship->student->name, 0, 1) }}
-                                                </div>
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-bold text-gray-900 dark:text-slate-200 transition-colors">{{ $internship->student->name }}</div>
-                                                    <div class="text-xs text-gray-500 dark:text-slate-500 transition-colors">{{ $internship->student->email }}</div>
+                                        <td class="px-6 py-5 whitespace-nowrap text-center">
+                                            <div class="flex items-center justify-center">
+                                                <div class="w-[220px] flex items-center text-left">
+                                                    <div class="h-10 w-10 shrink-0 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center text-white font-bold shadow-md border border-white dark:border-slate-800 transition-colors">
+                                                        {{ substr($internship->student->name, 0, 1) }}
+                                                    </div>
+                                                    <div class="ml-4 truncate">
+                                                        <div class="text-sm font-bold text-gray-900 dark:text-slate-200 transition-colors truncate">{{ $internship->student->name }}</div>
+                                                        <div class="text-xs text-gray-500 dark:text-slate-500 transition-colors truncate">{{ $internship->student->email }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
                                         
-                                        <td class="px-6 py-5 whitespace-nowrap">
+                                        <td class="px-6 py-5 text-center">
                                             @php
                                                 $eduLevel = $internship->student->studentProfile?->education_level ?? '-';
                                                 $classes = $eduLevel === 'SMK' ? 'bg-purple-100 dark:bg-purple-500/10 text-purple-800 dark:text-purple-400 border border-purple-200 dark:border-purple-500/20' : 'bg-indigo-100 dark:bg-indigo-500/10 text-indigo-800 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20';
@@ -130,15 +132,15 @@
                                             </span>
                                         </td>
                                         
-                                        <td class="px-6 py-5 whitespace-nowrap">
+                                        <td class="px-6 py-5 text-center">
                                             <div class="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors">{{ $internship->division?->name ?? '-' }}</div>
                                         </td>
-                                        <td class="px-6 py-5 whitespace-nowrap">
+                                        <td class="px-6 py-5 text-center">
                                             <div class="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors">{{ $internship->mentor?->name ?? '-' }}</div>
                                         </td>
 
                                         {{-- Unified Date Info Cell --}}
-                                        <td class="px-6 py-5 whitespace-nowrap">
+                                        <td class="px-6 py-5 whitespace-nowrap text-center">
                                             @if($status === 'active')
                                                 @php
                                                     $endDate = \Carbon\Carbon::parse($internship->end_date)->endOfDay();
@@ -148,63 +150,69 @@
                                                     $remainingDays = $now->diffInDays($endDate, false);
                                                 @endphp
 
-                                                <div class="flex items-center gap-3">
-                                                    <div class="flex-shrink-0">
-                                                        <div class="p-2 rounded-xl {{ $remainingDays > 10 ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400' : ($remainingDays > 0 ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-500') }} transition-colors">
-                                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                            </svg>
+                                                <div class="flex items-center justify-center">
+                                                    <div class="w-[150px] flex items-center gap-3 text-left">
+                                                        <div class="flex-shrink-0">
+                                                            <div class="p-2 rounded-xl {{ $remainingDays > 10 ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400' : ($remainingDays > 0 ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-500') }} transition-colors">
+                                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                </svg>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div>
-                                                        @if(!$isExpired)
-                                                            <div class="text-sm font-bold {{ $remainingDays > 10 ? 'text-slate-800 dark:text-slate-200' : 'text-orange-600 dark:text-orange-400' }} transition-colors">
-                                                                @if($diff->y > 0) {{ $diff->y }} Th @endif
-                                                                @if($diff->m > 0) {{ $diff->m }} Bln @endif
-                                                                @if($diff->d > 0) {{ $diff->d }} Hr @endif
-                                                            </div>
-                                                            <div class="text-xs text-slate-500 dark:text-slate-500 font-bold transition-colors">
-                                                                Selesai {{ $endDate->format('d M Y') }}
-                                                            </div>
-                                                        @elseif($remainingDays == 0)
-                                                            <div class="text-sm font-bold text-orange-600 dark:text-orange-400 transition-colors">
-                                                                Hari Terakhir
-                                                            </div>
-                                                            <div class="text-xs text-slate-500 dark:text-slate-500 font-bold transition-colors">
-                                                                Selesai Hari Ini
-                                                            </div>
-                                                        @else
-                                                            <div class="text-sm font-bold text-slate-500 dark:text-slate-600 transition-colors">
-                                                                Selesai
-                                                            </div>
-                                                        @endif
+                                                        <div>
+                                                            @if(!$isExpired)
+                                                                <div class="text-sm font-bold {{ $remainingDays > 10 ? 'text-slate-800 dark:text-slate-200' : 'text-orange-600 dark:text-orange-400' }} transition-colors">
+                                                                    @if($diff->y > 0) {{ $diff->y }} Th @endif
+                                                                    @if($diff->m > 0) {{ $diff->m }} Bln @endif
+                                                                    @if($diff->d > 0) {{ $diff->d }} Hr @endif
+                                                                </div>
+                                                                <div class="text-xs text-slate-500 dark:text-slate-500 font-bold transition-colors">
+                                                                    Selesai {{ $endDate->format('d M Y') }}
+                                                                </div>
+                                                            @elseif($remainingDays == 0)
+                                                                <div class="text-sm font-bold text-orange-600 dark:text-orange-400 transition-colors">
+                                                                    Hari Terakhir
+                                                                </div>
+                                                                <div class="text-xs text-slate-500 dark:text-slate-500 font-bold transition-colors">
+                                                                    Selesai Hari Ini
+                                                                </div>
+                                                            @else
+                                                                <div class="text-sm font-bold text-slate-500 dark:text-slate-600 transition-colors">
+                                                                    Selesai
+                                                                </div>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @elseif($status === 'extension')
                                                 @php
                                                     $extension = $internship->extensions->first();
                                                 @endphp
-                                                <div class="flex flex-col">
-                                                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider transition-colors">Current: <span class="text-slate-700 dark:text-slate-300 transition-colors">{{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}</span></div>
-                                                    <div class="text-sm font-bold text-emerald-600 dark:text-emerald-400 transition-colors">New: {{ \Carbon\Carbon::parse($extension->new_end_date)->format('d M Y') }}</div>
-                                                    <div class="text-[10px] font-bold text-slate-400 dark:text-slate-600 transition-colors">
-                                                        (+{{ \Carbon\Carbon::parse($extension->new_start_date)->diffInDays(\Carbon\Carbon::parse($extension->new_end_date)->addDay()) }} Days)
+                                                <div class="flex items-center justify-center">
+                                                    <div class="w-[150px] flex flex-col items-center justify-center text-center">
+                                                        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider transition-colors">Current: <span class="text-slate-700 dark:text-slate-300 transition-colors">{{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}</span></div>
+                                                        <div class="text-sm font-bold text-emerald-600 dark:text-emerald-400 transition-colors">New: {{ \Carbon\Carbon::parse($extension->new_end_date)->format('d M Y') }}</div>
+                                                        <div class="text-[10px] font-bold text-slate-400 dark:text-slate-600 transition-colors">
+                                                            (+{{ \Carbon\Carbon::parse($extension->new_start_date)->diffInDays(\Carbon\Carbon::parse($extension->new_end_date)->addDay()) }} Days)
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="flex flex-col">
-                                                    <div class="text-sm font-bold text-slate-800 dark:text-slate-200 transition-colors">
-                                                        {{ \Carbon\Carbon::parse($internship->start_date)->format('d M Y') }}
-                                                    </div>
-                                                    <div class="text-xs font-bold text-slate-500 dark:text-slate-500 transition-colors">
-                                                        s/d {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}
+                                                <div class="flex items-center justify-center">
+                                                    <div class="w-[150px] flex flex-col items-center justify-center text-center">
+                                                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 transition-colors">
+                                                            {{ \Carbon\Carbon::parse($internship->start_date)->format('d M Y') }}
+                                                        </div>
+                                                        <div class="text-xs font-bold text-slate-500 dark:text-slate-500 transition-colors">
+                                                            s/d {{ \Carbon\Carbon::parse($internship->end_date)->format('d M Y') }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endif
                                         </td>
 
-                                        <td class="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
-                                            <div class="flex items-center justify-end gap-2">
+                                        <td class="px-6 py-5 whitespace-nowrap text-center text-sm font-medium">
+                                            <div class="flex items-center justify-center gap-2">
                                                 @if($status === 'pending')
                                                     <button @click="$dispatch('open-review-modal', { 
                                                         id: {{ $internship->id }}, 

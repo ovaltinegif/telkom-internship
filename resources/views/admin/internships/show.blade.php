@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <h2 class="font-bold text-2xl text-slate-800 leading-tight">
+                <h2 class="font-bold text-2xl text-slate-800 dark:text-slate-100 transition-colors leading-tight">
                     {{ __('Detail Magang') }}
                 </h2>
-                <p class="text-slate-500 text-sm">Informasi lengkap terkait mahasiswa dan program magang</p>
+                <p class="text-slate-500 dark:text-slate-400 transition-colors text-sm">Informasi lengkap terkait mahasiswa dan program magang</p>
             </div>
-            <a href="{{ url()->previous() }}" class="inline-flex items-center px-4 py-2 bg-white border border-slate-300 rounded-xl font-semibold text-xs text-slate-700 uppercase tracking-widest shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transitionease-in-out duration-150">
+            <a href="{{ route('admin.internships.index', ['status' => 'active']) }}" class="inline-flex items-center px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-25 transition-all duration-200">
                 &larr; Kembali
             </a>
         </div>
