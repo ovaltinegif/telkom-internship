@@ -37,13 +37,17 @@ class ProfileController extends Controller
         $request->user()->save();
         //simpan data tambahan ke tabel student_profiles
         if ($request->user()->role === 'student') {
-            $data = [
-                'nim' => $request->nim,
-                'university' => $request->university,
-                'major' => $request->major,
-                'phone_number' => $request->phone_number,
-                'address' => $request->address,
-            ];
+            $data = [];
+            if ($request->has('nim'))
+                $data['nim'] = $request->nim;
+            if ($request->has('university'))
+                $data['university'] = $request->university;
+            if ($request->has('major'))
+                $data['major'] = $request->major;
+            if ($request->has('phone_number'))
+                $data['phone_number'] = $request->phone_number;
+            if ($request->has('address'))
+                $data['address'] = $request->address;
 
             // Handle Photo Upload
             if ($request->hasFile('photo')) {
@@ -55,23 +59,39 @@ class ProfileController extends Controller
                 $data['photo'] = $path;
             }
 
-            $request->user()->studentProfile()->updateOrCreate(
-            ['user_id' => $request->user()->id],
-                $data
-            );
+            if (!empty($data)) {
+                $request->user()->studentProfile()->updateOrCreate(
+                ['user_id' => $request->user()->id],
+                    $data
+                );
+            }
         }
         elseif ($request->user()->role === 'mentor') {
             // Update Data Mentor
-            $data = [
-                'nik' => $request->nik,
-                'position' => $request->position,
-                'phone_number' => $request->phone_number,
-            ];
+            $data = [];
+            if ($request->has('nik'))
+                $data['nik'] = $request->nik;
+            if ($request->has('position'))
+                $data['position'] = $request->position;
+            if ($request->has('phone_number'))
+                $data['phone_number'] = $request->phone_number;
 
-            $request->user()->mentorProfile()->updateOrCreate(
-            ['user_id' => $request->user()->id],
-                $data
-            );
+            // Handle Photo Upload using same logic
+            if ($request->hasFile('photo')) {
+                // Delete old photo if exists
+                if ($request->user()->mentorProfile && $request->user()->mentorProfile->photo) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($request->user()->mentorProfile->photo);
+                }
+                $path = $request->file('photo')->store('profile-photos', 'public');
+                $data['photo'] = $path;
+            }
+
+            if (!empty($data)) {
+                $request->user()->mentorProfile()->updateOrCreate(
+                ['user_id' => $request->user()->id],
+                    $data
+                );
+            }
         }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');

@@ -21,7 +21,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="space-y-10" enctype="multipart/form-data">
+    <form id="profile-update-form" method="post" action="{{ route('profile.update') }}" class="space-y-10" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -31,38 +31,7 @@
                 <span class="w-1.5 h-6 bg-red-600 rounded-full"></span>
                 <h3 class="text-sm font-black text-slate-800 dark:text-slate-200 uppercase tracking-widest">Informasi Dasar</h3>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Profile Photo --}}
-                @if($user->role === 'student')
-                <div class="md:col-span-2 flex items-center gap-8 p-6 bg-slate-50 dark:bg-slate-950 rounded-[2rem] border border-slate-100 dark:border-slate-800 group transition-all duration-300">
-                    <div class="shrink-0 relative">
-                        @if($user->studentProfile && $user->studentProfile->photo)
-                            <img class="h-24 w-24 object-cover rounded-[1.5rem] border-4 border-white dark:border-slate-800 shadow-xl group-hover:scale-105 transition-transform" src="{{ asset('storage/' . $user->studentProfile->photo) }}" alt="{{ $user->name }}" />
-                        @else
-                            <div class="h-24 w-24 rounded-[1.5rem] bg-white dark:bg-slate-900 flex items-center justify-center text-slate-200 dark:text-slate-800 border-4 border-white dark:border-slate-800 shadow-xl">
-                                <svg class="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="grow space-y-3">
-                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">Foto Profil</label>
-                        <input type="file" name="photo" class="block w-full text-xs text-slate-500 dark:text-slate-400
-                            file:mr-4 file:py-2 file:px-4
-                            file:rounded-xl file:border-0
-                            file:text-[10px] file:font-black file:uppercase file:tracking-widest
-                            file:bg-slate-900 dark:file:bg-slate-100 file:text-white dark:file:text-slate-900
-                            hover:file:bg-black dark:hover:file:bg-white
-                            cursor-pointer transition-all
-                        " accept="image/*">
-                        <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Batas ukuran 2MB (JPG, JPEG, atau PNG)</p>
-                        <x-input-error class="mt-2" :messages="$errors->get('photo')" />
-                    </div>
-                </div>
-                @endif
-
                 <div class="md:col-span-2">
                     <x-input-label for="name" :value="__('Nama Lengkap')" class="text-slate-600 dark:text-slate-400 font-bold ml-1 mb-2" />
                     <input id="name" name="name" type="text" class="w-full rounded-[1.25rem] border-slate-200 dark:border-slate-800 focus:border-red-500 focus:ring-red-500 dark:bg-slate-950 shadow-sm transition-all py-3 px-5 text-slate-700 dark:text-slate-200 font-medium" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name" />

@@ -124,7 +124,7 @@
                         </div>
     
                         <div class="mt-4">
-                            {{ $logbooks->links() }}
+                            {{ $logbooks->withQueryString()->links() }}
                         </div>
                     </div>
                 </div>

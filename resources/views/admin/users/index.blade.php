@@ -131,11 +131,15 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="px-6 py-12 whitespace-nowrap text-center text-sm text-gray-500 dark:text-slate-400 opacity-60">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-700 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                            </svg>
-                                            No users found for this category.
+                                        <td colspan="3" class="px-6 py-12 text-center text-gray-500 dark:text-slate-400 min-h-[160px]">
+                                            <div class="flex flex-col items-center justify-center h-full gap-2">
+                                                <div class="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mb-2 transition-colors shadow-inner">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-slate-300 dark:text-slate-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                    </svg>
+                                                </div>
+                                                <p class="text-base font-bold text-slate-500 dark:text-slate-500 transition-colors">No users found for this category.</p>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforelse

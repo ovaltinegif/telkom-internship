@@ -8,8 +8,8 @@
 
     <div class="py-12 bg-gray-50 dark:bg-slate-950 min-h-screen transition-colors duration-300"> 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none sm:rounded-[2.5rem] border border-slate-100 dark:border-slate-800 transition-colors duration-300">
-                <div class="p-10">
+            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none sm:rounded-2xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
+                <div class="p-8">
                     {{-- Tabs Navigation & Filters --}}
                     <div class="border-b border-slate-200 dark:border-slate-800 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors">
                         <nav class="-mb-px flex space-x-10 overflow-x-auto w-full md:w-auto" aria-label="Tabs">
@@ -80,7 +80,7 @@
                                 <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center gap-4">
-                                            <div class="h-10 w-10 rounded-[1rem] bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-white font-black text-base shadow-sm group-hover:scale-110 transition-transform">
+                                            <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:scale-110 transition-transform">
                                                 {{ substr($data->student->name, 0, 1) }}
                                             </div>
                                             <div>
