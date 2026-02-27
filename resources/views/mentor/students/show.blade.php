@@ -45,7 +45,7 @@
                 <div class="grow text-center md:text-left space-y-4">
                     <div>
                         <h1 class="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight transition-colors">{{ $internship->student->name }}</h1>
-                        <p class="text-slate-500 dark:text-slate-500 font-black uppercase tracking-widest text-[10px] mt-1 transition-colors">{{ $internship->student->email }}</p>
+                        <p class="text-slate-500 dark:text-slate-500 font-black tracking-widest text-[10px] mt-1 transition-colors">{{ $internship->student->email }}</p>
                     </div>
 
                     {{-- MERGED: INFO STATS FROM INCOMING CHANGE --}}

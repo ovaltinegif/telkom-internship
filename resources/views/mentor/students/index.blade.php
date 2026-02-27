@@ -85,7 +85,7 @@
                                             </div>
                                             <div>
                                                 <div class="text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors">{{ $data->student->name }}</div>
-                                                <div class="text-xs text-slate-500 dark:text-slate-500 font-bold uppercase tracking-widest mt-0.5 transition-colors">{{ $data->student->email }}</div>
+                                                <div class="text-xs text-slate-500 dark:text-slate-500 font-bold tracking-widest mt-0.5 transition-colors">{{ $data->student->email }}</div>
                                             </div>
                                         </div>
                                     </td>
