@@ -52,6 +52,15 @@
                                 <span>-</span>
                             </div>
                         </div>
+
+                        {{-- Reason Input --}}
+                        <div>
+                            <p class="text-[12px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 ml-1">Alasan Izin</p>
+                            <div class="bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 relative hover:border-red-200 dark:hover:border-red-900/50 transition-colors group">
+                                <textarea id="note_full" name="note" rows="3" placeholder="Tuliskan alasan lengkap izin Anda..." required
+                                    class="block w-full border-0 focus:ring-0 sm:text-sm bg-transparent text-slate-700 dark:text-slate-300 placeholder-slate-400 resize-none font-medium"></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

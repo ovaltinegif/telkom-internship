@@ -70,6 +70,10 @@ class DashboardController extends Controller
 
         $totalPermit = Attendance::where('internship_id', $internship->id)
             ->where('status', 'permit')
+            ->where(function ($query) {
+            $query->where('permit_type', '!=', 'temporary')
+                ->orWhereNull('permit_type');
+        })
             ->count();
 
         $totalSick = Attendance::where('internship_id', $internship->id)

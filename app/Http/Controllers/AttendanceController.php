@@ -203,7 +203,41 @@ class AttendanceController extends Controller
         if (count($errorDates) > 0 && $successCount === 0) {
             return back()->with('error', 'Absensi/Izin untuk tanggal yang dipilih sudah ada.');
         }
-        elseif (count($errorDates) > 0 && $successCount > 0) {
+
+        if ($successCount > 0) {
+            // Send email Notification to Mentor
+            $durationText = '';
+            if ($request->permit_type === 'full') {
+                if (count($datesToProcess) > 1) {
+                    $durationText = \Carbon\Carbon::parse($datesToProcess[0])->translatedFormat('d F Y') . ' s/d ' . \Carbon\Carbon::parse(end($datesToProcess))->translatedFormat('d F Y') . ' (' . count($datesToProcess) . ' Hari)';
+                }
+                else {
+                    $durationText = \Carbon\Carbon::parse($datesToProcess[0])->translatedFormat('d F Y') . ' (1 Hari)';
+                }
+            }
+            else {
+                $durationText = \Carbon\Carbon::parse($datesToProcess[0])->translatedFormat('d F Y') . ', ' . $request->start_time . ' - ' . $request->end_time;
+            }
+
+            $permissionData = [
+                'permit_type' => $request->permit_type,
+                'duration_text' => $durationText,
+                'reason' => $request->note,
+            ];
+
+            try {
+                $mentorEmail = $internship->mentor->email ?? null;
+                if ($mentorEmail) {
+                    \Illuminate\Support\Facades\Mail::to($mentorEmail)->send(new \App\Mail\InternPermissionNotification($permissionData, Auth::user()));
+                }
+            }
+            catch (\Exception $e) {
+                // Log the error silently, DO NOT break the application flow.
+                \Illuminate\Support\Facades\Log::error('Failed to send permission email: ' . $e->getMessage());
+            }
+        }
+
+        if (count($errorDates) > 0 && $successCount > 0) {
             return back()->with('success', "Sebagian pengajuan izin dikirim ($successCount hari). Beberapa hari (" . count($errorDates) . " hari) tidak diproses karena sudah ada absensi.");
         }
 
