@@ -133,6 +133,10 @@ class DocumentController extends Controller
 
         $path = $request->file('file')->store('documents/student/pakta', 'public');
 
+        $existingPakta = Document::where('internship_id', $internship->id)
+            ->where('type', 'pakta_integritas_signed')
+            ->exists();
+
         Document::create([
             'internship_id' => $internship->id,
             'name' => 'Pakta Integritas (Signed)',
@@ -140,6 +144,20 @@ class DocumentController extends Controller
             'file_path' => $path,
             'is_verified' => false,
         ]);
+
+        if (!$existingPakta) {
+            // Send Email Notification to Admins
+            try {
+                $admins = \App\Models\User::where('role', 'admin')->get();
+                if ($admins->count() > 0) {
+                    \Illuminate\Support\Facades\Mail::to($admins)->send(new \App\Mail\AdminActionRequiredNotification($internship, 'needs_induction'));
+                }
+            }
+            catch (\Exception $e) {
+                // Log the error silently, DO NOT break the application flow.
+                \Illuminate\Support\Facades\Log::error('Failed to send needs induction notification email to admins: ' . $e->getMessage());
+            }
+        }
 
         return back()->with('success', 'Pakta Integritas berhasil diunggah. Menunggu verifikasi Admin.');
     }
