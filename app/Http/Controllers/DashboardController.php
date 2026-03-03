@@ -92,6 +92,8 @@ class DashboardController extends Controller
             $now->copy()->setTime(19, 0)
         );
 
+        $hasTemporaryPermitToday = $todayAttendance && ($todayAttendance->permit_type === 'temporary' || $todayAttendance->permit_start_time !== null);
+
         return view('dashboard', [
             'internship' => $internship,
             'logbooks' => $logbooks,
@@ -103,6 +105,7 @@ class DashboardController extends Controller
             'attendancePercentage' => $attendancePercentage,
             'isCheckInTime' => $isCheckInTime,
             'isCheckOutTime' => $isCheckOutTime,
+            'hasTemporaryPermitToday' => $hasTemporaryPermitToday,
         ]);
     }
 }

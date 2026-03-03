@@ -8,24 +8,33 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400">Catat aktivitas harianmu disini</p>
             </div>
             
-            @if(isset($todayLogbook) && $todayLogbook)
-                <button disabled 
-                   class="inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 px-6 py-3 rounded-2xl text-xs font-black cursor-not-allowed border border-slate-200 dark:border-slate-700 shadow-inner group transition-all"
-                   title="Anda sudah mengisi logbook hari ini">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 opacity-50">
-                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+            @if(Auth::user()->internship && Auth::user()->internship->status === 'finished')
+                <a href="{{ route('logbooks.exportExcel') }}" class="inline-flex items-center gap-2 bg-gradient-to-br from-red-600 to-red-500 text-white px-6 py-3 rounded-2xl hover:shadow-2xl hover:shadow-red-500/30 transition-all duration-300 text-xs font-black group active:scale-95 border-b-4 border-red-800/50">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 group-hover:scale-110 transition-transform">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125h-7.5a1.125 1.125 0 0 1-1.125-1.125m0 0h7.5m-7.5 0V5.625m0 12.75v1.5c0 .621-.504 1.125-1.125 1.125M9 5.625v9.75m6-9.75v9.75M3.375 5.625h17.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125H3.375a1.125 1.125 0 0 1-1.125-1.125V6.75c0-.621.504-1.125 1.125-1.125Z" />
                     </svg>
-                    LOGBOOK TERISI
-                </button>
+                    REKAP LOGBOOK
+                </a>
             @else
-                @if(Auth::user()->internship && Auth::user()->internship->status === 'active')
-                    <a href="{{ route('logbooks.create') }}" 
-                       class="inline-flex items-center gap-2 bg-gradient-to-br from-red-600 to-red-500 text-white px-6 py-3 rounded-2xl hover:shadow-2xl hover:shadow-red-500/30 transition-all duration-300 text-xs font-black group active:scale-95 border-b-4 border-red-800/50">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 group-hover:scale-110 transition-transform">
-                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+                @if(isset($todayLogbook) && $todayLogbook)
+                    <button disabled 
+                       class="inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 px-6 py-3 rounded-2xl text-xs font-black cursor-not-allowed border border-slate-200 dark:border-slate-700 shadow-inner group transition-all"
+                       title="Anda sudah mengisi logbook hari ini">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 opacity-50">
+                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
                         </svg>
-                        ISI LOGBOOK
-                    </a>
+                        LOGBOOK TERISI
+                    </button>
+                @else
+                    @if(Auth::user()->internship && Auth::user()->internship->status === 'active')
+                        <a href="{{ route('logbooks.create') }}" 
+                           class="inline-flex items-center gap-2 bg-gradient-to-br from-red-600 to-red-500 text-white px-6 py-3 rounded-2xl hover:shadow-2xl hover:shadow-red-500/30 transition-all duration-300 text-xs font-black group active:scale-95 border-b-4 border-red-800/50">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 group-hover:scale-110 transition-transform">
+                                <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+                            </svg>
+                            ISI LOGBOOK
+                        </a>
+                    @endif
                 @endif
             @endif
         </div>

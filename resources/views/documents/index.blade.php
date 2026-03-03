@@ -366,6 +366,7 @@
                 originalEndDate: '{{ $internship->end_date }}',
                 endDate: '{{ old('end_date') }}',
                 fileName: '',
+                isDragging: false,
                 get duration() {
                     if (!this.endDate) return '';
                     const start = new Date(this.originalEndDate);
@@ -384,8 +385,43 @@
                     if (days > 0) text += days + ' Hari';
                     
                     return text + ' (' + diffDays + ' Hari Tambahan)';
+                },
+                clearFile() {
+                    this.fileName = '';
+                    this.$refs.fileInput.value = '';
+                },
+                initFlatpickr() {
+                    flatpickr(this.$refs.dateInput, {
+                        minDate: '{{ \Carbon\Carbon::parse($internship->end_date)->addDays(2)->toDateString() }}',
+                        dateFormat: 'Y-m-d',
+                        defaultDate: this.endDate || null,
+                        disableMobile: true,
+                        onChange: (selectedDates, dateStr) => {
+                            this.endDate = dateStr;
+                        },
+                        onReady: function(selectedDates, dateStr, instance) {
+                            instance.calendarContainer.classList.add('theme-modern-glow');
+                        }
+                    });
+                },
+                handleDrop(e) {
+                    this.isDragging = false;
+                    if (e.dataTransfer.files.length > 0) {
+                        const file = e.dataTransfer.files[0];
+                        if (file.type === 'application/pdf') {
+                            this.$refs.fileInput.files = e.dataTransfer.files;
+                            this.fileName = file.name;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Format Tidak Sesuai',
+                                text: 'Harap unggah file dalam format PDF.',
+                            });
+                        }
+                    }
                 }
-              }">
+              }"
+              x-init="initFlatpickr()">
             @csrf
             
             {{-- Decorative Background Glimmer --}}
@@ -465,11 +501,11 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        <input type="date" 
+                        <input type="text" 
                                id="end_date" 
                                name="end_date" 
-                               x-model="endDate"
-                               min="{{ \Carbon\Carbon::parse($internship->end_date)->addDays(2)->toDateString() }}"
+                               x-ref="dateInput"
+                               placeholder="Pilih Tanggal Selesai Baru"
                                class="block w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-950/50 border-2 border-slate-100 dark:border-slate-800 focus:border-amber-500 focus:ring-amber-500 rounded-2xl shadow-sm sm:text-sm transition-all font-bold text-slate-800 dark:text-slate-200" 
                                required>
                     </div>
@@ -496,18 +532,34 @@
                 {{-- File Upload --}}
                 <div class="relative z-10">
                     <x-input-label for="file" :value="__('File Surat Disposisi (PDF)')" class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 ml-1" />
-                    <div class="mt-2 flex justify-center px-6 pt-10 pb-10 border-2 border-slate-200 dark:border-slate-800 border-dashed rounded-[2rem] transition-all hover:border-amber-400 hover:bg-amber-50/30 dark:hover:bg-amber-500/10 hover:shadow-xl group relative cursor-pointer bg-slate-50/50 dark:bg-slate-950/20">
-                        <input id="file" name="file" type="file" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" required @change="fileName = $event.target.files[0].name">
+                    <div 
+                        @dragover.prevent="isDragging = true" 
+                        @dragleave.prevent="isDragging = false" 
+                        @drop.prevent="handleDrop($event)"
+                        :class="{'border-amber-500 bg-amber-50/50 dark:bg-amber-500/20 scale-105': isDragging, 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20': !isDragging}"
+                        class="mt-2 flex justify-center px-6 pt-10 pb-10 border-2 border-dashed rounded-[2rem] transition-all duration-300 hover:border-amber-400 hover:bg-amber-50/30 dark:hover:bg-amber-500/10 hover:shadow-xl group relative cursor-pointer">
+                        <input id="file" name="file" type="file" accept=".pdf" x-ref="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required @change="fileName = $event.target.files[0].name" :class="{'hidden': fileName}">
                         <div class="space-y-3 text-center transition-transform group-hover:scale-105 duration-300">
                             <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-600 group-hover:text-amber-500 group-hover:bg-amber-50 dark:group-hover:bg-amber-500/10 transition-all shadow-sm">
                                 <svg class="w-8 h-8" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <div class="flex flex-col text-sm text-slate-600 dark:text-slate-400">
+                            <div class="flex flex-col text-sm text-slate-600 dark:text-slate-400 relative z-20">
                                 <span class="relative font-black text-slate-800 dark:text-slate-200">
                                     <span x-show="!fileName">Klik atau seret file ke sini</span>
-                                    <span x-show="fileName" x-text="fileName" class="text-amber-600 dark:text-amber-400 underline underline-offset-4 decoration-amber-500/30"></span>
+                                    
+                                     {{-- Selected File State --}}
+                                    <div x-show="fileName" style="display: none;" class="flex flex-col items-center gap-2 mt-2">
+                                        <div class="flex items-center gap-2 bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 px-3 py-1.5 rounded-lg border border-amber-200 dark:border-amber-500/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                            <span x-text="fileName" class="font-bold truncate max-w-[200px]"></span>
+                                            <button type="button" @click.stop.prevent="clearFile()" class="p-1 hover:bg-amber-200 dark:hover:bg-amber-500/40 rounded-md transition-colors text-amber-600 hover:text-red-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
                                 </span>
                                 <p class="text-xs text-slate-500 mt-1 uppercase tracking-widest font-black" x-show="!fileName">Format: PDF (Max. 5MB)</p>
                             </div>
@@ -569,18 +621,57 @@
                         </button>
                     </div>
 
-                    <div class="mb-8 relative" x-data="{ fileName: '' }">
+                    <div class="mb-8 relative" x-data="{ 
+                        fileName: '', 
+                        isDragging: false,
+                        handleDrop(e) {
+                            this.isDragging = false;
+                            if (e.dataTransfer.files.length > 0) {
+                                const file = e.dataTransfer.files[0];
+                                if (file.type === 'application/pdf') {
+                                    this.$refs.fileInput.files = e.dataTransfer.files;
+                                    this.fileName = file.name;
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Format Tidak Sesuai',
+                                        text: 'Harap unggah file dalam format PDF.',
+                                    });
+                                }
+                            }
+                        },
+                        clearFile() {
+                            this.fileName = '';
+                            this.$refs.fileInput.value = '';
+                        }
+                    }">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 ml-1">Pilih File Laporan (PDF)</label>
-                        <div class="mt-1 flex justify-center px-6 pt-10 pb-10 border-2 border-slate-100 dark:border-slate-800 border-dashed rounded-3xl group transition-all hover:bg-purple-50 dark:hover:bg-purple-500/5 hover:border-purple-400 relative cursor-pointer shadow-inner bg-slate-50/50 dark:bg-slate-950/20">
-                            <input type="file" name="file" accept=".pdf" class="absolute inset-0 opacity-0 cursor-pointer z-10" required @change="fileName = $event.target.files[0].name">
-                            <div class="text-center space-y-3">
+                        <div 
+                            @dragover.prevent="isDragging = true" 
+                            @dragleave.prevent="isDragging = false" 
+                            @drop.prevent="handleDrop($event)"
+                            :class="{'border-purple-500 bg-purple-50/50 dark:bg-purple-500/10 scale-105': isDragging, 'border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20': !isDragging}"
+                            class="mt-1 flex justify-center px-6 pt-10 pb-10 border-2 border-dashed rounded-3xl group transition-all hover:bg-purple-50 dark:hover:bg-purple-500/5 hover:border-purple-400 relative cursor-pointer shadow-inner">
+                            <input type="file" name="file" accept=".pdf" x-ref="fileInput" class="absolute inset-0 opacity-0 cursor-pointer z-10" required @change="fileName = $event.target.files[0].name" :class="{'hidden': fileName}">
+                            <div class="text-center space-y-3 transition-transform group-hover:scale-105 duration-300">
                                 <div class="inline-flex items-center justify-center w-14 h-14 bg-white dark:bg-slate-800 rounded-2xl text-slate-400 dark:text-slate-600 group-hover:text-purple-500 transition-all shadow-sm">
                                      <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                                 </div>
-                                <div class="text-xs text-slate-600 dark:text-slate-400">
-                                    <span x-show="!fileName" class="font-bold block text-slate-800 dark:text-slate-200">Klik untuk upload lampiran</span>
-                                    <span x-show="fileName" x-text="fileName" class="font-black text-purple-600 dark:text-purple-400 underline decoration-purple-500/30 font-mono"></span>
-                                    <p class="mt-1 opacity-60 font-medium" x-show="!fileName">Ukuran file maksimal 10MB</p>
+                                <div class="text-xs text-slate-600 dark:text-slate-400 relative z-20">
+                                    <span x-show="!fileName" class="font-bold block text-slate-800 dark:text-slate-200">Klik atau seret file ke sini</span>
+                                    
+                                    {{-- Selected File State --}}
+                                    <div x-show="fileName" style="display: none;" class="flex flex-col items-center gap-2">
+                                        <div class="flex items-center gap-2 bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-lg border border-purple-200 dark:border-purple-500/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                            <span x-text="fileName" class="font-bold truncate max-w-[200px]"></span>
+                                            <button type="button" @click.stop.prevent="clearFile()" class="p-1 hover:bg-purple-200 dark:hover:bg-purple-500/40 rounded-md transition-colors text-purple-600 hover:text-red-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <p class="mt-1 opacity-60 font-medium" x-show="!fileName">Format: PDF (Max. 10MB)</p>
                                 </div>
                             </div>
                         </div>

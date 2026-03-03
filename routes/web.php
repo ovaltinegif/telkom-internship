@@ -129,25 +129,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
     });
 
 
-// ==========================================================
-// TESTING ROUTES
-// ==========================================================
-Route::get('/preview-email-izin', function () {
-    $internUser = \App\Models\User::where('role', 'intern')->first();
 
-    if (!$internUser) {
-        $internUser = new \App\Models\User();
-        $internUser->name = 'Reyhan Alfarel';
-        $internUser->email = 'reyhan@gmail.com';
-    }
-
-    $permissionData = [
-        'permit_type' => 'full',
-        'duration_text' => '3 Maret 2026 - 4 Maret 2026 (2 Hari)',
-        'reason' => 'Mengikuti acara keluarga di luar kota.'
-    ];
-
-    return new \App\Mail\InternPermissionNotification($permissionData, $internUser);
-});
 
 require __DIR__ . '/auth.php';

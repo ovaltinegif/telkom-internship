@@ -118,14 +118,65 @@
                                         Upload Pakta Integritas
                                     </h4>
                                     
-                                    <form action="{{ route('documents.storePaktaIntegritas') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('documents.storePaktaIntegritas') }}" method="POST" enctype="multipart/form-data"
+                                          x-data="{ 
+                                            fileName: '', 
+                                            isDragging: false,
+                                            handleDrop(e) {
+                                                this.isDragging = false;
+                                                if (e.dataTransfer.files.length > 0) {
+                                                    const file = e.dataTransfer.files[0];
+                                                    if (file.type === 'application/pdf') {
+                                                        this.$refs.fileInput.files = e.dataTransfer.files;
+                                                        this.fileName = file.name;
+                                                    } else {
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Format Tidak Sesuai',
+                                                            text: 'Harap unggah file dalam format PDF.',
+                                                        });
+                                                    }
+                                                }
+                                            },
+                                            clearFile() {
+                                                this.fileName = '';
+                                                this.$refs.fileInput.value = '';
+                                            }
+                                        }">
                                         @csrf
-                                        <div class="mb-4">
+                                        <div class="mb-6 relative">
                                             <label class="block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-2 transition-colors">File Ditandatangani</label>
-                                            <input type="file" name="file" required class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-emerald-50 dark:file:bg-emerald-900/30 file:text-emerald-700 dark:file:text-emerald-400 hover:file:bg-emerald-100 dark:hover:file:bg-emerald-800/40 transition-colors">
-                                            <p class="text-xs text-gray-400 dark:text-slate-500 mt-2 ml-1 transition-colors">Format: PDF, Maks 5MB</p>
+                                            <div 
+                                                @dragover.prevent="isDragging = true" 
+                                                @dragleave.prevent="isDragging = false" 
+                                                @drop.prevent="handleDrop($event)"
+                                                :class="{'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/10 scale-105': isDragging, 'border-gray-200 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/30': !isDragging}"
+                                                class="mt-1 flex justify-center px-4 pt-6 pb-6 border-2 border-dashed rounded-2xl group transition-all hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5 hover:border-emerald-400 relative cursor-pointer shadow-sm">
+                                                <input type="file" name="file" accept=".pdf" x-ref="fileInput" class="absolute inset-0 opacity-0 cursor-pointer z-10" required @change="fileName = $event.target.files[0].name" :class="{'hidden': fileName}">
+                                                <div class="text-center space-y-2 transition-transform group-hover:scale-105 duration-300 w-full">
+                                                    <div class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-800 rounded-xl text-gray-400 dark:text-slate-500 group-hover:text-emerald-500 transition-all shadow-sm">
+                                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                                    </div>
+                                                    <div class="text-xs text-gray-600 dark:text-slate-400 relative z-20">
+                                                        <span x-show="!fileName" class="font-bold block text-gray-800 dark:text-slate-200">Klik atau seret file ke sini</span>
+                                                        
+                                                        {{-- Selected File State --}}
+                                                        <div x-show="fileName" style="display: none;" class="flex flex-col items-center gap-2 mt-1">
+                                                            <div class="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-500/30 w-full justify-center max-w-[250px]">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                                                <span x-text="fileName" class="font-bold truncate" style="max-width: 150px;"></span>
+                                                                <button type="button" @click.stop.prevent="clearFile()" class="p-1 hover:bg-emerald-200 dark:hover:bg-emerald-500/40 rounded-md transition-colors text-emerald-600 hover:text-red-500 shrink-0">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <p class="mt-1 opacity-60 font-medium" x-show="!fileName">Format: PDF (Max. 5MB)</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20 transition-all transform hover:-translate-y-0.5">
+                                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20 transition-all transform hover:-translate-y-0.5 active:scale-95 text-sm uppercase tracking-wide">
                                             Kirim Dokumen
                                         </button>
                                     </form>

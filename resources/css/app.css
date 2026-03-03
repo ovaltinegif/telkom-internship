@@ -86,4 +86,300 @@
         border-left-color: #334155;
         color: #94a3b8;
     }
+
+    /* Flatpickr Custom Theme "Modern Glow" (Telkom Red) */
+    .flatpickr-calendar.theme-modern-glow {
+        border-radius: 24px !important;
+        box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.1), 0 10px 10px -5px rgba(220, 38, 38, 0.04) !important;
+        border: 1px solid #fee2e2 !important;
+        padding: 10px !important;
+        overflow: hidden !important;
+        background: #ffffff !important;
+    }
+
+    .dark .flatpickr-calendar.theme-modern-glow {
+        background: #0f172a !important;
+        border-color: #1e293b !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Option 1 Custom Time Grid Style */
+    .theme-time-grid {
+        width: 100% !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .theme-time-grid .flatpickr-time {
+        height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        max-height: none !important;
+        border-top: none !important;
+        background: transparent !important;
+        width: 100% !important;
+        line-height: normal !important;
+        overflow: visible !important;
+    }
+
+    .theme-time-grid .numInputWrapper {
+        width: 80px !important;
+        height: auto !important;
+    }
+
+    .theme-time-grid input.flatpickr-hour,
+    .theme-time-grid input.flatpickr-minute {
+        font-size: 3rem !important;
+        line-height: normal !important;
+        font-weight: 800 !important;
+        color: #dc2626 !important;
+        background: transparent !important;
+        border-radius: 0.75rem !important;
+        padding: 0.5rem 0 !important;
+        height: auto !important;
+        transition: all 0.2s !important;
+        box-shadow: none !important;
+    }
+
+    .theme-time-grid input.flatpickr-hour:hover,
+    .theme-time-grid input.flatpickr-minute:hover,
+    .theme-time-grid input.flatpickr-hour:focus,
+    .theme-time-grid input.flatpickr-minute:focus {
+        background: #fef2f2 !important;
+        color: #b91c1c !important;
+        outline: none !important;
+    }
+
+    .dark .theme-time-grid input.flatpickr-hour:hover,
+    .dark .theme-time-grid input.flatpickr-minute:hover,
+    .dark .theme-time-grid input.flatpickr-hour:focus,
+    .dark .theme-time-grid input.flatpickr-minute:focus {
+        background: #450a0a !important;
+        color: #fca5a5 !important;
+    }
+
+    .theme-time-grid .flatpickr-time-separator {
+        font-size: 2.5rem !important;
+        font-weight: 800 !important;
+        color: #94a3b8 !important;
+        padding: 0 0.5rem !important;
+    }
+
+    .dark .theme-time-grid .flatpickr-time-separator {
+        color: #475569 !important;
+    }
+
+    /* Keep max 2 chars width naturally */
+    /* Hide Arrows for a cleaner look */
+    .theme-time-grid .numInputWrapper span.arrowUp,
+    .theme-time-grid .numInputWrapper span.arrowDown {
+        display: none !important;
+    }
+
+    .theme-time-grid .flatpickr-am-pm {
+        display: none !important;
+    }
+
+    .theme-modern-glow .flatpickr-months {
+        background: linear-gradient(135deg, #dc2626, #991b1b) !important;
+        border-radius: 16px !important;
+        margin-bottom: 15px !important;
+        padding: 10px 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: relative !important;
+    }
+
+    .theme-modern-glow .flatpickr-month {
+        color: white !important;
+        fill: white !important;
+        height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .theme-modern-glow .flatpickr-current-month {
+        padding: 0 !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .theme-modern-glow .flatpickr-current-month .flatpickr-monthDropdown-months,
+    .theme-modern-glow .flatpickr-current-month input.cur-year {
+        color: white !important;
+        fill: white !important;
+    }
+
+    .theme-modern-glow .flatpickr-prev-month,
+    .theme-modern-glow .flatpickr-next-month {
+        position: absolute !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        padding: 0 10px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
+        z-index: 3 !important;
+    }
+
+    .theme-modern-glow .flatpickr-prev-month {
+        left: 5px !important;
+    }
+
+    .theme-modern-glow .flatpickr-next-month {
+        right: 5px !important;
+    }
+
+    .theme-modern-glow .flatpickr-prev-month svg,
+    .theme-modern-glow .flatpickr-next-month svg {
+        fill: white !important;
+        transition: transform 0.2s !important;
+        width: 14px !important;
+        height: 14px !important;
+        display: block !important;
+    }
+
+    .theme-modern-glow .flatpickr-prev-month:hover svg,
+    .theme-modern-glow .flatpickr-next-month:hover svg {
+        transform: scale(1.2) !important;
+        fill: #fecaca !important;
+    }
+
+    .theme-modern-glow .flatpickr-weekdays {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin-bottom: 5px !important;
+        overflow: hidden !important;
+    }
+
+    .theme-modern-glow .flatpickr-weekday {
+        color: #94a3b8 !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        width: 14.2857% !important;
+        flex: 1 1 14.2857% !important;
+        text-align: center !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .dark .theme-modern-glow .flatpickr-weekday {
+        color: #64748b !important;
+    }
+
+    .theme-modern-glow .flatpickr-days {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .theme-modern-glow .dayContainer {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-start !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .theme-modern-glow .flatpickr-day {
+        border-radius: 12px !important;
+        color: #334155 !important;
+        font-weight: 500 !important;
+        transition: all 0.2s !important;
+        border: 2px solid transparent !important;
+        flex-basis: 14.2857% !important;
+        max-width: 14.2857% !important;
+        height: 38px !important;
+        line-height: 34px !important;
+        margin: 2px 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    .dark .theme-modern-glow .flatpickr-day {
+        color: #cbd5e1 !important;
+    }
+
+    .theme-modern-glow .flatpickr-day:hover {
+        background: #fef2f2 !important;
+        border-color: #fca5a5 !important;
+        color: #dc2626 !important;
+    }
+
+    .dark .theme-modern-glow .flatpickr-day:hover {
+        background: #450a0a !important;
+        border-color: #7f1d1d !important;
+        color: #fca5a5 !important;
+    }
+
+    .theme-modern-glow .flatpickr-day.selected,
+    .theme-modern-glow .flatpickr-day.startRange,
+    .theme-modern-glow .flatpickr-day.endRange,
+    .theme-modern-glow .flatpickr-day.selected.inRange,
+    .theme-modern-glow .flatpickr-day.startRange.inRange,
+    .theme-modern-glow .flatpickr-day.endRange.inRange,
+    .theme-modern-glow .flatpickr-day.selected:focus,
+    .theme-modern-glow .flatpickr-day.startRange:focus,
+    .theme-modern-glow .flatpickr-day.endRange:focus,
+    .theme-modern-glow .flatpickr-day.selected:hover,
+    .theme-modern-glow .flatpickr-day.startRange:hover,
+    .theme-modern-glow .flatpickr-day.endRange:hover,
+    .theme-modern-glow .flatpickr-day.selected.prevMonthDay,
+    .theme-modern-glow .flatpickr-day.startRange.prevMonthDay,
+    .theme-modern-glow .flatpickr-day.endRange.prevMonthDay,
+    .theme-modern-glow .flatpickr-day.selected.nextMonthDay,
+    .theme-modern-glow .flatpickr-day.startRange.nextMonthDay,
+    .theme-modern-glow .flatpickr-day.endRange.nextMonthDay {
+        background: #dc2626 !important;
+        border-color: #dc2626 !important;
+        color: white !important;
+        box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4) !important;
+        transform: scale(1.05) !important;
+        outline: none !important;
+    }
+
+    .theme-modern-glow .flatpickr-day.inRange {
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: #fee2e2 !important;
+        border-color: transparent !important;
+        outline: none !important;
+    }
+
+    .dark .theme-modern-glow .flatpickr-day.inRange {
+        background: #7f1d1d !important;
+    }
+
+    .theme-modern-glow .flatpickr-day:focus {
+        outline: none !important;
+        border-color: #fca5a5 !important;
+    }
+
+    .theme-modern-glow .flatpickr-day.today {
+        border-color: #dc2626 !important;
+        color: #dc2626 !important;
+        font-weight: 800 !important;
+    }
 }

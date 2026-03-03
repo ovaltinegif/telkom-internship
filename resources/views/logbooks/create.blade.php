@@ -24,7 +24,7 @@
                                     class="w-full border-slate-300 dark:border-slate-700 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm transition-all bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200"
                                     placeholder="dd/mm/yyyy"
                                     x-data
-                                    x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })" />
+                                    x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true, onReady: function(selectedDates, dateStr, instance) { instance.calendarContainer.classList.add('theme-modern-glow'); } })" />
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 </div>
@@ -69,7 +69,35 @@
                         {{-- Input Bukti --}}
                         <div>
                             <x-input-label for="evidence" :value="__('Bukti Kegiatan')" class="text-slate-700 dark:text-slate-300 font-semibold mb-3 ml-1" />
-                            <div class="mt-1 flex justify-center px-6 pt-8 pb-8 border-2 border-slate-200 dark:border-slate-800 border-dashed rounded-[2rem] hover:bg-slate-50 dark:hover:bg-slate-800/20 hover:border-red-500/50 dark:hover:border-red-500/30 transition-all group cursor-pointer relative overflow-hidden shadow-inner bg-slate-50/50 dark:bg-slate-900/50" onclick="document.getElementById('evidence').click()">
+                            <div 
+                                x-data="{ 
+                                    isDragging: false,
+                                    handleDrop(e) {
+                                        this.isDragging = false;
+                                        if (e.dataTransfer.files.length > 0) {
+                                            const file = e.dataTransfer.files[0];
+                                            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+                                            if (validTypes.includes(file.type)) {
+                                                const fileInput = document.getElementById('evidence');
+                                                fileInput.files = e.dataTransfer.files;
+                                                // Trigger onchange manually for existing preview script
+                                                const event = new Event('change');
+                                                fileInput.dispatchEvent(event);
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Format Tidak Sesuai',
+                                                    text: 'Harap unggah file PNG, JPG, atau PDF.',
+                                                });
+                                            }
+                                        }
+                                    }
+                                }"
+                                @dragover.prevent="isDragging = true" 
+                                @dragleave.prevent="isDragging = false" 
+                                @drop.prevent="handleDrop($event)"
+                                :class="{'border-red-500 bg-red-50/50 dark:bg-red-500/20 scale-[1.02]': isDragging, 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50': !isDragging}"
+                                class="mt-1 flex justify-center px-6 pt-8 pb-8 border-2 border-dashed rounded-[2rem] hover:bg-slate-50 dark:hover:bg-slate-800/20 hover:border-red-500/50 dark:hover:border-red-500/30 transition-all group cursor-pointer relative overflow-hidden shadow-inner" onclick="document.getElementById('evidence').click()">
                                 
                                 {{-- Default Content --}}
                                 <div id="dropzone_content" class="space-y-3 text-center transition-all duration-300 group-hover:scale-105">

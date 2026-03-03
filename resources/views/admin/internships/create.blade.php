@@ -130,7 +130,7 @@
                                         required 
                                         placeholder="dd/mm/yyyy"
                                         x-data
-                                        x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })"
+                                        x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true, onReady: function(selectedDates, dateStr, instance) { instance.calendarContainer.classList.add('theme-modern-glow'); } })"
                                     />
                                 </div>
                             </div>
@@ -152,7 +152,7 @@
                                         required 
                                         placeholder="dd/mm/yyyy"
                                         x-data
-                                        x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true })"
+                                        x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true, onReady: function(selectedDates, dateStr, instance) { instance.calendarContainer.classList.add('theme-modern-glow'); } })"
                                     />
                                 </div>
                             </div>

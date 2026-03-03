@@ -5,7 +5,7 @@
                 {{ __('Update Kata Sandi') }}
             </h2>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 font-medium">
-                {{ __('Pastikan akun Anda menggunakan kata sandi yang panjang dan acak untuk tetap aman.') }}
+                {{ __('Ubah dan ingat kata sandi agar tetap aman.') }}
             </p>
         </div>
         <div class="hidden sm:block">

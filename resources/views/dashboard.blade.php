@@ -110,28 +110,20 @@
                     <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700"></div>
                     <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700"></div>
                     
-                    <div class="px-8 py-10 md:px-12 md:py-16 relative z-10 text-center md:text-left flex flex-col md:flex-row items-center gap-8">
+                    <div class="px-8 py-6 md:px-12 md:py-8 relative z-10 text-center md:text-left flex flex-col md:flex-row items-center gap-8">
                         <div class="shrink-0">
-                            <div class="w-24 h-24 md:w-32 md:h-32 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border-4 border-white/30 shadow-xl animate-bounce">
+                            <div class="w-24 h-24 md:w-28 md:h-28 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border-4 border-white/30 shadow-xl animate-bounce">
                                 <span class="text-5xl md:text-6xl text-white">🎓</span>
                             </div>
                         </div>
                         
                         <div class="flex-1 text-white">
-                            <h3 class="text-3xl md:text-5xl font-black mb-4 tracking-tight drop-shadow-lg">Selamat! Magang Selesai.</h3>
-                            <p class="text-lg md:text-xl text-red-50 opacity-90 leading-relaxed max-w-2xl font-medium">
+                            <h3 class="text-3xl md:text-5xl font-black mb-3 tracking-tight drop-shadow-lg">Selamat! Magang Selesai.</h3>
+                            <p class="text-lg md:text-xl text-red-50 opacity-90 leading-relaxed max-w-4xl font-medium">
                                 Anda telah resmi menyelesaikan program magang di <span class="font-bold underline decoration-red-200">Telkom Witel Semarang Jateng Utara</span>. Terima kasih atas dedikasi dan kontribusi luar biasa Anda selama program ini.
                             </p>
                             
-                            <div class="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
-                                {{-- 1. Rekap Logbook --}}
-                                <a href="{{ route('logbooks.exportExcel') }}" class="inline-flex items-center gap-2 bg-white text-red-600 px-6 py-3 rounded-2xl font-bold hover:bg-red-50 transition-all shadow-lg hover:shadow-white/20 active:scale-95">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125h-7.5a1.125 1.125 0 0 1-1.125-1.125m0 0h7.5m-7.5 0V5.625m0 12.75v1.5c0 .621-.504 1.125-1.125 1.125M9 5.625v9.75m6-9.75v9.75M3.375 5.625h17.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125H3.375a1.125 1.125 0 0 1-1.125-1.125V6.75c0-.621.504-1.125 1.125-1.125Z" />
-                                    </svg>
-                                    Rekap Logbook (.xlsx)
-                                </a>
-
+                            <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-4">
                                 {{-- 2. Transkrip Nilai --}}
                                 @php
                                     $transcriptDoc = $internship->documents->where('type', 'transcript')->first();
@@ -302,9 +294,15 @@
                                         @endif
                                         
                                         <div class="pt-2 flex items-center justify-center gap-4">
-                                            <button type="button" onclick="openPermissionModal(false, 'temporary')" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
-                                                Izin Sementara
-                                            </button>
+                                            @if($hasTemporaryPermitToday)
+                                                <button type="button" onclick="showDuplicatePermitError()" class="text-sm text-indigo-300/50 cursor-not-allowed pb-1" title="Sudah izin hari ini">
+                                                    Izin Sementara
+                                                </button>
+                                            @else
+                                                <button type="button" onclick="openPermissionModal(false, 'temporary')" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
+                                                    Izin Sementara
+                                                </button>
+                                            @endif
                                             <span class="text-indigo-500/50">•</span>
                                             <button type="button" onclick="openFullDayPermissionModal()" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
                                                 Izin Full Day
@@ -360,7 +358,7 @@
                                         </div>
                                     </div>
 
-                                @elseif(!$todayAttendance->check_out_time)
+                                 @elseif(!$todayAttendance->check_out_time)
                                     <div class="text-center space-y-4 w-full">
                                         <div class="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 w-full mb-2">
                                             <p class="text-emerald-200 text-xs uppercase tracking-wide font-bold">Waktu Masuk</p>
@@ -383,14 +381,24 @@
                                             </div>
                                         @endif
 
-                                        <div class="pt-2">
-                                            <button onclick="openPermissionModal(true)" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
-                                                Izin Setengah Hari / Keluar Sementara?
+                                        <div class="pt-2 flex items-center justify-center gap-4">
+                                            @if($hasTemporaryPermitToday)
+                                                <button type="button" onclick="showDuplicatePermitError()" class="text-sm text-indigo-300/50 cursor-not-allowed pb-1" title="Sudah izin hari ini">
+                                                    Izin Sementara
+                                                </button>
+                                            @else
+                                                <button type="button" onclick="openPermissionModal(false, 'temporary')" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
+                                                    Izin Sementara
+                                                </button>
+                                            @endif
+                                            <span class="text-indigo-500/50">•</span>
+                                            <button type="button" onclick="openFullDayPermissionModal()" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
+                                                Izin Full Day
                                             </button>
                                         </div>
                                     </div>
 
-                                @else
+                                 @else
                                     <div class="text-center space-y-4 w-full">
                                         <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg shadow-emerald-500/30">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8 text-white">
@@ -411,6 +419,12 @@
                                                 <p class="text-xs text-indigo-300 uppercase">Keluar</p>
                                                 <p class="font-mono text-sm font-bold text-white">{{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('H:i:s') }}</p>
                                             </div>
+                                        </div>
+                                        
+                                        <div class="pt-2 flex items-center justify-center gap-4">
+                                            <button type="button" onclick="openFullDayPermissionModal()" class="text-sm text-indigo-300 hover:text-white hover:underline transition-colors pb-1">
+                                                Izin Full Day
+                                            </button>
                                         </div>
                                     </div>
                                 @endif
@@ -496,9 +510,60 @@
                 <form action="{{ route('documents.storeFinalReport') }}" method="POST" enctype="multipart/form-data" class="p-6">
                     @csrf
                     <h3 class="text-lg font-medium text-gray-900 dark:text-slate-100 mb-4">Upload Laporan Akhir</h3>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-slate-300">File Laporan (PDF)</label>
-                        <input type="file" name="file" accept=".pdf" class="mt-1 block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 dark:file:bg-purple-500/10 file:text-purple-700 dark:file:text-purple-400 hover:file:bg-purple-100 dark:hover:file:bg-purple-500/20" required>
+                    <div class="mb-8 relative" x-data="{ 
+                        fileName: '', 
+                        isDragging: false,
+                        handleDrop(e) {
+                            this.isDragging = false;
+                            if (e.dataTransfer.files.length > 0) {
+                                const file = e.dataTransfer.files[0];
+                                if (file.type === 'application/pdf') {
+                                    this.$refs.fileInput.files = e.dataTransfer.files;
+                                    this.fileName = file.name;
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Format Tidak Sesuai',
+                                        text: 'Harap unggah file dalam format PDF.',
+                                    });
+                                }
+                            }
+                        },
+                        clearFile() {
+                            this.fileName = '';
+                            this.$refs.fileInput.value = '';
+                        }
+                    }">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 ml-1">File Laporan (PDF)</label>
+                        <div 
+                            @dragover.prevent="isDragging = true" 
+                            @dragleave.prevent="isDragging = false" 
+                            @drop.prevent="handleDrop($event)"
+                            :class="{'border-purple-500 bg-purple-50/50 dark:bg-purple-500/10 scale-105': isDragging, 'border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20': !isDragging}"
+                            class="mt-1 flex justify-center px-6 pt-10 pb-10 border-2 border-dashed rounded-3xl group transition-all hover:bg-purple-50 dark:hover:bg-purple-500/5 hover:border-purple-400 relative cursor-pointer shadow-inner">
+                            <input type="file" name="file" accept=".pdf" x-ref="fileInput" class="absolute inset-0 opacity-0 cursor-pointer z-10" required @change="fileName = $event.target.files[0].name" :class="{'hidden': fileName}">
+                            <div class="text-center space-y-3 transition-transform group-hover:scale-105 duration-300">
+                                <div class="inline-flex items-center justify-center w-14 h-14 bg-white dark:bg-slate-800 rounded-2xl text-slate-400 dark:text-slate-600 group-hover:text-purple-500 transition-all shadow-sm">
+                                     <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                </div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400 relative z-20">
+                                    <span x-show="!fileName" class="font-bold block text-slate-800 dark:text-slate-200">Klik atau seret file ke sini</span>
+                                    
+                                    {{-- Selected File State --}}
+                                    <div x-show="fileName" style="display: none;" class="flex flex-col items-center gap-2">
+                                        <div class="flex items-center gap-2 bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-lg border border-purple-200 dark:border-purple-500/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                                            <span x-text="fileName" class="font-bold truncate max-w-[200px]"></span>
+                                            <button type="button" @click.stop.prevent="clearFile()" class="p-1 hover:bg-purple-200 dark:hover:bg-purple-500/40 rounded-md transition-colors text-purple-600 hover:text-red-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <p class="mt-1 opacity-60 font-medium" x-show="!fileName">Format: PDF (Max. 10MB)</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="flex justify-end gap-3">
                         <button type="button" onclick="closeModal('finalReportModal')" class="py-2 px-4 border dark:border-slate-700 rounded-md text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">Batal</button>
@@ -530,6 +595,21 @@
     function openFinalReportModal() { document.getElementById('finalReportModal').classList.remove('hidden'); }
 
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    function showDuplicatePermitError() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Satu Kali Sehari',
+            text: 'Anda sudah mengajukan Izin Sementara hari ini. Batas pengajuan adalah 1 kali per hari.',
+            buttonsStyling: false,
+            customClass: {
+                popup: 'bg-white dark:bg-slate-900 border border-transparent dark:border-slate-800 rounded-2xl shadow-xl',
+                title: 'text-slate-900 dark:text-slate-100 font-bold',
+                htmlContainer: 'text-slate-600 dark:text-slate-400',
+                confirmButton: 'px-6 py-2.5 mx-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all active:scale-95',
+            }
+        });
+    }
 
     // 1. Fungsi Konfirmasi CHECK-IN
 
@@ -661,7 +741,10 @@
             altFormat: 'd F Y',
             locale: 'id',
             disableMobile: true,
-            minDate: "today"
+            minDate: "today",
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.calendarContainer.classList.add('theme-modern-glow');
+            }
         });
 
         // Time Pickers
@@ -671,7 +754,19 @@
             dateFormat: "H:i",
             time_24hr: true,
             disableMobile: true,
-            allowInput: false
+            inline: true,
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.calendarContainer.classList.add('theme-time-grid');
+                if(instance.calendarContainer.querySelector('.flatpickr-time')) {
+                    instance.calendarContainer.querySelector('.flatpickr-time').style.borderTop = 'none';
+                }
+                
+                // Explicitly limit input to 2 chars max
+                const hourInput = instance.calendarContainer.querySelector('.flatpickr-hour');
+                const minInput = instance.calendarContainer.querySelector('.flatpickr-minute');
+                if (hourInput) hourInput.setAttribute('maxlength', '2');
+                if (minInput) minInput.setAttribute('maxlength', '2');
+            }
         });
 
         flatpickr("#end_time", {
@@ -680,7 +775,19 @@
             dateFormat: "H:i",
             time_24hr: true,
             disableMobile: true,
-            allowInput: false
+            inline: true,
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.calendarContainer.classList.add('theme-time-grid');
+                if(instance.calendarContainer.querySelector('.flatpickr-time')) {
+                    instance.calendarContainer.querySelector('.flatpickr-time').style.borderTop = 'none';
+                }
+                
+                // Explicitly limit input to 2 chars max
+                const hourInput = instance.calendarContainer.querySelector('.flatpickr-hour');
+                const minInput = instance.calendarContainer.querySelector('.flatpickr-minute');
+                if (hourInput) hourInput.setAttribute('maxlength', '2');
+                if (minInput) minInput.setAttribute('maxlength', '2');
+            }
         });
 
         // Inline Range Calendar for Full Day Permission Modal
@@ -730,6 +837,9 @@
                     
                     hiddenRangeEl.value = dateStr; // e.g., "2026-02-16 to 2026-02-20"
                 }
+            },
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.calendarContainer.classList.add('theme-modern-glow');
             }
         });
     });

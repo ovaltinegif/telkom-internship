@@ -48,56 +48,16 @@
                             {{-- Start Time Box --}}
                             <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 relative hover:border-red-200 dark:hover:border-red-900/50 transition-colors group">
                                 <label for="start_time" class="block text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500 font-bold mb-1">Pukul Berangkat</label>
-                                <div class="flex items-center gap-3 relative">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-red-500 group-focus-within:text-red-600 transition-colors shrink-0">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <select name="start_time" id="start_time" 
-                                        class="block w-full bg-transparent bg-none border-0 focus:ring-0 text-slate-800 dark:text-slate-200 font-black text-3xl placeholder-slate-300 p-0 appearance-none cursor-pointer"
-                                        required>
-                                        <option value="" disabled selected class="text-slate-300 text-sm">--:--</option>
-                                        @php
-                                            $startTime = \Carbon\Carbon::createFromFormat('H:i', '07:00');
-                                            $endTimeRange = \Carbon\Carbon::createFromFormat('H:i', '20:00');
-                                        @endphp
-                                        @while($startTime->lte($endTimeRange))
-                                            <option value="{{ $startTime->format('H:i') }}" class="text-base text-slate-700 dark:text-slate-900 font-semibold">{{ $startTime->format('H:i') }}</option>
-                                            @php $startTime->addMinutes(30); @endphp
-                                        @endwhile
-                                    </select>
-                                    <div class="absolute inset-y-0 right-0 flex items-center pointer-events-none">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 text-slate-300 dark:text-slate-600">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                        </svg>
-                                    </div>
+                                <div class="flex flex-col gap-3 relative justify-center items-center">
+                                    <input type="text" name="start_time" id="start_time" class="absolute opacity-0 w-0 h-0 pointer-events-none" required tabindex="-1">
                                 </div>
                             </div>
                             
                             {{-- End Time Box --}}
                             <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 relative hover:border-red-200 dark:hover:border-red-900/50 transition-colors group">
                                 <label for="end_time" class="block text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500 font-bold mb-1">Perkiraan Kembali</label>
-                                <div class="flex items-center gap-3 relative">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-red-500 group-focus-within:text-red-600 transition-colors shrink-0">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <select name="end_time" id="end_time" 
-                                        class="block w-full bg-transparent bg-none border-0 focus:ring-0 text-slate-800 dark:text-slate-200 font-black text-3xl placeholder-slate-300 p-0 appearance-none cursor-pointer"
-                                        required>
-                                        <option value="" disabled selected class="text-slate-300 text-sm">--:--</option>
-                                        @php
-                                            $startTime2 = \Carbon\Carbon::createFromFormat('H:i', '07:00');
-                                            $endTimeRange2 = \Carbon\Carbon::createFromFormat('H:i', '20:00');
-                                        @endphp
-                                        @while($startTime2->lte($endTimeRange2))
-                                            <option value="{{ $startTime2->format('H:i') }}" class="text-base text-slate-700 dark:text-slate-900 font-semibold">{{ $startTime2->format('H:i') }}</option>
-                                            @php $startTime2->addMinutes(30); @endphp
-                                        @endwhile
-                                    </select>
-                                    <div class="absolute inset-y-0 right-0 flex items-center pointer-events-none">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 text-slate-300 dark:text-slate-600">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                        </svg>
-                                    </div>
+                                <div class="flex flex-col gap-3 relative justify-center items-center">
+                                    <input type="text" name="end_time" id="end_time" class="absolute opacity-0 w-0 h-0 pointer-events-none" required tabindex="-1">
                                 </div>
                             </div>
 

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flatpickr Telkom Styles</title>
+    <!-- Tailwind CSS for layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b', // Telkom primary red
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Flatpickr Core Options -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* 
+         * OPTION 1: "Modern Glow"
+         * Telkom Red, very rounded, subtle shadows, floating header
+         */
+        .theme-modern-glow {
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.1), 0 10px 10px -5px rgba(220, 38, 38, 0.04);
+            border: 1px solid #fee2e2;
+            padding: 10px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .theme-modern-glow .flatpickr-months {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            border-radius: 16px;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+
+        .theme-modern-glow .flatpickr-month,
+        .theme-modern-glow .flatpickr-current-month .flatpickr-monthDropdown-months,
+        .theme-modern-glow .flatpickr-current-month input.cur-year {
+            color: white;
+            fill: white;
+        }
+
+        .theme-modern-glow .flatpickr-prev-month svg,
+        .theme-modern-glow .flatpickr-next-month svg {
+            fill: white;
+            transition: transform 0.2s;
+        }
+
+        .theme-modern-glow .flatpickr-prev-month:hover svg,
+        .theme-modern-glow .flatpickr-next-month:hover svg {
+            transform: scale(1.2);
+            fill: #fecaca;
+        }
+
+        .theme-modern-glow .flatpickr-weekday {
+            color: #94a3b8;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .theme-modern-glow .flatpickr-day {
+            border-radius: 12px;
+            color: #334155;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .theme-modern-glow .flatpickr-day:hover {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #dc2626;
+        }
+
+        .theme-modern-glow .flatpickr-day.selected {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4);
+            transform: scale(1.05);
+        }
+
+        .theme-modern-glow .flatpickr-day.today {
+            border-color: #dc2626;
+            color: #dc2626;
+            font-weight: 800;
+        }
+
+        /* 
+         * OPTION 2: "Minimalist Soft"
+         * Clean, white header, red accents, very soft UI
+         */
+        .theme-minimalist {
+            border-radius: 30px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+            border: none;
+            padding: 16px;
+            background: white;
+        }
+
+        .theme-minimalist .flatpickr-months {
+            background: transparent;
+            margin-bottom: 8px;
+        }
+
+        .theme-minimalist .flatpickr-month {
+            color: #1e293b;
+        }
+
+        .theme-minimalist .flatpickr-current-month .flatpickr-monthDropdown-months {
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .theme-minimalist .flatpickr-current-month input.cur-year {
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .theme-minimalist .flatpickr-prev-month svg,
+        .theme-minimalist .flatpickr-next-month svg {
+            fill: #dc2626;
+            width: 12px;
+            background: #fef2f2;
+            padding: 6px;
+            border-radius: 50%;
+            height: auto;
+        }
+
+        .theme-minimalist .flatpickr-prev-month:hover svg,
+        .theme-minimalist .flatpickr-next-month:hover svg {
+            background: #dc2626;
+            fill: white;
+        }
+
+        .theme-minimalist .flatpickr-weekdays {
+            border-bottom: 2px dashed #f1f5f9;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .theme-minimalist .flatpickr-weekday {
+            color: #dc2626;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.7rem;
+        }
+
+        .theme-minimalist .flatpickr-day {
+            border-radius: 50%;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .theme-minimalist .flatpickr-day:hover {
+            background: #f1f5f9;
+            color: #dc2626;
+        }
+
+        .theme-minimalist .flatpickr-day.selected {
+            background: #991b1b;
+            color: white;
+            border: none;
+        }
+
+        .theme-minimalist .flatpickr-day.today {
+            border-color: transparent;
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* 
+         * OPTION 3: "Neumorphic / Card Style"
+         * Playful, floating days with slight gray background
+         */
+        .theme-neumorphic {
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .theme-neumorphic .flatpickr-innerContainer {
+            background: white;
+            border-radius: 0 0 20px 20px;
+            padding: 10px;
+        }
+
+        .theme-neumorphic .flatpickr-months {
+            background: #f8fafc;
+            border-radius: 20px 20px 0 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .theme-neumorphic .flatpickr-current-month .flatpickr-monthDropdown-months,
+        .theme-neumorphic .flatpickr-current-month input.cur-year {
+            color: #b91c1c;
+            font-weight: 900;
+        }
+
+        .theme-neumorphic .flatpickr-prev-month svg,
+        .theme-neumorphic .flatpickr-next-month svg {
+            fill: #64748b;
+        }
+
+        .theme-neumorphic .flatpickr-weekday {
+            color: #64748b;
+        }
+
+        .theme-neumorphic .flatpickr-day {
+            border-radius: 8px;
+            color: #1e293b;
+            margin: 2px;
+            width: calc(14.28% - 4px);
+            max-width: 36px;
+            height: 36px;
+            line-height: 36px;
+            background: #f1f5f9;
+            border: 1px solid transparent;
+        }
+
+        .theme-neumorphic .flatpickr-day:hover {
+            background: white;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .theme-neumorphic .flatpickr-day.selected {
+            background: linear-gradient(to bottom right, #ef4444, #b91c1c);
+            color: white;
+            border: none;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(1px);
+        }
+
+        .theme-neumorphic .flatpickr-day.today {
+            border-color: #dc2626;
+            background: white;
+        }
+    </style>
+</head>
+
+<body class="p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <div class="mb-10 text-center">
+            <h1 class="text-3xl font-black text-slate-800 tracking-tight">Eksplorasi Desain Kalender</h1>
+            <p class="text-slate-500 mt-2">Pilih gaya navigasi tanggal yang paling pas dengan antarmuka Telkom
+                Internship.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+            <!-- Option 1 -->
+            <div class="flex flex-col items-center">
+                <div
+                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 w-full flex flex-col items-center">
+                    <h2 class="text-lg font-bold text-red-600 mb-1">Opsi 1: Modern Glow</h2>
+                    <p class="text-xs text-slate-500 mb-6 text-center">Header gradien merah menyatu, tanggal kotak
+                        melengkung (rounded) dengan efek bayangan merah merona saat dipilih.</p>
+
+                    <div class="w-full max-w-[320px]">
+                        <input type="text" id="picker-1" class="hidden" placeholder="Pilih Tanggal">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 2 -->
+            <div class="flex flex-col items-center">
+                <div
+                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 w-full flex flex-col items-center">
+                    <h2 class="text-lg font-bold text-red-600 mb-1">Opsi 2: Minimalist Soft</h2>
+                    <p class="text-xs text-slate-500 mb-6 text-center">Tampilan seputih salju, tulisan tanggal bulat
+                        penuh elegan, aksen merah minimalis namun sangat fokus pada interaksi.</p>
+
+                    <div class="w-full max-w-[320px]">
+                        <input type="text" id="picker-2" class="hidden" placeholder="Pilih Tanggal">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 3 -->
+            <div class="flex flex-col items-center">
+                <div
+                    class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 w-full flex flex-col items-center">
+                    <h2 class="text-lg font-bold text-red-600 mb-1">Opsi 3: Neumorphic Blocks</h2>
+                    <p class="text-xs text-slate-500 mb-6 text-center">Setiap tanggal berbentuk blok timbul semi-kotak
+                        (`rounded-md`), menonjol dari *background*, unik dan sedikit *playful*.</p>
+
+                    <div class="w-full max-w-[320px]">
+                        <input type="text" id="picker-3" class="hidden" placeholder="Pilih Tanggal">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Initialize all pickers inline so they stay open for viewing
+
+        flatpickr("#picker-1", {
+            inline: true,
+            defaultDate: "today"
+        });
+
+        // Apply custom class to the calendar container
+        const cal1 = document.querySelector("#picker-1")._flatpickr.calendarContainer;
+        cal1.classList.add('theme-modern-glow');
+
+
+        flatpickr("#picker-2", {
+            inline: true,
+            defaultDate: "today"
+        });
+        const cal2 = document.querySelector("#picker-2")._flatpickr.calendarContainer;
+        cal2.classList.add('theme-minimalist');
+
+
+        flatpickr("#picker-3", {
+            inline: true,
+            defaultDate: "today"
+        });
+        const cal3 = document.querySelector("#picker-3")._flatpickr.calendarContainer;
+        cal3.classList.add('theme-neumorphic');
+
+    </script>
+</body>
+
+</html>

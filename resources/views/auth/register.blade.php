@@ -375,25 +375,97 @@
 
                         <div class="bg-gray-50 p-8 rounded-2xl border-2 border-dashed border-gray-300 hover:border-red-300 transition-colors">
                             <div class="grid md:grid-cols-2 gap-8">
-                            <div>
+                            
+                            {{-- CV Upload --}}
+                            <div x-data="{ 
+                                fileNameCV: '', isDraggingCV: false,
+                                handleDrop(e) { this.isDraggingCV = false; if(e.dataTransfer.files.length > 0) { const file = e.dataTransfer.files[0]; if(file.type === 'application/pdf') { this.$refs.inputCV.files = e.dataTransfer.files; this.fileNameCV = file.name; errors.cv = false; } else { showError('Format CV harus PDF'); } } },
+                                clearFile() { this.fileNameCV = ''; this.$refs.inputCV.value = ''; }
+                            }">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Curriculum Vitae (PDF)</label>
-                                <input type="file" name="cv" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer rounded-lg border transition" x-bind:class="{'border-red-500 bg-red-50': errors.cv, 'border-gray-300': !errors.cv}" required @change="errors.cv = false">
+                                <div @dragover.prevent="isDraggingCV = true" @dragleave.prevent="isDraggingCV = false" @drop.prevent="handleDrop($event)" 
+                                     :class="{'border-red-500 bg-red-50': isDraggingCV || errors.cv, 'border-gray-300 bg-white': !isDraggingCV && !errors.cv}"
+                                     class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer hover:bg-red-50 hover:border-red-400 transition-all group">
+                                    <input type="file" name="cv" accept=".pdf" class="absolute inset-0 opacity-0 cursor-pointer z-10" x-ref="inputCV" required @change="fileNameCV = $event.target.files[0].name; errors.cv = false;" :class="{'hidden': fileNameCV}">
+                                    <div class="text-center w-full" :class="{'hidden': fileNameCV}">
+                                        <svg class="mx-auto h-8 w-8 text-gray-400 group-hover:text-red-500 mb-2 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                        <p class="text-xs text-gray-500 font-semibold">Tarik & lepas PDF di sini</p>
+                                    </div>
+                                    <div x-show="fileNameCV" style="display: none;" class="flex items-center justify-between w-full bg-red-100 text-red-700 px-3 py-2 rounded-lg border border-red-200 relative z-20">
+                                        <span x-text="fileNameCV" class="text-xs font-bold truncate max-w-[150px]"></span>
+                                        <button type="button" @click.stop.prevent="clearFile()" class="text-red-500 hover:text-red-800 p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
+
+                            {{-- Surat Rekomendasi/Pengantar Upload --}}
+                            <div x-data="{ 
+                                fileNameSurat: '', isDraggingSurat: false,
+                                handleDrop(e) { this.isDraggingSurat = false; if(e.dataTransfer.files.length > 0) { const file = e.dataTransfer.files[0]; if(file.type === 'application/pdf') { this.$refs.inputSurat.files = e.dataTransfer.files; this.fileNameSurat = file.name; errors.surat_rekomendasi = false; } else { showError('Format Surat harus PDF'); } } },
+                                clearFile() { this.fileNameSurat = ''; this.$refs.inputSurat.value = ''; }
+                            }">
+                                <label class="block text-sm font-medium text-gray-700 mb-2 cursor-auto z-20 relative">
                                     <span x-text="isStudent ? 'Surat Pengantar Sekolah (PDF)' : 'Surat Rekomendasi Kampus (PDF)'"></span>
                                 </label>
-                                <input type="file" name="surat_rekomendasi" accept=".pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer rounded-lg border transition" x-bind:class="{'border-red-500 bg-red-50': errors.surat_rekomendasi, 'border-gray-300': !errors.surat_rekomendasi}" required @change="errors.surat_rekomendasi = false">
+                                <div @dragover.prevent="isDraggingSurat = true" @dragleave.prevent="isDraggingSurat = false" @drop.prevent="handleDrop($event)" 
+                                     :class="{'border-red-500 bg-red-50': isDraggingSurat || errors.surat_rekomendasi, 'border-gray-300 bg-white': !isDraggingSurat && !errors.surat_rekomendasi}"
+                                     class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer hover:bg-red-50 hover:border-red-400 transition-all group">
+                                    <input type="file" name="surat_rekomendasi" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" x-ref="inputSurat" required @change="fileNameSurat = $event.target.files[0].name; errors.surat_rekomendasi = false;" :class="{'hidden': fileNameSurat}">
+                                    <div class="text-center w-full" :class="{'hidden': fileNameSurat}">
+                                        <svg class="mx-auto h-8 w-8 text-gray-400 group-hover:text-red-500 mb-2 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                        <p class="text-xs text-gray-500 font-semibold">Tarik & lepas PDF di sini</p>
+                                    </div>
+                                    <div x-show="fileNameSurat" style="display: none;" class="flex items-center justify-between w-full bg-red-100 text-red-700 px-3 py-2 rounded-lg border border-red-200 relative z-20">
+                                        <span x-text="fileNameSurat" class="text-xs font-bold truncate max-w-[150px]"></span>
+                                        <button type="button" @click.stop.prevent="clearFile()" class="text-red-500 hover:text-red-800 p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
+
+                            {{-- KTM/Kartu Pelajar Upload --}}
+                            <div x-data="{ 
+                                fileNameKTM: '', isDraggingKTM: false,
+                                handleDrop(e) { this.isDraggingKTM = false; if(e.dataTransfer.files.length > 0) { const file = e.dataTransfer.files[0]; const valid = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg']; if(valid.includes(file.type)) { this.$refs.inputKTM.files = e.dataTransfer.files; this.fileNameKTM = file.name; errors.ktm = false; } else { showError('Format tidak valid (PDF/JPG/PNG)'); } } },
+                                clearFile() { this.fileNameKTM = ''; this.$refs.inputKTM.value = ''; }
+                            }">
+                                <label class="block text-sm font-medium text-gray-700 mb-2 cursor-auto z-20 relative">
                                     <span x-text="isStudent ? 'Kartu Pelajar (Image/PDF)' : 'Kartu Tanda Mahasiswa (Image/PDF)'"></span>
                                 </label>
-                                <input type="file" name="ktm" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer rounded-lg border transition" x-bind:class="{'border-red-500 bg-red-50': errors.ktm, 'border-gray-300': !errors.ktm}" required @change="errors.ktm = false">
+                                <div @dragover.prevent="isDraggingKTM = true" @dragleave.prevent="isDraggingKTM = false" @drop.prevent="handleDrop($event)" 
+                                     :class="{'border-red-500 bg-red-50': isDraggingKTM || errors.ktm, 'border-gray-300 bg-white': !isDraggingKTM && !errors.ktm}"
+                                     class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer hover:bg-red-50 hover:border-red-400 transition-all group">
+                                    <input type="file" name="ktm" accept=".pdf,.jpg,.jpeg,.png" class="absolute inset-0 opacity-0 cursor-pointer z-10" x-ref="inputKTM" required @change="fileNameKTM = $event.target.files[0].name; errors.ktm = false;" :class="{'hidden': fileNameKTM}">
+                                    <div class="text-center w-full" :class="{'hidden': fileNameKTM}">
+                                       <svg class="mx-auto h-8 w-8 text-gray-400 group-hover:text-red-500 mb-2 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                                        <p class="text-xs text-gray-500 font-semibold">Tarik & lepas Image/PDF</p>
+                                    </div>
+                                    <div x-show="fileNameKTM" style="display: none;" class="flex items-center justify-between w-full bg-red-100 text-red-700 px-3 py-2 rounded-lg border border-red-200 relative z-20">
+                                        <span x-text="fileNameKTM" class="text-xs font-bold truncate max-w-[150px]"></span>
+                                        <button type="button" @click.stop.prevent="clearFile()" class="text-red-500 hover:text-red-800 p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
+
+                            {{-- Foto Diri Upload --}}
+                            <div x-data="{ 
+                                fileNamePhoto: '', isDraggingPhoto: false,
+                                handleDrop(e) { this.isDraggingPhoto = false; if(e.dataTransfer.files.length > 0) { const file = e.dataTransfer.files[0]; const valid = ['image/jpeg', 'image/png', 'image/jpg']; if(valid.includes(file.type)) { this.$refs.inputPhoto.files = e.dataTransfer.files; this.fileNamePhoto = file.name; errors.photo = false; } else { showError('Format tidak valid (JPG/PNG)'); } } },
+                                clearFile() { this.fileNamePhoto = ''; this.$refs.inputPhoto.value = ''; }
+                            }">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Foto Diri Terbaru (Image)</label>
-                                <input type="file" name="photo" accept=".jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 cursor-pointer rounded-lg border transition" x-bind:class="{'border-red-500 bg-red-50': errors.photo, 'border-gray-300': !errors.photo}" required @change="errors.photo = false">
+                                <div @dragover.prevent="isDraggingPhoto = true" @dragleave.prevent="isDraggingPhoto = false" @drop.prevent="handleDrop($event)" 
+                                     :class="{'border-red-500 bg-red-50': isDraggingPhoto || errors.photo, 'border-gray-300 bg-white': !isDraggingPhoto && !errors.photo}"
+                                     class="relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer hover:bg-red-50 hover:border-red-400 transition-all group">
+                                    <input type="file" name="photo" accept=".jpg,.jpeg,.png" class="absolute inset-0 opacity-0 cursor-pointer z-10" x-ref="inputPhoto" required @change="fileNamePhoto = $event.target.files[0].name; errors.photo = false;" :class="{'hidden': fileNamePhoto}">
+                                    <div class="text-center w-full" :class="{'hidden': fileNamePhoto}">
+                                       <svg class="mx-auto h-8 w-8 text-gray-400 group-hover:text-red-500 mb-2 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        <p class="text-xs text-gray-500 font-semibold">Tarik & lepas Image</p>
+                                    </div>
+                                    <div x-show="fileNamePhoto" style="display: none;" class="flex items-center justify-between w-full bg-red-100 text-red-700 px-3 py-2 rounded-lg border border-red-200 relative z-20">
+                                        <span x-text="fileNamePhoto" class="text-xs font-bold truncate max-w-[150px]"></span>
+                                        <button type="button" @click.stop.prevent="clearFile()" class="text-red-500 hover:text-red-800 p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

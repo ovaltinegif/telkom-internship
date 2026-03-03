@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilihan Desain Time Picker Telkom</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Flatpickr (For Option 1) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* Option 1: Redesigned Flatpickr Time (Inline Grid) */
+        .theme-time-grid .flatpickr-time {
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            max-height: 100% !important;
+            border-top: none;
+            background: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.1);
+            border: 1px solid #fee2e2;
+        }
+
+        .theme-time-grid .numInputWrapper {
+            width: 70px;
+        }
+
+        .theme-time-grid input.flatpickr-hour,
+        .theme-time-grid input.flatpickr-minute {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #dc2626;
+            background: #fef2f2;
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            height: auto;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .theme-time-grid input.flatpickr-hour:hover,
+        .theme-time-grid input.flatpickr-minute:hover {
+            background: #ffe4e6;
+        }
+
+        .theme-time-grid .flatpickr-time-separator {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #94a3b8;
+            padding: 0 0.5rem;
+        }
+
+        /* Hide Arrows for a cleaner look */
+        .theme-time-grid .numInputWrapper span.arrowUp,
+        .theme-time-grid .numInputWrapper span.arrowDown {
+            display: none !important;
+        }
+
+        /* Option 2: Native HTML5 input[type="time"] customized */
+        .native-time-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .native-time-input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+        }
+
+        /* Custom Chrome Icon */
+        .native-time-input::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+            z-index: 10;
+        }
+
+        /* Option 3: Quick Select Chips (Modern UI) */
+        .chip-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .time-chip {
+            padding: 0.75rem 0.5rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            text-align: center;
+            border-radius: 0.75rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .time-chip:hover {
+            border-color: #fca5a5;
+            background: #fef2f2;
+            color: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .time-chip.active {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: white;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+    </style>
+</head>
+
+<body class="p-10 min-h-screen bg-slate-50 flex flex-col items-center">
+
+    <div class="max-w-4xl w-full">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">Pilihan Desain Input Jam/Waktu</h1>
+            <p class="text-slate-500">Silakan pilih gaya UX mana yang terasa paling efisien dan pas untuk form izin.</p>
+        </div>
+
+        <div class="space-y-12">
+
+            {{-- OPSI 1 --}}
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-red-100 text-red-600 font-bold px-4 py-1.5 rounded-full text-sm">Opsi 1</span>
+                    <h2 class="text-xl font-bold text-slate-800">Flatpickr "Bold & Clean"</h2>
+                </div>
+                <p class="text-slate-500 text-sm mb-6">Masih menggunakan Flatpickr, tapi panah atas/bawah yang lambat
+                    dihilangkan. Angka dibesarkan. Pengguna cukup menyorot angka dan <strong
+                        class="text-slate-700">mengetik langsung</strong> lewat keyboard atau men-scroll.</p>
+
+                <div class="max-w-xs">
+                    <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Pilih
+                        Waktu</label>
+                    <input id="time-opt-1" type="text" placeholder="--:--"
+                        class="w-full text-lg px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-500 focus:ring-0 outline-none transition-all cursor-pointer font-bold text-slate-700 text-center">
+                </div>
+            </div>
+
+            {{-- OPSI 2 --}}
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-red-100 text-red-600 font-bold px-4 py-1.5 rounded-full text-sm">Opsi 2</span>
+                    <h2 class="text-xl font-bold text-slate-800">Native OS Picker (Minimalist)</h2>
+                </div>
+                <p class="text-slate-500 text-sm mb-6">Menggunakan bawaan dari perangkat (HP/Laptop) murni. Ini adalah
+                    **opsi paling efisien dan cepat** karena UI-nya sudah dioptimasi oleh masing-masing sistem operasi
+                    (seperti scroll-wheel di iPhone atau dial di Android/Windows).</p>
+
+                <div class="max-w-xs relative isolate">
+                    <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Pilih
+                        Waktu</label>
+                    <div class="relative">
+                        <input type="time" class="native-time-input font-mono">
+                        {{-- Decorative Clock Icon --}}
+                        <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                class="w-6 h-6">
+                                <path fill-rule="evenodd"
+                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- OPSI 3 --}}
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-red-100 text-red-600 font-bold px-4 py-1.5 rounded-full text-sm">Opsi 3</span>
+                    <h2 class="text-xl font-bold text-slate-800">Quick Select Chips</h2>
+                </div>
+                <p class="text-slate-500 text-sm mb-6">Tanpa mengetik dan tanpa *scroll*. Memberikan pilihan waktu tetap
+                    yang umum digunakan (seperti kelipatan 30 menit). **Sangat efisien (hanya 1 klik)** jika jam
+                    operasional / izin sudah standar.</p>
+
+                <div class="max-w-lg">
+                    <label class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wide">Pilih Jam Keluar
+                        Biasa</label>
+                    <div class="chip-container" id="chip-group">
+                        <button class="time-chip" onclick="selectChip(this)">08:00</button>
+                        <button class="time-chip" onclick="selectChip(this)">09:30</button>
+                        <button class="time-chip" onclick="selectChip(this)">10:00</button>
+                        <button class="time-chip" onclick="selectChip(this)">11:30</button>
+
+                        <button class="time-chip" onclick="selectChip(this)">13:00</button>
+                        <button class="time-chip active" onclick="selectChip(this)">14:30</button>
+                        <button class="time-chip" onclick="selectChip(this)">15:00</button>
+                        <button class="time-chip" onclick="selectChip(this)">Lainnya+</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Init Scripts -->
+    <script>
+        // Init Option 1
+        flatpickr("#time-opt-1", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            inline: true,
+            onReady: function (selectedDates, dateStr, instance) {
+                // Remove calendar container class restrictions for our custom grid
+                instance.calendarContainer.classList.add('theme-time-grid');
+                instance.calendarContainer.querySelector('.flatpickr-time').style.borderTop = 'none';
+            }
+        });
+
+        // Script Options 3
+        function selectChip(element) {
+            document.querySelectorAll('#chip-group .time-chip').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

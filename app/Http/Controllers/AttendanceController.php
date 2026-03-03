@@ -171,8 +171,15 @@ class AttendanceController extends Controller
             if ($existingAttendance) {
                 // Allow update ONLY if permit_type is 'temporary' (Half-day)
                 if ($request->permit_type === 'temporary') {
+                    // Check if they ALREADY have a temporary permit submitted today
+                    if ($existingAttendance->permit_type === 'temporary' || $existingAttendance->permit_start_time !== null) {
+                        $errorDates[] = $processDate;
+                        continue;
+                    }
+
+                    // Update the existing attendance (could be already 'present') 
+                    // with the temporary permit details. Don't override status if they are already present.
                     $existingAttendance->update([
-                        'status' => 'permit',
                         'permit_type' => 'temporary',
                         'permit_start_time' => $request->start_time,
                         'permit_end_time' => $request->end_time,
@@ -182,14 +189,16 @@ class AttendanceController extends Controller
                     $successCount++;
                 }
                 else {
+                    // It's a full day permit, but attendance already exists. Reject to prevent overriding a check-in.
                     $errorDates[] = $processDate;
                 }
             }
             else {
+                // No attendance exists yet. Create a new one.
                 Attendance::create([
                     'internship_id' => $internship->id,
                     'date' => $processDate,
-                    'status' => 'permit', // Set as permit
+                    'status' => $request->permit_type === 'full' ? 'permit' : 'pending', // Temporary permit shouldn't mean they took a full day off.
                     'permit_type' => $request->permit_type,
                     'permit_start_time' => $request->permit_type === 'temporary' ? $request->start_time : null,
                     'permit_end_time' => $request->permit_type === 'temporary' ? $request->end_time : null,

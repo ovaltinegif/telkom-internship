@@ -198,9 +198,6 @@ class AdminController extends Controller
     /**
      * Monitoring Magang: List semua magang aktif.
      */
-    /**
-     * Monitoring Magang: List semua magang aktif.
-     */
     public function internships(Request $request)
     {
         $status = $request->query('status', 'pending'); // Default to 'pending' (Applicants)
@@ -269,9 +266,6 @@ class AdminController extends Controller
         return view('admin.internships.index', compact('internships', 'status', 'studentType', 'pendingCount', 'onboardingCount', 'activeCount', 'finishedCount', 'extensionCount', 'divisions', 'mentors'));
     }
 
-    /**
-     * Approve Internship (Pending -> Onboarding)
-     */
     /**
      * Approve Internship (Pending -> Onboarding)
      * Admin uploads Surprise Jawaban & Pakta Integrity Template
@@ -359,10 +353,6 @@ class AdminController extends Controller
         // Check if student has uploaded signed pakta integritas
         $hasSignedPact = $internship->documents()->where('type', 'pakta_integritas_signed')->exists();
 
-        // Note: You can uncomment this if you want to strictly enforce it. 
-        // For now, allow admin to override or maybe just warn? 
-        // Based on user request "jika aktor mahasiswa... sudah isi pakta integritas ... lalu admin approve", it implies admin makes the call.
-        // But the system should probably check.
         if (!$hasSignedPact) {
             return back()->with('error', 'Mahasiswa belum mengupload Pakta Integritas yang sudah ditandatangani.');
         }
@@ -403,7 +393,7 @@ class AdminController extends Controller
         $internship = Internship::with('student.studentProfile')->findOrFail($id);
 
         if ($internship->status !== 'finished') {
-        // ...
+            return back()->with('error', 'Status magang belum selesai sehingga belum bisa diproses kelulusannya.');
         }
 
         $isSmk = optional($internship->student->studentProfile)->education_level === 'SMK';
@@ -456,9 +446,6 @@ class AdminController extends Controller
 
 
 
-    /**
-     * Form Edit Monitoring Magang
-     */
     /**
      * Detail Monitoring Magang (Read Only)
      */
