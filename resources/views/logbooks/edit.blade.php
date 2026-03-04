@@ -2,9 +2,9 @@
     <x-slot name="header">
         <div class="flex flex-col gap-1">
             <h2 class="font-bold text-2xl text-slate-800 dark:text-slate-100 leading-tight">
-                {{ __('Isi Logbook Harian') }}
+                {{ __('Edit Logbook Harian') }}
             </h2>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Ceritakan aktivitas magangmu hari ini</p>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Perbarui aktivitas magangmu untuk tanggal {{ \Carbon\Carbon::parse($logbook->date)->translatedFormat('d F Y') }}</p>
         </div>
     </x-slot>
 
@@ -13,18 +13,16 @@
             <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-2xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
                 <div class="p-8">
                     
-                    <form action="{{ route('logbooks.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="logbookForm" x-data="{ loading: false }">
+                    <form action="{{ route('logbooks.update', $logbook->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="logbookForm" x-data="{ loading: false }">
                         @csrf
+                        @method('PUT')
                         
-                        {{-- Input Tanggal --}}
+                        {{-- Input Tanggal (Disabled in Edit) --}}
                         <div>
-                            <x-input-label for="date" :value="__('Tanggal Kegiatan')" class="text-slate-700 dark:text-slate-300 font-semibold mb-2" />
+                            <x-input-label for="disabled_date" :value="__('Tanggal Kegiatan')" class="text-slate-700 dark:text-slate-300 font-semibold mb-2" />
                             <div class="relative">
-                                <input id="date" type="text" name="date" value="{{ old('date') }}" required
-                                    class="w-full border-slate-300 dark:border-slate-700 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm transition-all bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200"
-                                    placeholder="dd/mm/yyyy"
-                                    x-data
-                                    x-init="flatpickr($el, { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd/m/Y', locale: 'id', disableMobile: true, onReady: function(selectedDates, dateStr, instance) { instance.calendarContainer.classList.add('theme-modern-glow'); } })" />
+                                <input id="disabled_date" type="text" value="{{ \Carbon\Carbon::parse($logbook->date)->translatedFormat('l, d F Y') }}" disabled
+                                    class="w-full border-slate-300 dark:border-slate-700 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm transition-all bg-slate-100 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 cursor-not-allowed" />
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 </div>
@@ -42,7 +40,7 @@
                             <div class="bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl focus-within:border-red-500/30 focus-within:shadow-red-500/10 transition-all duration-500 group/editor">
                                 {{-- Area Input Judul --}}
                                 <div class="px-8 pt-8 pb-4 border-b border-slate-50 dark:border-slate-800/50 bg-slate-50/30 dark:bg-slate-950/20">
-                                    <input id="title" type="text" name="title" value="{{ old('title') }}" required
+                                    <input id="title" type="text" name="title" value="{{ old('title', $logbook->title) }}" required
                                         class="w-full border-0 focus:ring-0 p-0 text-2xl font-black text-slate-800 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-700 bg-transparent transition-all"
                                         placeholder="Tulis Judul Aktivitas..." />
                                     <x-input-error :messages="$errors->get('title')" class="mt-2" />
@@ -53,7 +51,7 @@
                                     {{-- Subtle Glow for Dark Mode --}}
                                     <div class="absolute inset-0 bg-red-500/5 dark:bg-red-500/2 rounded-3xl blur-3xl opacity-0 group-focus-within/editor:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                                     
-                                    <input id="activity" type="hidden" name="activity" value="{{ old('activity') }}">
+                                    <input id="activity" type="hidden" name="activity" value="{{ old('activity', $logbook->activity) }}">
                                     <trix-editor input="activity" 
                                         class="trix-content w-full min-h-[400px] border-0 focus:ring-0 px-6 py-4 text-slate-700 dark:text-slate-200 leading-relaxed text-lg relative z-10"
                                         placeholder="Ceritakan detail kegiatanmu, tantangan, atau hasil pekerjaan hari ini..."
@@ -135,16 +133,35 @@
                             <x-input-error :messages="$errors->get('evidence')" class="mt-2" />
                         </div>
 
+                        {{-- Mentor Notes (Readonly) if exists --}}
+                        @if ($logbook->mentor_notes)
+                            <div class="mt-4 bg-amber-50 dark:bg-amber-500/10 border-l-4 border-amber-500 p-4 rounded-r-xl">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-amber-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-amber-800 dark:text-amber-300">Catatan/Revisi Pembimbing:</h3>
+                                        <div class="mt-2 text-sm text-amber-700 dark:text-amber-400">
+                                            <p>{{ $logbook->mentor_notes }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Buttons --}}
                         <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-                             <a href="{{ route('dashboard') }}" class="px-5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                             <a href="{{ route('logbooks.index') }}" class="px-5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                                 Batal
                             </a>
                             <button type="button" @click="confirmSaveLogbook($data)" 
                                 x-bind:disabled="loading"
                                 :class="{'opacity-50 cursor-not-allowed': loading, 'hover:shadow-red-500/40 hover:scale-[1.02]': !loading}"
                                 class="bg-gradient-to-r from-red-600 to-red-500 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-red-500/30 transition-all duration-300 flex items-center gap-2">
-                                <span x-show="!loading">Simpan Logbook</span>
+                                <span x-show="!loading">Perbarui Logbook</span>
                                 <span x-show="loading" class="flex items-center gap-2">
                                     <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

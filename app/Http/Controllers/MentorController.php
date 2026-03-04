@@ -8,6 +8,10 @@ use App\Models\DailyLogbook;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use App\Models\Document;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Notifications\LogbookGraded;
 
 class MentorController extends Controller
 {
@@ -133,10 +137,11 @@ class MentorController extends Controller
     /**
      * Menyimpan status Approval/Reject logbook.
      */
-    public function updateLogbook(Request $request, $id)
+    public function evaluateLogbook(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:approved',
+            'status' => 'required|in:approved,rejected',
+            'notes' => 'nullable|string|max:500'
         ]);
 
         $logbook = DailyLogbook::findOrFail($id);
@@ -148,9 +153,17 @@ class MentorController extends Controller
 
         $logbook->update([
             'status' => $request->status,
+            // Optional: if your DailyLogbook model has a 'mentor_notes' column, save it
+            'mentor_notes' => $request->notes ?? null
         ]);
 
-        return back()->with('success', 'Logbook berhasil disetujui.');
+        // Kirim Notifikasi ke Mahasiswa
+        if ($logbook->internship && $logbook->internship->student) {
+            $logbook->internship->student->notify(new LogbookGraded($logbook));
+        }
+
+        $message = $request->status === 'approved' ? 'Logbook berhasil disetujui.' : 'Logbook dikembalikan untuk direvisi.';
+        return back()->with('success', $message);
     }
 
     /**

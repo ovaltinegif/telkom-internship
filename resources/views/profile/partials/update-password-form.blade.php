@@ -39,8 +39,8 @@
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center gap-4 pt-4">
-            <button type="submit" class="px-8 py-3.5 bg-slate-900 dark:bg-slate-100 hover:bg-black dark:hover:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-slate-200 dark:shadow-slate-950/40">
+        <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
+            <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-slate-900 dark:bg-slate-100 hover:bg-black dark:hover:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-slate-200 dark:shadow-slate-950/40">
                 {{ __('Ubah Password') }}
             </button>
 

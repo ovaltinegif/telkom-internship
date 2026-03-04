@@ -84,11 +84,24 @@
                                                 <div class="line-clamp-2" title="{{ strip_tags($logbook->activity) }}">
                                                     {{ Str::limit(strip_tags($logbook->activity), 80) }}
                                                 </div>
-                                                <button 
-                                                    @click="showModal = true; modalContent = {{ json_encode($logbook->activity) }}; modalDate = '{{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}'; modalTitle = '{{ addslashes($logbook->title) }}'"
-                                                    class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-medium mt-1 inline-flex items-center gap-1 transition-colors">
-                                                    Lihat Selengkapnya
-                                                </button>
+                                                <div class="flex items-center gap-3 mt-2">
+                                                    <button 
+                                                        @click="showModal = true; modalContent = {{ json_encode($logbook->activity) }}; modalDate = '{{ \Carbon\Carbon::parse($logbook->date)->format('d M Y') }}'; modalTitle = '{{ addslashes($logbook->title) }}'"
+                                                        class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs font-bold inline-flex items-center gap-1 transition-colors">
+                                                        Baca
+                                                    </button>
+                                                    
+                                                    @if(in_array($logbook->status, ['pending', 'rejected']))
+                                                        <span class="text-slate-300 dark:text-slate-700 text-xs">|</span>
+                                                        <a href="{{ route('logbooks.edit', $logbook->id) }}" class="text-amber-500 hover:text-amber-600 dark:hover:text-amber-400 text-xs font-bold transition-colors">Edit</a>
+                                                        <span class="text-slate-300 dark:text-slate-700 text-xs">|</span>
+                                                        <form action="{{ route('logbooks.destroy', $logbook->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus catatan logbook ini? Tindakan ini tidak dapat dibatalkan.');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="text-slate-500 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300 text-xs font-bold transition-colors">Hapus</button>
+                                                        </form>
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 transition-colors">
                                                 @if($logbook->evidence)

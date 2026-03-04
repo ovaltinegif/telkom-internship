@@ -7,9 +7,14 @@
                 </h2>
                 <p class="text-slate-500 dark:text-slate-400 transition-colors text-sm">Informasi lengkap terkait mahasiswa dan program magang</p>
             </div>
-            <a href="{{ route('admin.internships.index', ['status' => 'active']) }}" class="inline-flex items-center px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-25 transition-all duration-200">
-                &larr; Kembali
-            </a>
+            <div class="flex items-center gap-3">
+                <button type="button" onclick="document.getElementById('overrideModal').classList.remove('hidden')" class="inline-flex items-center px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200">
+                    Timpa Kehadiran
+                </button>
+                <a href="{{ route('admin.internships.index', ['status' => 'active']) }}" class="inline-flex items-center px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-25 transition-all duration-200">
+                    &larr; Kembali
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -199,6 +204,76 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Override Attendance Modal -->
+    <div id="overrideModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background Overlay -->
+            <div class="fixed inset-0 transition-opacity bg-slate-900/75 backdrop-blur-sm" aria-hidden="true" onclick="document.getElementById('overrideModal').classList.add('hidden')"></div>
+
+            <!-- Modal Panel -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white dark:bg-slate-900 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full border border-slate-100 dark:border-slate-800">
+                <form action="{{ route('admin.attendance.override') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="internship_id" value="{{ $internship->id }}">
+                    
+                    <div class="px-6 py-6 sm:p-8">
+                        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-indigo-100 dark:bg-indigo-500/20 rounded-full mb-6">
+                            <svg class="w-8 h-8 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl font-black text-slate-800 dark:text-slate-100" id="modal-title">Timpa Presensi Manual</h3>
+                            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 font-medium">Bypass logika absensi waktu untuk menetapkan status manual untuk {{ $internship->student->name }}.</p>
+                        </div>
+
+                        <div class="space-y-5 text-left">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Tanggal Target</label>
+                                <input type="date" name="date" required class="w-full border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Jam Masuk (Opsional)</label>
+                                    <input type="time" name="check_in_time" class="w-full border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Jam Keluar (Opsional)</label>
+                                    <input type="time" name="check_out_time" class="w-full border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Status Penetapan</label>
+                                <select name="status" required class="w-full border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500 font-bold">
+                                    <option value="present">Hadir (Present)</option>
+                                    <option value="permit">Izin (Permit)</option>
+                                    <option value="absent">Mangkir (Absent)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Catatan Override (Opsional)</label>
+                                <textarea name="note" rows="2" class="w-full border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-xl shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Alasan perubahan manual..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3 sm:px-8">
+                        <button type="button" class="px-5 py-2.5 rounded-xl font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" onclick="document.getElementById('overrideModal').classList.add('hidden')">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-6 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 hover:-translate-y-0.5 transition-all">
+                            Simpan Kehadiran
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

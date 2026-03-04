@@ -101,6 +101,66 @@
 
                 <div class="h-8 w-px bg-gray-200 dark:bg-slate-800 mx-1"></div>
 
+                {{-- Notifications Dropdown --}}
+                <div class="relative" x-data="{ notifOpen: false }">
+                    <button @click="notifOpen = !notifOpen" @click.away="notifOpen = false" class="relative p-2 text-slate-500 hover:text-red-500 dark:text-slate-400 dark:hover:text-red-400 transition-colors focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                        </svg>
+                        
+                        @if(Auth::user()->unreadNotifications->count() > 0)
+                            <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border border-white dark:border-slate-900 rounded-full animate-pulse"></span>
+                        @endif
+                    </button>
+
+                    <div x-cloak x-show="notifOpen"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="transform opacity-0 scale-95 translate-y-2"
+                         x-transition:enter-end="transform opacity-100 scale-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="transform opacity-100 scale-100 translate-y-0"
+                         x-transition:leave-end="transform opacity-0 scale-95 translate-y-2"
+                         class="absolute right-0 mt-3 w-80 max-w-[90vw] bg-white dark:bg-slate-800 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 dark:border-slate-700 overflow-hidden py-0 z-50 origin-top-right flex flex-col max-h-[85dvh]">
+                        
+                        <div class="px-4 py-3 border-b border-gray-50 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-900/50 flex justify-between items-center z-10 sticky top-0">
+                            <h3 class="font-bold text-slate-800 dark:text-slate-200">Notifikasi</h3>
+                            @if(Auth::user()->unreadNotifications->count() > 0)
+                                <form action="{{ route('notifications.markAllRead') }}" method="POST" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="text-xs text-red-600 hover:text-red-700 font-bold">Tandai Dibaca</button>
+                                </form>
+                            @endif
+                        </div>
+
+                        <div class="overflow-y-auto flex-1">
+                            @forelse(Auth::user()->unreadNotifications as $notification)
+                                <div class="px-4 py-3 border-b border-gray-50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors {{ loop->last ? 'border-b-0' : '' }}">
+                                    <div class="flex items-start gap-3">
+                                        <div class="p-2 rounded-full {{ $notification->data['icon'] === 'check-circle' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400' }}">
+                                            @if($notification->data['icon'] === 'check-circle')
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            @else
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $notification->data['title'] }}</p>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">{{ $notification->data['message'] }}</p>
+                                            <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
+                                    Belum ada notifikasi baru.
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-8 w-px bg-gray-200 dark:bg-slate-800 mx-1"></div>
+
                 {{-- Profile Dropdown Trigger --}}
                 <div class="relative" x-data="{ dropdownOpen: false }">
                     <button 
@@ -156,6 +216,64 @@
 
             {{-- Mobile Menu Button --}}
             <div class="-mr-2 flex items-center sm:hidden gap-2">
+                {{-- Notifications Dropdown (Mobile) --}}
+                <div class="relative" x-data="{ notifOpenMobile: false }">
+                    <button @click="notifOpenMobile = !notifOpenMobile" @click.away="notifOpenMobile = false" class="relative p-2 text-slate-500 hover:text-red-500 dark:text-slate-400 dark:hover:text-red-400 transition-colors focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                        </svg>
+                        
+                        @if(Auth::user()->unreadNotifications->count() > 0)
+                            <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border border-white dark:border-slate-900 rounded-full animate-pulse"></span>
+                        @endif
+                    </button>
+
+                    <div x-cloak x-show="notifOpenMobile"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="transform opacity-0 scale-95 translate-y-2"
+                         x-transition:enter-end="transform opacity-100 scale-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="transform opacity-100 scale-100 translate-y-0"
+                         x-transition:leave-end="transform opacity-0 scale-95 translate-y-2"
+                         class="absolute right-0 mt-3 w-80 max-w-[85vw] bg-white dark:bg-slate-800 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 dark:border-slate-700 overflow-hidden py-0 z-50 origin-top-right flex flex-col max-h-[85dvh]">
+                        
+                        <div class="px-4 py-3 border-b border-gray-50 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-900/50 flex justify-between items-center z-10 sticky top-0">
+                            <h3 class="font-bold text-slate-800 dark:text-slate-200">Notifikasi</h3>
+                            @if(Auth::user()->unreadNotifications->count() > 0)
+                                <form action="{{ route('notifications.markAllRead') }}" method="POST" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="text-xs text-red-600 hover:text-red-700 font-bold">Tandai Dibaca</button>
+                                </form>
+                            @endif
+                        </div>
+
+                        <div class="overflow-y-auto flex-1 max-h-[60vh]">
+                            @forelse(Auth::user()->unreadNotifications as $notification)
+                                <div class="px-4 py-3 border-b border-gray-50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors {{ loop->last ? 'border-b-0' : '' }}">
+                                    <div class="flex items-start gap-3">
+                                        <div class="p-2 rounded-full {{ $notification->data['icon'] === 'check-circle' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400' }}">
+                                            @if($notification->data['icon'] === 'check-circle')
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            @else
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $notification->data['title'] }}</p>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">{{ $notification->data['message'] }}</p>
+                                            <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
+                                    Belum ada notifikasi baru.
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Theme Toggle Mobile --}}
                 <button @click="toggleTheme()" 
                         class="relative flex items-center justify-between p-1 w-14 h-7 rounded-full bg-slate-200 dark:bg-slate-800 transition-colors duration-500 focus:outline-none border border-slate-300 dark:border-slate-700 shadow-inner group">

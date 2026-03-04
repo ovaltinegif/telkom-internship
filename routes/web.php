@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\NotificationController; // Added this import
 
 /* |--------------------------------------------------------------------------
  | Web Routes
@@ -43,6 +44,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/activity', 'index')->name('logbooks.index');
             Route::get('/logbooks/create', 'create')->name('logbooks.create');
             Route::post('/logbooks', 'store')->name('logbooks.store');
+            Route::get('/logbooks/{id}/edit', 'edit')->name('logbooks.edit');
+            Route::put('/logbooks/{id}', 'update')->name('logbooks.update');
+            Route::delete('/logbooks/{id}', 'destroy')->name('logbooks.destroy');
             Route::post('/logbooks/upload-image', 'uploadImage')->name('logbooks.uploadImage');
         }
         );
@@ -65,6 +69,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/attendance/report', 'downloadReport')->name('attendance.report');
         }
         );
+
+        // -- Notification Route --
+        Route::post('/notifications/mark-read', [NotificationController::class , 'markAllRead'])->name('notifications.markAllRead');
     });
 
 
@@ -101,6 +108,9 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
 
     Route::controller(AdminController::class)->group(function () {
             Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
+            // AJAX API
+            Route::get('/api/search-students', 'searchStudents')->name('admin.api.search-students');
+            Route::get('/api/search-mentors', 'searchMentors')->name('admin.api.search-mentors');
 
             // Setup Magang
             Route::get('/internship/create', 'createInternship')->name('admin.internship.create');
@@ -114,6 +124,10 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
             // Monitoring Magang
             Route::get('/internships', 'internships')->name('admin.internships.index');
             Route::get('/internships/{id}', 'showInternship')->name('admin.internships.show');
+            Route::get('/evaluations/{id}', 'showEvaluation')->name('admin.evaluations.show');
+
+            // Attendance Override
+            Route::post('/attendance/override', 'overrideAttendance')->name('admin.attendance.override');
 
             // Workflow Actions
             Route::patch('/internships/{id}/approve', 'approveInternship')->name('admin.internships.approve');

@@ -56,18 +56,79 @@
                             {{-- Field: Mahasiswa --}}
                             <div class="md:col-span-2 space-y-1.5">
                                 <x-input-label for="student_id" :value="__('Pilih Intern')" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest ml-1" />
-                                <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-red-500 transition-colors">
+                                <div class="relative group" 
+                                     x-data="{ 
+                                         search: '', 
+                                         selectedId: '', 
+                                         selectedName: '',
+                                         results: [], 
+                                         open: false,
+                                         loading: false,
+                                         fetchStudents() {
+                                             this.loading = true;
+                                             fetch('/admin/api/search-students?q=' + this.search)
+                                                 .then(res => res.json())
+                                                 .then(data => {
+                                                     this.results = data;
+                                                     this.loading = false;
+                                                     this.open = true;
+                                                 })
+                                                 .catch(err => {
+                                                     console.error(err);
+                                                     this.loading = false;
+                                                 });
+                                         },
+                                         selectStudent(student) {
+                                             this.selectedId = student.id;
+                                             this.selectedName = student.name + ' (' + student.email + ')';
+                                             this.search = this.selectedName;
+                                             this.open = false;
+                                         }
+                                     }"
+                                     @click.away="open = false"
+                                >
+                                    <input type="hidden" name="student_id" :value="selectedId" required>
+                                    
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-red-500 transition-colors z-10">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                                             <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
                                         </svg>
                                     </div>
-                                    <select name="student_id" id="student_id" class="pl-12 block w-full border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm font-bold transition-all py-3">
-                                        <option value="">-- Cari Intern --</option>
-                                        @foreach($students as $student)
-                                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
-                                        @endforeach
-                                    </select>
+                                    
+                                    <input 
+                                        type="text" 
+                                        x-model="search" 
+                                        @input.debounce.300ms="fetchStudents()"
+                                        @focus="search !== selectedName ? fetchStudents() : open = true"
+                                        placeholder="Ketik nama atau email intern..."
+                                        class="pl-12 block w-full border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm font-bold transition-all py-3"
+                                        autocomplete="off"
+                                    >
+                                    
+                                    <!-- Loading Indicator -->
+                                    <div x-show="loading" class="absolute right-4 top-3.5 flex items-center">
+                                        <svg class="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Dropdown Results -->
+                                    <div x-show="open && results.length > 0" 
+                                         x-transition
+                                         class="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                        <template x-for="student in results" :key="student.id">
+                                            <div @click="selectStudent(student)" 
+                                                 class="px-4 py-3 cursor-pointer hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 transition-colors border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                                                <div class="font-bold text-sm" x-text="student.name"></div>
+                                                <div class="text-xs text-slate-500 opacity-80" x-text="student.email"></div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div x-show="open && results.length === 0 && search.length > 0 && !loading" 
+                                         class="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg p-4 text-center text-sm text-slate-500">
+                                        Tidak ada intern yang ditemukan atau sudah memiliki magang aktif.
+                                    </div>
                                 </div>
                             </div>
 
@@ -91,25 +152,85 @@
                             {{-- Field: Mentor --}}
                             <div class="space-y-1.5">
                                 <x-input-label for="mentor_id" :value="__('Mentor Pembimbing')" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest ml-1" />
-                                <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-red-500 transition-colors">
+                                <div class="relative group"
+                                     x-data="{ 
+                                         search: '', 
+                                         selectedId: '', 
+                                         selectedName: '',
+                                         results: [], 
+                                         open: false,
+                                         loading: false,
+                                         fetchMentors() {
+                                             this.loading = true;
+                                             fetch('/admin/api/search-mentors?q=' + this.search)
+                                                 .then(res => res.json())
+                                                 .then(data => {
+                                                     this.results = data;
+                                                     this.loading = false;
+                                                     this.open = true;
+                                                 })
+                                                 .catch(err => {
+                                                     console.error(err);
+                                                     this.loading = false;
+                                                 });
+                                         },
+                                         selectMentor(mentor) {
+                                             if (mentor.is_full) return;
+                                             this.selectedId = mentor.id;
+                                             this.selectedName = mentor.display_text;
+                                             this.search = this.selectedName;
+                                             this.open = false;
+                                         }
+                                     }"
+                                     @click.away="open = false"
+                                >
+                                    <input type="hidden" name="mentor_id" :value="selectedId" required>
+                                    
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-red-500 transition-colors z-10">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                                             <path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.78.78 0 01-.358-.442 3 3 0 014.308-3.516 6.484 6.484 0 00-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 01-2.07-.655zM16.44 15.98a4.97 4.97 0 002.07-.654.78.78 0 00.357-.442 3 3 0 00-4.308-3.517 6.484 6.484 0 011.907 3.96 2.32 2.32 0 01-.026.654zM18 8a2 2 0 11-4 0 2 2 0 014 0zM5.304 16.19a.844.844 0 01-.277-.71 5 5 0 019.947 0 .843.843 0 01-.277.71A6.975 6.975 0 0110 18a6.974 6.974 0 01-4.696-1.81z" />
                                         </svg>
                                     </div>
-                                    <select name="mentor_id" id="mentor_id" class="pl-12 block w-full border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm font-bold transition-all py-3">
-                                        <option value="">-- Pilih Mentor --</option>
-                                        @foreach($mentors as $mentor)
-                                            @php
-                                                $quota = $mentor->mentorProfile->quota ?? 5;
-                                                $active = $mentor->activeInternships()->count();
-                                                $isFull = $active >= $quota;
-                                            @endphp
-                                            <option value="{{ $mentor->id }}" {{ $isFull ? 'disabled' : '' }} class="{{ $isFull ? 'text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-900/50' : '' }}">
-                                                {{ $mentor->name }} ({{ $active }}/{{ $quota }}) {{ $isFull ? '- Penuh' : '' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    
+                                    <input 
+                                        type="text" 
+                                        x-model="search" 
+                                        @input.debounce.300ms="fetchMentors()"
+                                        @focus="search !== selectedName ? fetchMentors() : open = true"
+                                        placeholder="Ketik nama atau email mentor..."
+                                        class="pl-12 block w-full border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:border-red-500 focus:ring-red-500 rounded-xl shadow-sm font-bold transition-all py-3"
+                                        autocomplete="off"
+                                    >
+                                    
+                                    <!-- Loading Indicator -->
+                                    <div x-show="loading" class="absolute right-4 top-3.5 flex items-center">
+                                        <svg class="animate-spin h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Dropdown Results -->
+                                    <div x-show="open && results.length > 0" 
+                                         x-transition
+                                         class="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                        <template x-for="mentor in results" :key="mentor.id">
+                                            <div @click="selectMentor(mentor)" 
+                                                 :class="{'cursor-not-allowed bg-slate-50 dark:bg-slate-900/50 opacity-60': mentor.is_full, 'cursor-pointer hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400': !mentor.is_full}"
+                                                 class="px-4 py-3 transition-colors border-b border-slate-50 dark:border-slate-700/50 last:border-0 relative">
+                                                <div class="font-bold text-sm" x-text="mentor.name"></div>
+                                                <div class="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
+                                                    <span x-text="mentor.email" class="opacity-80"></span>
+                                                    <span class="inline-block w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                                                    <span :class="mentor.is_full ? 'text-red-500 font-bold' : 'text-emerald-500'">Aktif: <span x-text="mentor.active"></span>/<span x-text="mentor.quota"></span></span>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div x-show="open && results.length === 0 && search.length > 0 && !loading" 
+                                         class="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg p-4 text-center text-sm text-slate-500">
+                                        Tidak ada mentor yang ditemukan.
+                                    </div>
                                 </div>
                             </div>
 

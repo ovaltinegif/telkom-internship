@@ -127,7 +127,99 @@ class LogbookController extends Controller
             'status' => 'pending', // Default status menunggu persetujuan mentor
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Logbook berhasil disimpan!');
+        return redirect()->route('logbooks.index')->with('success', 'Logbook berhasil disimpan!');
+    }
+
+    /**
+     * Menampilkan form edit logbook.
+     */
+    public function edit($id)
+    {
+        $internship = Internship::where('student_id', Auth::id())->first();
+
+        if (!$internship) {
+            return redirect()->route('dashboard')->with('error', 'Data magang tidak ditemukan.');
+        }
+
+        $logbook = DailyLogbook::where('id', $id)
+            ->where('internship_id', $internship->id)
+            ->firstOrFail();
+
+        if ($logbook->status === 'approved') {
+            return redirect()->route('logbooks.index')->with('error', 'Logbook yang sudah disetujui tidak dapat diubah.');
+        }
+
+        return view('logbooks.edit', compact('logbook'));
+    }
+
+    /**
+     * Memperbarui data logbook ke database.
+     */
+    public function update(StoreLogbookRequest $request, $id)
+    {
+        $internship = Internship::where('student_id', Auth::id())->first();
+
+        if (!$internship) {
+            return redirect()->route('dashboard')->with('error', 'Data magang tidak ditemukan.');
+        }
+
+        $logbook = DailyLogbook::where('id', $id)
+            ->where('internship_id', $internship->id)
+            ->firstOrFail();
+
+        if ($logbook->status === 'approved') {
+            return redirect()->route('logbooks.index')->with('error', 'Logbook yang sudah disetujui tidak dapat diubah.');
+        }
+
+        // Handle Upload File Bukti (Jika ada)
+        $evidencePath = $logbook->evidence; // default to old image
+        if ($request->hasFile('evidence')) {
+            // Hapus evidence lama jika ada
+            if ($logbook->evidence && Storage::disk('public')->exists($logbook->evidence)) {
+                Storage::disk('public')->delete($logbook->evidence);
+            }
+            // Simpan ke folder: storage/app/public/evidence
+            $evidencePath = $request->file('evidence')->store('evidence', 'public');
+        }
+
+        $logbook->update([
+            'title' => $request->title,
+            'activity' => $request->activity,
+            'evidence' => $evidencePath,
+            'status' => 'pending', // Kembalikan ke pending agar direview ulang
+            'mentor_notes' => null // Hapus notes lama
+        ]);
+
+        return redirect()->route('logbooks.index')->with('success', 'Logbook berhasil diperbarui!');
+    }
+
+    /**
+     * Menghapus logbook.
+     */
+    public function destroy($id)
+    {
+        $internship = Internship::where('student_id', Auth::id())->first();
+
+        if (!$internship) {
+            return redirect()->route('dashboard')->with('error', 'Data magang tidak ditemukan.');
+        }
+
+        $logbook = DailyLogbook::where('id', $id)
+            ->where('internship_id', $internship->id)
+            ->firstOrFail();
+
+        if ($logbook->status === 'approved') {
+            return redirect()->route('logbooks.index')->with('error', 'Logbook yang sudah disetujui tidak dapat dihapus.');
+        }
+
+        // Hapus evidence jika ada
+        if ($logbook->evidence && Storage::disk('public')->exists($logbook->evidence)) {
+            Storage::disk('public')->delete($logbook->evidence);
+        }
+
+        $logbook->delete();
+
+        return redirect()->route('logbooks.index')->with('success', 'Logbook berhasil dihapus!');
     }
 
     /**

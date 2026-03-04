@@ -64,16 +64,74 @@ class AdminController extends Controller
      */
     public function createInternship()
     {
-        // Ambil user student yang BELUM punya magang (opsional logic-nya, disini kita ambil semua student dulu)
-        $students = User::where('role', 'student')->get();
-
-        // Ambil semua mentor
-        $mentors = User::where('role', 'mentor')->get();
-
-        // Ambil semua divisi
+        // Ambil semua divisi (divisi jumlahnya sedikit, aman di-load semua)
         $divisions = Division::all();
 
-        return view('admin.internships.create', compact('students', 'mentors', 'divisions'));
+        return view('admin.internships.create', compact('divisions'));
+    }
+
+    /**
+     * AJAX Search untuk Student (Max 20 results)
+     */
+    public function searchStudents(Request $request)
+    {
+        $search = $request->query('q');
+
+        $students = User::where('role', 'student')
+            ->whereDoesntHave('internship', function ($q) {
+            // Jangan tampilkan mahasiswa yang sudah magang aktif/onboarding
+            $q->whereIn('status', ['active', 'onboarding']);
+        })
+            ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                }
+                );
+            })
+            ->select('id', 'name', 'email')
+            ->take(20)
+            ->get();
+
+        return response()->json($students);
+    }
+
+    /**
+     * AJAX Search untuk Mentor (Max 20 results, beserta kuota)
+     */
+    public function searchMentors(Request $request)
+    {
+        $search = $request->query('q');
+
+        $mentors = User::where('role', 'mentor')
+            ->with(['mentorProfile', 'activeInternships'])
+            ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                }
+                );
+            })
+            ->take(20)
+            ->get();
+
+        $formattedMentors = $mentors->map(function ($mentor) {
+            $quota = $mentor->mentorProfile->quota ?? 5;
+            $active = $mentor->activeInternships->count();
+            $isFull = $active >= $quota;
+
+            return [
+            'id' => $mentor->id,
+            'name' => $mentor->name,
+            'email' => $mentor->email,
+            'quota' => $quota,
+            'active' => $active,
+            'is_full' => $isFull,
+            'display_text' => "{$mentor->name} ({$active}/{$quota})" . ($isFull ? ' - Penuh' : '')
+            ];
+        });
+
+        return response()->json($formattedMentors);
     }
 
     /**
@@ -307,9 +365,14 @@ class AdminController extends Controller
             'mentor_id' => $request->mentor_id,
         ]);
 
-        // Optional: Send Notification to Student (Queued)
-        if ($internship->student && $internship->student->email) {
-            \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipApproved($internship));
+        try {
+            // Optional: Send Notification to Student (Queued)
+            if ($internship->student && $internship->student->email) {
+                \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipApproved($internship));
+            }
+        }
+        catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send InternshipApproved email: ' . $e->getMessage());
         }
 
         return redirect()->route('admin.internships.index', ['status' => 'pending'])
@@ -330,9 +393,14 @@ class AdminController extends Controller
         // Update status to rejected
         $internship->update(['status' => 'rejected']);
 
-        // Send Rejection Email (Queued)
-        if ($internship->student && $internship->student->email) {
-            \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipRejected($internship));
+        try {
+            // Send Rejection Email (Queued)
+            if ($internship->student && $internship->student->email) {
+                \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipRejected($internship));
+            }
+        }
+        catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send InternshipRejected email: ' . $e->getMessage());
         }
 
         return redirect()->route('admin.internships.index', ['status' => 'pending'])
@@ -375,10 +443,16 @@ class AdminController extends Controller
 
         $message = 'Program magang berhasil diaktifkan. Mahasiswa kini berstatus Aktif dengan Mentor & Divisi terpilih.';
 
-        // Trigger Email Notification (Queued)
-        if ($internship->student && $internship->student->email) {
-            \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipActive($internship, $inductionData));
-            $message .= ' Email notifikasi telah dimasukkan ke antrean.';
+        try {
+            // Trigger Email Notification (Queued)
+            if ($internship->student && $internship->student->email) {
+                \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipActive($internship, $inductionData));
+                $message .= ' Email notifikasi telah antre dikirim.';
+            }
+        }
+        catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send InternshipActive email: ' . $e->getMessage());
+            $message .= ' Namun email gagal dikirim (Cek konfigurasi SMTP Anda).';
         }
 
         return redirect()->route('admin.internships.index', ['status' => 'onboarding'])
@@ -438,6 +512,15 @@ class AdminController extends Controller
                 'is_verified' => true
             ]
             );
+        }
+
+        try {
+            if ($internship->student && $internship->student->email) {
+                \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\InternshipFinished($internship));
+            }
+        }
+        catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send InternshipFinished email: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Dokumen kelulusan berhasil dikirim!');

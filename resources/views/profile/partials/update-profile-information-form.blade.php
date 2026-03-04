@@ -123,8 +123,8 @@
             </div>
         </div>
 
-        <div class="pt-6 border-t border-slate-50 dark:border-slate-800 flex items-center gap-6 transition-colors duration-300">
-            <button type="submit" class="px-10 py-4 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-red-200 dark:shadow-red-900/40">
+        <div class="pt-6 border-t border-slate-50 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-6 transition-colors duration-300">
+            <button type="submit" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-red-200 dark:shadow-red-900/40">
                 {{ __('Simpan Perubahan') }}
             </button>
 

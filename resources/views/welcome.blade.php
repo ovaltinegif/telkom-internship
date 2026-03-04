@@ -51,7 +51,7 @@
                 <div class="hidden sm:flex items-center gap-4">
                      @if (Route::has('login'))
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="px-6 py-3 rounded-full text-[16px] font-bold bg-red-600 text-white hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20">Dashboard</a>
+                            <a href="{{ url('/dashboard') }}" class="w-full sm:w-auto text-center px-6 py-3 rounded-full text-[16px] font-bold bg-red-600 text-white hover:bg-red-700 transition-colors shadow-lg shadow-red-600/20">Dashboard</a>
                         @else
                             <a href="{{ route('login') }}" class="flex items-center gap-2.5 px-6 py-2.5 rounded-full border-2 border-gray-200 text-gray-600 hover:text-red-600 hover:border-red-600 hover:bg-white transition-all text-[14px] font-bold uppercase tracking-wider">
                                 Login 
@@ -91,13 +91,13 @@
             <p class="mt-4 text-xl text-gray-100 max-w-3xl mx-auto mb-10">
                 Ikuti program internship kami untuk mendapatkan pengalaman langsung, mengasah kemampuanmu, dan terlibat dalam proyek nyata yang membawa perubahan.
             </p>
-            <div class="flex justify-center gap-4">
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Go to Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="w-full sm:w-auto text-center bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Go to Dashboard</a>
                 @else
-                    <a href="{{ route('register') }}" class="bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Apply Now</a>
+                    <a href="{{ route('register') }}" class="w-full sm:w-auto text-center bg-[#e60000] text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition">Apply Now</a>
                 @endauth
-                <a href="#" class="bg-white text-gray-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">Contact Us</a>
+                <a href="#" class="w-full sm:w-auto text-center bg-white text-gray-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">Contact Us</a>
             </div>
         </div>
     </section>

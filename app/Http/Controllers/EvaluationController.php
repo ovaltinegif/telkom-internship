@@ -14,7 +14,7 @@ class EvaluationController extends Controller
     {
         // Security Check: Pastikan yang menilai adalah mentor yang benar
         if (auth()->user()->id !== $internship->mentor_id) {
-             abort(403, 'Anda bukan mentor untuk magang ini.');
+            abort(403, 'Anda bukan mentor untuk magang ini.');
         }
 
         return view('mentor.evaluations.create', compact('internship'));
@@ -27,23 +27,33 @@ class EvaluationController extends Controller
         // Validasi input
         $validated = $request->validate([
             'discipline_score' => 'required|integer|min:0|max:100',
-            'technical_score'  => 'required|integer|min:0|max:100',
+            'technical_score' => 'required|integer|min:0|max:100',
             'soft_skill_score' => 'required|integer|min:0|max:100',
-            'feedback'         => 'nullable|string',
+            'feedback' => 'nullable|string',
         ]);
 
         // Hitung nilai akhir (rata-rata) otomatis
         $finalScore = ($request->discipline_score + $request->technical_score + $request->soft_skill_score) / 3;
 
         // Simpan ke database
-        Evaluation::create([
-            'internship_id'    => $internship->id,
+        $evaluation = Evaluation::create([
+            'internship_id' => $internship->id,
             'discipline_score' => $request->discipline_score,
-            'technical_score'  => $request->technical_score,
+            'technical_score' => $request->technical_score,
             'soft_skill_score' => $request->soft_skill_score,
-            'final_score'      => round($finalScore), // Saya tambah round() biar angkanya bulat
-            'feedback'         => $request->feedback,
+            'final_score' => round($finalScore), // Saya tambah round() biar angkanya bulat
+            'feedback' => $request->feedback,
         ]);
+
+        try {
+            // Send Email Notification (Queued)
+            if ($internship->student && $internship->student->email) {
+                \Illuminate\Support\Facades\Mail::to($internship->student->email)->queue(new \App\Mail\EvaluationSubmitted($internship, $evaluation));
+            }
+        }
+        catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send EvaluationSubmitted email: ' . $e->getMessage());
+        }
 
         // Redirect ke detail mahasiswa
         return redirect()->route('mentor.students.show', $internship->student_id)

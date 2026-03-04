@@ -19,7 +19,7 @@
         <button
             x-data=""
             x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-            class="px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-rose-200 dark:shadow-rose-950/40"
+            class="w-full sm:w-auto px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-rose-200 dark:shadow-rose-950/40"
         >{{ __('Hapus Akun Permanen') }}</button>
     </div>
 
@@ -50,12 +50,12 @@
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
-            <div class="mt-10 flex justify-end gap-4">
-                <button type="button" x-on:click="$dispatch('close')" class="px-8 py-3.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+            <div class="mt-10 flex flex-col sm:flex-row justify-end gap-4">
+                <button type="button" x-on:click="$dispatch('close')" class="w-full sm:w-auto px-8 py-3.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
                     {{ __('Batal') }}
                 </button>
 
-                <button type="submit" class="px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-rose-200 dark:shadow-rose-950/40">
+                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-rose-200 dark:shadow-rose-950/40">
                     {{ __('Hapus Sekarang') }}
                 </button>
             </div>
