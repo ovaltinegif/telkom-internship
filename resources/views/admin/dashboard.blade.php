@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-50 dark:bg-slate-950 min-h-screen font-sans transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-12 bg-gray-50 dark:bg-slate-950 min-h-screen font-sans transition-colors duration-300 w-full block">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full block">
             
             {{-- Header Section --}}
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4 border-b border-gray-200 dark:border-slate-800 pb-6 transition-colors duration-300">
+            <div class="flex flex-col w-full block md:flex-row justify-between items-end mb-8 gap-4 border-b border-gray-200 dark:border-slate-800 pb-6 transition-colors duration-300">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-800 dark:text-slate-200 tracking-tight">Dashboard</h1>
                     <p class="text-gray-500 dark:text-slate-400 mt-1">Welcome back, <span class="font-bold text-red-600 dark:text-red-400">{{ Auth::user()->name }}</span>. Here's your daily overview.</p>

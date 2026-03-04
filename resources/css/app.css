@@ -383,3 +383,12 @@
         font-weight: 800 !important;
     }
 }
+
+/* Turbo Progress Bar */
+.turbo-progress-bar {
+    height: 3px;
+    background-color: #dc2626;
+    /* text-red-600 */
+    box-shadow: 0 0 10px #ef4444, 0 0 5px #f87171;
+    /* red glow */
+}

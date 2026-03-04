@@ -348,7 +348,7 @@
             });
         @endif
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('turbo:load', function () {
             const buttons = document.querySelectorAll('.btn-action');
 
             buttons.forEach(button => {

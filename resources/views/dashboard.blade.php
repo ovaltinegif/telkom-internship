@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="flex flex-col w-full md:flex-row justify-between items-start md:items-center gap-4">
             <div class="flex flex-col gap-1">
                 <h2 class="font-bold text-2xl text-slate-800 dark:text-slate-200 leading-tight">
                     @if($internship->status === 'finished')
@@ -733,7 +733,7 @@
     getLocation(); 
 
     // Init Flatpickr for Permission Date
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('turbo:load', function() {
         // Date Picker
         flatpickr("#permission_date", {
             dateFormat: 'Y-m-d',

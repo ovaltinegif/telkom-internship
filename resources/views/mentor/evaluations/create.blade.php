@@ -45,36 +45,39 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                             <!-- Discipline Score -->
-                            <div class="space-y-4">
+                            <div class="space-y-4" x-data="{ score: '' }">
                                 <label for="discipline_score" class="flex items-center gap-2 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">
                                     <span class="w-1.5 h-1.5 bg-red-600 dark:bg-red-500 rounded-full"></span>
                                     Kedisiplinan & Etika
                                 </label>
                                 <input type="number" name="discipline_score" id="discipline_score" min="0" max="100" 
+                                       x-model="score" @input="score = score > 100 ? 100 : (score < 0 ? 0 : score); $el.value = score.toString().slice(0, 3)"
                                        class="w-full px-6 py-4 rounded-2xl border-slate-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 focus:border-red-500 focus:ring-red-500 font-black text-2xl transition-all shadow-inner" 
                                        placeholder="0-100" required>
                                 <p class="text-[9px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-wider pl-1">Kehadiran, attitude, dan etika kerja</p>
                             </div>
 
                             <!-- Technical Score -->
-                            <div class="space-y-4">
+                            <div class="space-y-4" x-data="{ score: '' }">
                                 <label for="technical_score" class="flex items-center gap-2 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">
                                      <span class="w-1.5 h-1.5 bg-red-600 dark:bg-red-500 rounded-full"></span>
                                     Kemampuan Teknis
                                 </label>
                                 <input type="number" name="technical_score" id="technical_score" min="0" max="100" 
+                                       x-model="score" @input="score = score > 100 ? 100 : (score < 0 ? 0 : score); $el.value = score.toString().slice(0, 3)"
                                        class="w-full px-6 py-4 rounded-2xl border-slate-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 focus:border-red-500 focus:ring-red-500 font-black text-2xl transition-all shadow-inner" 
                                        placeholder="0-100" required>
                                 <p class="text-[9px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-wider pl-1">Hard skills dan kualitas hasil kerja</p>
                             </div>
 
                             <!-- Soft Skill Score -->
-                            <div class="space-y-4">
+                            <div class="space-y-4" x-data="{ score: '' }">
                                 <label for="soft_skill_score" class="flex items-center gap-2 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">
                                      <span class="w-1.5 h-1.5 bg-red-600 dark:bg-red-500 rounded-full"></span>
                                     Kerjasama & Soft Skill
                                 </label>
                                 <input type="number" name="soft_skill_score" id="soft_skill_score" min="0" max="100" 
+                                       x-model="score" @input="score = score > 100 ? 100 : (score < 0 ? 0 : score); $el.value = score.toString().slice(0, 3)"
                                        class="w-full px-6 py-4 rounded-2xl border-slate-200 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 focus:border-red-500 focus:ring-red-500 font-black text-2xl transition-all shadow-inner" 
                                        placeholder="0-100" required>
                                 <p class="text-[9px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-wider pl-1">Komunikasi dan kolaborasi tim</p>
@@ -111,7 +114,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('turbo:load', function() {
             // 1. Tombol Simpan
             const btnSave = document.getElementById('btn-save');
             const form = document.getElementById('evaluation-form');

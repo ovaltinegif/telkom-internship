@@ -320,7 +320,7 @@
     @include('partials.footer')
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('turbo:load', function() {
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('nav a[href^="#"]');
 

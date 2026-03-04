@@ -20,6 +20,8 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Scripts -->
+        {{ Vite::useScriptTagAttributes(['data-turbo-track' => 'reload']) }}
+        {{ Vite::useStyleTagAttributes(['data-turbo-track' => 'reload']) }}
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script>
             // Anti-flash script
@@ -49,20 +51,20 @@
         }"
         class="font-sans antialiased text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-950 transition-colors duration-300"
     >
-        <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+        <div class="w-full block min-h-screen bg-slate-50 dark:bg-slate-950">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white dark:bg-slate-900 shadow-sm border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white dark:bg-slate-900 shadow-sm border-b border-gray-100 dark:border-slate-800 transition-colors duration-300 w-full block">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full block">
                         {{ $header }}
                     </div>
                 </header>
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="w-full block">
                 {{ $slot }}
             </main>
         </div>

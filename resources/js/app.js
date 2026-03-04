@@ -20,4 +20,13 @@ window.Swal = Swal.mixin({
 
 Alpine.plugin(intersect);
 Alpine.start();
-AOS.init();
+
+import "@hotwired/turbo";
+
+// Re-initialize AOS on every Turbo page load
+document.addEventListener("turbo:load", function () {
+    AOS.init({
+        duration: 800,
+        once: true,
+    });
+});

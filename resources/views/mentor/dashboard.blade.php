@@ -8,8 +8,8 @@
         </div>
     </x-slot>
 
-    <div class="py-8 bg-white dark:bg-slate-950 min-h-screen transition-colors duration-300">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+    <div class="py-8 bg-white dark:bg-slate-950 min-h-screen transition-colors duration-300 w-full block">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8 w-full block">
             
             {{-- Stats Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
