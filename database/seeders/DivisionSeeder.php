@@ -13,12 +13,11 @@ class DivisionSeeder extends Seeder
      */
     public function run(): void
     {
-       $divisions = [
-            ['name' => 'HC & Finance', 'code' => 'HCF'],
-            ['name' => 'Access & Service Operation', 'code' => 'ASO'],
-            ['name' => 'Sales & Customer Care', 'code' => 'SCC'],
-            ['name' => 'Digital Service & Wifi', 'code' => 'DSW'],
-            ['name' => 'Government Service', 'code' => 'DGS'],
+        $divisions = [
+            ['name' => 'Shared Service and General Support', 'code' => 'SSGS'],
+            ['name' => 'Business Service', 'code' => 'BS'],
+            ['name' => 'Government Service', 'code' => 'GS'],
+            ['name' => 'Performance, Risk, and Quality of Sales', 'code' => 'PRQS'],
         ];
 
         foreach ($divisions as $division) {

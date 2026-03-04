@@ -28,12 +28,10 @@ class DatabaseSeeder extends Seeder
 
         // 1. Buat Data Divisi
         $divisionsData = [
+            ['name' => 'Shared Service and General Support', 'description' => 'Layanan dukungan layanan dan operasional.'],
             ['name' => 'Business Service', 'description' => 'Pengelolaan layanan bisnis.'],
-            ['name' => 'Enterprise Service', 'description' => 'Solusi untuk korporat.'],
             ['name' => 'Government Service', 'description' => 'Layanan untuk pemerintah.'],
-            ['name' => 'Human Capital', 'description' => 'Pengelolaan SDM.'],
-            ['name' => 'Payment Collection', 'description' => 'Manajemen penagihan.'],
-            ['name' => 'Warroom', 'description' => 'Pusat pemantauan jaringan.'],
+            ['name' => 'Performance, Risk, and Quality of Sales', 'description' => 'Manajemen performa dan risiko.'],
         ];
 
         foreach ($divisionsData as $divData) {
