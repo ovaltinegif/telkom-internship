@@ -17,20 +17,7 @@
                     $links = [];
                     
                     if ($roleFn('mentor')) {
-                        $pendingCount = \App\Models\DailyLogbook::whereHas('internship', function($q) {
-                            $q->where('mentor_id', auth()->id());
-                        })->where('status', 'pending')->count();
-
-                        $links = [
-                            ['name' => 'Dashboard', 'route' => 'mentor.dashboard', 'active' => request()->routeIs('mentor.dashboard')],
-                            ['name' => 'Intern', 'route' => 'mentor.students.index', 'active' => request()->routeIs('mentor.students*')],
-                            [
-                                'name' => 'Approval', 
-                                'route' => 'mentor.approvals.index', 
-                                'active' => request()->routeIs('mentor.approvals*'),
-                                'badge' => $pendingCount > 0 ? $pendingCount : null
-                            ],
-                        ];
+                         $links = []; // Mentors use the vertical Sidebar now.
                     } elseif ($roleFn('admin')) {
                          $links = []; // Admins use the vertical Sidebar now.
                     } else {

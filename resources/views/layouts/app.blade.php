@@ -51,13 +51,21 @@
         }"
         class="font-sans antialiased text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-950 transition-colors duration-300"
     >
-        @if(auth()->check() && auth()->user()->role === 'admin')
-            {{-- Admin Layout: Sidebar + Topbar --}}
+        @if(auth()->check() && in_array(auth()->user()->role, ['admin', 'mentor']))
+            {{-- Unified Layout: Sidebar + Topbar --}}
             <div class="flex h-screen overflow-hidden text-slate-800 dark:text-slate-200 antialiased bg-[#f8fafc] dark:bg-slate-950">
-                @include('layouts.admin-sidebar')
+                @if(auth()->user()->role === 'admin')
+                    @include('layouts.admin-sidebar')
+                @else
+                    @include('layouts.mentor-sidebar')
+                @endif
                 
                 <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
-                    @include('layouts.admin-topbar')
+                    @if(auth()->user()->role === 'admin')
+                        @include('layouts.admin-topbar')
+                    @else
+                        @include('layouts.mentor-topbar')
+                    @endif
                     
                     <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#f8fafc] dark:bg-slate-950 transition-colors duration-300 flex flex-col justify-between">
                         <div>
