@@ -182,11 +182,20 @@ class AdminController extends Controller
     {
         $role = $request->query('role');
         $studentType = $request->query('student_type'); // New filter parameter
+        $search = $request->query('search'); // Search query parameter
 
         $users = User::with(['studentProfile', 'mentoredInternships' => function ($query) {
             // Only load active or onboarding internships for display
             $query->whereIn('status', ['active', 'onboarding'])->with('student');
         }])
+            ->when($search, function ($query, $search) {
+            // Search by name or email
+            return $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                }
+                );
+            })
             ->when($role, function ($query, $role) {
             return $query->where('role', $role);
         })
@@ -466,52 +475,26 @@ class AdminController extends Controller
     {
         $internship = Internship::with('student.studentProfile')->findOrFail($id);
 
-        if ($internship->status !== 'finished') {
-            return back()->with('error', 'Status magang belum selesai sehingga belum bisa diproses kelulusannya.');
-        }
+        $request->validate([
+            'dokumen_kelulusan' => 'required|array|min:1',
+            'dokumen_kelulusan.*' => 'file|mimes:pdf|max:5120', // Increased to 5MB per file
+        ]);
 
-        $isSmk = optional($internship->student->studentProfile)->education_level === 'SMK';
+        // Optional: Remove old completion documents if re-uploading
+        $internship->documents()->whereIn('type', ['sertifikat_kelulusan', 'laporan_penilaian_pkl', 'dokumen_kelulusan'])->delete();
 
-        $rules = [
-            'sertifikat_kelulusan' => 'required|file|mimes:pdf|max:2048',
-        ];
+        if ($request->hasFile('dokumen_kelulusan')) {
+            foreach ($request->file('dokumen_kelulusan') as $file) {
+                $path = $file->store('documents/admin', 'public');
+                $originalName = $file->getClientOriginalName();
 
-        if ($isSmk) {
-            $rules['laporan_penilaian_pkl'] = 'required|file|mimes:pdf|max:2048';
-        }
-        else {
-            $rules['laporan_penilaian_pkl'] = 'nullable|file|mimes:pdf|max:2048';
-        }
-
-        $request->validate($rules);
-
-        // Upload Certificate
-        if ($request->hasFile('sertifikat_kelulusan')) {
-            $path = $request->file('sertifikat_kelulusan')->store('documents/admin', 'public');
-
-            // Delete old if exists (optional cleanup) or just add new
-            $internship->documents()->updateOrCreate(
-            ['type' => 'sertifikat_kelulusan'],
-            [
-                'name' => 'Sertifikat Kelulusan Magang',
-                'file_path' => $path,
-                'is_verified' => true
-            ]
-            );
-        }
-
-        // Upload PKL Assessment (Required for SMK, Optional for others)
-        if ($request->hasFile('laporan_penilaian_pkl')) {
-            $path = $request->file('laporan_penilaian_pkl')->store('documents/admin', 'public');
-
-            $internship->documents()->updateOrCreate(
-            ['type' => 'laporan_penilaian_pkl'],
-            [
-                'name' => 'Laporan Penilaian PKL',
-                'file_path' => $path,
-                'is_verified' => true
-            ]
-            );
+                $internship->documents()->create([
+                    'type' => 'dokumen_kelulusan',
+                    'name' => $originalName,
+                    'file_path' => $path,
+                    'is_verified' => true
+                ]);
+            }
         }
 
         try {
@@ -574,5 +557,35 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Pengajuan perpanjangan berhasil ditolak.');
+    }
+
+    /**
+     * Override Attendance (Manual Edit)
+     */
+    public function overrideAttendance(Request $request)
+    {
+        $request->validate([
+            'internship_id' => 'required|exists:internships,id',
+            'date' => 'required|date',
+            'status' => 'required|in:present,sick,permit,alpha',
+            'check_in_time' => 'nullable|date_format:H:i',
+            'check_out_time' => 'nullable|date_format:H:i',
+            'note' => 'nullable|string'
+        ]);
+
+        \App\Models\Attendance::updateOrCreate(
+        [
+            'internship_id' => $request->internship_id,
+            'date' => $request->date,
+        ],
+        [
+            'status' => $request->status,
+            'check_in_time' => $request->check_in_time,
+            'check_out_time' => $request->check_out_time,
+            'note' => $request->note
+        ]
+        );
+
+        return back()->with('success', 'Kehadiran berhasil diedit.');
     }
 }

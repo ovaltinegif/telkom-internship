@@ -1,7 +1,6 @@
 <x-app-layout>
-    {{-- No header slot needed since we have a dedicated topbar --}}
-    
-    <div class="max-w-7xl mx-auto space-y-10 w-full">
+    {{-- Main Scrollable Content Wrapper - Enforcing strict HTML structural fidelity --}}
+    <div class="p-8 lg:p-10 max-w-7xl mx-auto space-y-10 w-full flex-1">
         
         <!-- Welcome Section -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -20,7 +19,7 @@
             @endif
         </div>
 
-        <!-- Premium Stats Grid -->
+        <!-- Premium Stats Grid - STRICT ALIGNMENT grid-cols-1 lg:grid-cols-2 gap-8 -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
             <!-- Stat 1: Total Interns -->
@@ -106,7 +105,7 @@
                         <input type="text" placeholder="Search interns..." class="pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500 outline-none transition-all dark:text-white w-full sm:w-64">
                     </div>
                     <a href="{{ route('mentor.students.index') }}" class="p-2 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-500 hover:text-red-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" title="View all Interns">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                     </a>
                 </div>
             </div>
@@ -128,7 +127,8 @@
                             <td class="px-8 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-4">
                                     <div class="h-11 w-11 relative">
-                                        @if($internship->student->studentProfile && $internship->student->studentProfile->photo)
+                                        {{-- Null Safe Student & Profile check --}}
+                                        @if(optional(optional($internship->student)->studentProfile)->photo)
                                             <img class="h-11 w-11 rounded-full object-cover shadow-sm border-2 border-white dark:border-slate-800" src="{{ asset('storage/' . $internship->student->studentProfile->photo) }}" alt="Student">
                                         @else
                                             <div class="h-11 w-11 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold border-2 border-white dark:border-slate-800 shadow-sm">
@@ -141,14 +141,18 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-red-600 transition-colors">{{ optional($internship->student)->name ?? 'Unknown' }}</div>
-                                        <div class="text-[11px] font-bold text-slate-500 mt-0.5">{{ optional(optional($internship->student)->studentProfile)->university ?? 'Universitas' }}</div>
+                                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-red-600 transition-colors">
+                                            {{ optional($internship->student)->name ?? 'Unknown Student' }}
+                                        </div>
+                                        <div class="text-[11px] font-bold text-slate-500 mt-0.5">
+                                            {{ optional(optional($internship->student)->studentProfile)->university ?? 'Universitas Tidak Diketahui' }}
+                                        </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-8 py-4 whitespace-nowrap">
-                                <div class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ optional($internship->division)->name ?? '-' }}</div>
-                                <div class="text-xs text-slate-500">{{ optional($internship->position)->name ?? '-' }}</div>
+                                <div class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ optional($internship->division)->name ?? 'No Division' }}</div>
+                                <div class="text-xs text-slate-500">{{ optional($internship->position)->name ?? 'No Target Role' }}</div>
                             </td>
                             <td class="px-8 py-4 whitespace-nowrap">
                                 @if($internship->status == 'active')
@@ -161,7 +165,8 @@
                                         Completed
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 uppercase tracking-widest">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 uppercase tracking-widest animate-pulse">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                         {{ $internship->status }}
                                     </span>
                                 @endif

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Database User Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        telkom: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden text-slate-800 antialiased">
+
+    <!-- Sidebar (Simplified for reference) -->
+    <aside
+        class="w-64 bg-white border-r border-slate-200 hidden lg:flex flex-col z-20 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+        <div class="h-20 flex items-center px-6 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-gradient-to-br from-telkom-500 to-telkom-700 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-telkom-500/30">
+                    T</div>
+                <span class="font-extrabold text-xl tracking-tight text-slate-900">Internship</span>
+            </div>
+        </div>
+        <div class="px-6 py-4">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Main Menu</p>
+            <nav class="space-y-1">
+                <a href="#"
+                    class="flex items-center gap-3 px-3 py-2.5 text-slate-500 rounded-lg font-medium hover:text-slate-800 hover:bg-slate-50 transition-all group">
+                    <svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                        </path>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 px-3 py-2.5 bg-telkom-50 text-telkom-700 rounded-lg font-semibold border border-telkom-100 shadow-sm transition-all group">
+                    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                    Database User
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+
+        <!-- Header / Topbar -->
+        <header
+            class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0">
+            <div class="flex items-center gap-4">
+                <button class="lg:hidden text-slate-500 hover:text-slate-800">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Search bar subtle -->
+                <div
+                    class="hidden md:flex items-center bg-slate-100 rounded-full px-4 py-2 border border-transparent focus-within:bg-white focus-within:border-slate-300 focus-within:shadow-sm transition-all w-64">
+                    <svg class="w-4 h-4 text-slate-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" placeholder="Quick search..."
+                        class="bg-transparent border-none outline-none text-sm w-full text-slate-700 placeholder-slate-400">
+                </div>
+
+                <!-- Notifications -->
+                <button class="text-slate-400 hover:text-slate-600 transition-colors relative">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                        </path>
+                    </svg>
+                    <span
+                        class="absolute top-0 right-0 w-2.5 h-2.5 bg-telkom-500 border-2 border-white rounded-full"></span>
+                </button>
+
+                <!-- Profile -->
+                <div class="flex items-center gap-3 pl-6 border-l border-slate-200">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-semibold text-slate-800">Admin User</p>
+                        <p class="text-xs text-slate-500">Administrator</p>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden cursor-pointer hover:ring-2 ring-slate-200 transition-all">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=dc2626&color=fff&bold=true"
+                            alt="Profile" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Scrollable Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#f8fafc] p-6 lg:p-10">
+
+            <div class="max-w-7xl mx-auto space-y-8">
+
+                <!-- Page Title Area (Replaces standard header slot) -->
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Data User</h2>
+                    <p class="text-slate-500 mt-2 text-sm md:text-base">Manage all registered users, roles, and access
+                        across the application.</p>
+                </div>
+
+                <!-- Main Container -->
+                <div
+                    class="bg-white rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-slate-100 overflow-hidden">
+
+                    <div class="p-8">
+                        <!-- Controls Row: Tabs & Actions -->
+                        <div
+                            class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 border-b border-slate-100 pb-6 mb-6">
+
+                            <!-- Premium Tabs -->
+                            <nav class="flex space-x-2 overflow-x-auto w-full xl:w-auto" aria-label="Tabs">
+                                <a href="#"
+                                    class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-telkom-50 text-telkom-700 border border-telkom-100 shadow-sm flex items-center whitespace-nowrap">
+                                    All Users
+                                    <span
+                                        class="ml-2 bg-white text-telkom-600 py-0.5 px-2.5 rounded-full text-[10px] font-black shadow-sm">248</span>
+                                </a>
+                                <a href="#"
+                                    class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-500 hover:text-slate-800 hover:bg-slate-50 border border-transparent whitespace-nowrap flex items-center">
+                                    Intern
+                                </a>
+                                <a href="#"
+                                    class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-500 hover:text-slate-800 hover:bg-slate-50 border border-transparent whitespace-nowrap flex items-center">
+                                    Mentors
+                                </a>
+                            </nav>
+
+                            <!-- Actions & Filters -->
+                            <div class="flex items-center gap-3 w-full xl:w-auto">
+                                <div class="relative flex-1 xl:w-64">
+                                    <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                    <input type="text" placeholder="Search by name, email..."
+                                        class="pl-9 pr-4 py-2.5 w-full bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-telkom-500/20 focus:border-telkom-500 outline-none transition-all placeholder-slate-400 font-medium text-slate-700">
+                                </div>
+                                <button
+                                    class="px-4 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 hover:text-slate-900 transition-all font-semibold text-sm shadow-sm active:scale-95 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
+                                        </path>
+                                    </svg>
+                                    <span class="hidden sm:inline">Filter</span>
+                                </button>
+                                <button
+                                    class="px-4 py-2.5 bg-telkom-600 text-white rounded-xl hover:bg-telkom-700 transition-all font-semibold text-sm shadow-[0_4px_14px_0_rgba(220,38,38,0.39)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.23)] active:scale-95 flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4"></path>
+                                    </svg>
+                                    <span class="hidden sm:inline">Add User</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-slate-100">
+                                <thead class="bg-slate-50/50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-5 text-left text-xs font-black text-slate-400 uppercase tracking-widest rounded-tl-xl rounded-bl-xl">
+                                            User Detail</th>
+                                        <th scope="col"
+                                            class="px-6 py-5 text-left text-xs font-black text-slate-400 uppercase tracking-widest">
+                                            Role</th>
+                                        <th scope="col"
+                                            class="px-6 py-5 text-left text-xs font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell">
+                                            Registered</th>
+                                        <th scope="col"
+                                            class="px-6 py-5 text-center text-xs font-black text-slate-400 uppercase tracking-widest rounded-tr-xl rounded-br-xl">
+                                            Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100/80">
+                                    <!-- Row 1: Admin -->
+                                    <tr class="hover:bg-slate-50/80 transition-colors group">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center gap-4">
+                                                <div class="relative">
+                                                    <div
+                                                        class="h-11 w-11 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-sm border-2 border-white group-hover:scale-105 transition-transform">
+                                                        A
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div
+                                                        class="text-sm font-bold text-slate-800 transition-colors group-hover:text-telkom-600">
+                                                        Admin Utama</div>
+                                                    <div
+                                                        class="text-[11px] font-bold text-slate-400 tracking-wider mt-0.5">
+                                                        admin@telkom.id</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-3 py-1 inline-flex text-[10px] uppercase tracking-widest font-black rounded-lg shadow-sm bg-purple-50 text-purple-600 border border-purple-100 transition-all">
+                                                <span
+                                                    class="w-1.5 h-1.5 rounded-full bg-purple-500 mr-1.5 self-center"></span>
+                                                Admin
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                                            <div class="text-sm font-bold text-slate-600">12 Jan 2026</div>
+                                            <div class="text-[11px] font-medium text-slate-400 mt-0.5">2 months ago
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-telkom-600 hover:border-telkom-200 hover:bg-telkom-50 transition-all cursor-pointer shadow-sm group-hover:shadow hover:scale-105 active:scale-95"
+                                                title="Edit User">
+                                                <svg class="w-4 h-4 text-slate-500 group-hover:text-telkom-600"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 2: Mentor -->
+                                    <tr class="hover:bg-slate-50/80 transition-colors group">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center gap-4">
+                                                <div class="relative">
+                                                    <div
+                                                        class="h-11 w-11 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-lg shadow-sm border-2 border-white group-hover:scale-105 transition-transform">
+                                                        B
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div
+                                                        class="text-sm font-bold text-slate-800 transition-colors group-hover:text-telkom-600">
+                                                        Budi Santoso</div>
+                                                    <div
+                                                        class="text-[11px] font-bold text-slate-400 tracking-wider mt-0.5">
+                                                        budi@telkom.id</div>
+                                                    <!-- Optional sub-info like mentored interns -->
+                                                    <div class="mt-2 flex flex-wrap gap-1">
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 border border-slate-200">
+                                                            <svg class="mr-1 h-3 w-3 text-slate-400"
+                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                                fill="currentColor">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                            Dimas R.
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-3 py-1 inline-flex text-[10px] uppercase tracking-widest font-black rounded-lg shadow-sm bg-blue-50 text-blue-600 border border-blue-100 transition-all">
+                                                <span
+                                                    class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5 self-center"></span>
+                                                Mentor
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                                            <div class="text-sm font-bold text-slate-600">14 Jan 2026</div>
+                                            <div class="text-[11px] font-medium text-slate-400 mt-0.5">2 months ago
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-telkom-600 hover:border-telkom-200 hover:bg-telkom-50 transition-all cursor-pointer shadow-sm group-hover:shadow hover:scale-105 active:scale-95"
+                                                title="Edit User">
+                                                <svg class="w-4 h-4 text-slate-500 group-hover:text-telkom-600"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 3: Intern (Mahasiswa) -->
+                                    <tr class="hover:bg-slate-50/80 transition-colors group">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center gap-4">
+                                                <div class="relative">
+                                                    <div
+                                                        class="h-11 w-11 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-lg shadow-sm border-2 border-white group-hover:scale-105 transition-transform">
+                                                        D
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div
+                                                        class="text-sm font-bold text-slate-800 transition-colors group-hover:text-telkom-600">
+                                                        Dimas Raditya</div>
+                                                    <div
+                                                        class="text-[11px] font-bold text-slate-400 tracking-wider mt-0.5">
+                                                        dimas@student.id</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-3 py-1 inline-flex text-[10px] uppercase tracking-widest font-black rounded-lg shadow-sm bg-emerald-50 text-emerald-600 border border-emerald-100 transition-all">
+                                                <span
+                                                    class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 self-center"></span>
+                                                Mahasiswa
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                                            <div class="text-sm font-bold text-slate-600">10 Feb 2026</div>
+                                            <div class="text-[11px] font-medium text-slate-400 mt-0.5">1 month ago</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-telkom-600 hover:border-telkom-200 hover:bg-telkom-50 transition-all cursor-pointer shadow-sm group-hover:shadow hover:scale-105 active:scale-95"
+                                                title="Edit User">
+                                                <svg class="w-4 h-4 text-slate-500 group-hover:text-telkom-600"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 4: Intern (SMK) -->
+                                    <tr class="hover:bg-slate-50/80 transition-colors group border-b-0">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center gap-4">
+                                                <div class="relative">
+                                                    <div
+                                                        class="h-11 w-11 rounded-full bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg shadow-sm border-2 border-white group-hover:scale-105 transition-transform">
+                                                        A
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div
+                                                        class="text-sm font-bold text-slate-800 transition-colors group-hover:text-telkom-600">
+                                                        Arya Pertama</div>
+                                                    <div
+                                                        class="text-[11px] font-bold text-slate-400 tracking-wider mt-0.5">
+                                                        arya@smk.id</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-3 py-1 inline-flex text-[10px] uppercase tracking-widest font-black rounded-lg shadow-sm bg-indigo-50 text-indigo-600 border border-indigo-100 transition-all">
+                                                <span
+                                                    class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5 self-center"></span>
+                                                SMK
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                                            <div class="text-sm font-bold text-slate-600">12 Feb 2026</div>
+                                            <div class="text-[11px] font-medium text-slate-400 mt-0.5">1 month ago</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-telkom-600 hover:border-telkom-200 hover:bg-telkom-50 transition-all cursor-pointer shadow-sm group-hover:shadow hover:scale-105 active:scale-95"
+                                                title="Edit User">
+                                                <svg class="w-4 h-4 text-slate-500 group-hover:text-telkom-600"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Premium Pagination -->
+                        <div class="mt-8 flex items-center justify-between border-t border-slate-100 pt-6">
+                            <span
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden sm:block">Showing
+                                1 to 10 of 248 entries</span>
+
+                            <div
+                                class="flex items-center gap-1 bg-slate-50 rounded-xl p-1 border border-slate-100 shadow-sm mx-auto sm:mx-0">
+                                <button
+                                    class="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-white transition-all shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </button>
+
+                                <button
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold bg-white text-telkom-600 shadow-sm border border-slate-200 transition-all">1</button>
+                                <button
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-slate-500 hover:bg-white hover:text-slate-800 transition-all">2</button>
+                                <button
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-slate-500 hover:bg-white hover:text-slate-800 transition-all">3</button>
+
+                                <span class="px-1 text-slate-400">...</span>
+                                <button
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-slate-500 hover:bg-white hover:text-slate-800 transition-all">25</button>
+
+                                <button
+                                    class="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-white transition-all shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <footer class="mt-16 text-center text-sm font-medium text-slate-400 pb-4">
+                &copy; 2026 Telkom Internship Dashboard. Design Layout Reference.
+            </footer>
+        </main>
+    </div>
+
+</body>
+
+</html>

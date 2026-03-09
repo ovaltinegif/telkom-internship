@@ -1,9 +1,11 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-slate-900 w-64 border-r border-gray-100 dark:border-slate-800 hidden lg:flex flex-col z-20 h-screen sticky top-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)] transition-colors duration-300">
     {{-- Logo Area --}}
     <div class="h-20 flex items-center px-6 border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
-        <a href="{{ route('mentor.dashboard') }}" class="flex items-center gap-3 group transition-transform duration-300 hover:scale-105">
-            <img src="{{ asset('images/logo-telkom.png') }}" class="h-[40px] w-auto dark:hidden" alt="Telkom Indonesia">
-            <img src="{{ asset('images/logo-telkom-white.png') }}" class="h-[40px] w-auto hidden dark:block" alt="Telkom Indonesia logo">
+        <a href="{{ route('mentor.dashboard') }}" class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-red-500/30">
+                T
+            </div>
+            <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white transition-colors duration-300">Internship</span>
         </a>
     </div>
 
