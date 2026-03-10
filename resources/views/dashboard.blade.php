@@ -138,30 +138,30 @@
                                     </div>
                                 @endif
 
-                                {{-- 3. Sertifikat & Penilaian (Dokumen Kelulusan) --}}
+                                {{-- 3. Sertifikat & Penilaian (Semua Dokumen Kelulusan) --}}
                                 @php
-                                    $certDoc = $internship->documents->where('type', 'sertifikat_kelulusan')->first();
-                                    $pklDoc = $internship->documents->where('type', 'laporan_penilaian_pkl')->first();
+                                    $gradDocs = $internship->documents->whereIn('type', ['sertifikat_kelulusan', 'laporan_penilaian_pkl', 'dokumen_kelulusan']);
                                 @endphp
                                 
-                                @if($certDoc)
-                                    <a href="{{ Storage::url($certDoc->file_path) }}" target="_blank" class="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md text-white border border-white/30 px-6 py-3 rounded-2xl font-bold hover:bg-black/30 transition-all shadow-lg active:scale-95">
-                                        🎖️ Sertifikat Magang
+                                @foreach($gradDocs as $doc)
+                                    <a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md text-white border border-white/30 px-6 py-3 rounded-2xl font-bold hover:bg-black/30 transition-all shadow-lg active:scale-95">
+                                        @if(str_contains(strtolower($doc->name), 'sertifikat'))
+                                            🎖️
+                                        @elseif(str_contains(strtolower($doc->name), 'nilai') || str_contains(strtolower($doc->name), 'penilaian'))
+                                            📋
+                                        @else
+                                            📄
+                                        @endif
+                                        {{ $doc->name }}
                                     </a>
-                                @endif
-
-                                @if($pklDoc)
-                                    <a href="{{ Storage::url($pklDoc->file_path) }}" target="_blank" class="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md text-white border border-white/30 px-6 py-3 rounded-2xl font-bold hover:bg-black/30 transition-all shadow-lg active:scale-95">
-                                        📋 Penilaian PKL
-                                    </a>
-                                @endif
+                                @endforeach
 
                                 {{-- 4. Laporan Akhir --}}
                                 <button @click="$dispatch('open-final-report-modal')" class="inline-flex items-center gap-2 bg-indigo-600/40 backdrop-blur-md text-white border border-indigo-400/40 px-6 py-3 rounded-2xl font-bold hover:bg-indigo-600/60 transition-all shadow-lg active:scale-95">
                                     📁 Laporan Akhir
                                 </button>
 
-                                @if(!$certDoc && !$pklDoc)
+                                @if($gradDocs->isEmpty())
                                     <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white/80 border border-white/20 px-6 py-3 rounded-2xl font-bold italic text-sm">
                                         ⌛ Dokumen kelulusan sedang diproses...
                                     </div>

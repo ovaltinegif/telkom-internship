@@ -18,97 +18,151 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 0. Buat Akun ADMIN
-        $adminEmail = 'admin@telkom.co.id';
-        User::updateOrCreate(['email' => $adminEmail], [
+        // 1. Create Admin
+        User::updateOrCreate(['email' => 'admin@telkom.co.id'], [
             'name' => 'Super Admin',
             'password' => Hash::make('password'),
             'role' => 'admin',
         ]);
 
-        // 1. Buat Data Divisi
-        $divisionsData = [
-            ['name' => 'Shared Service and General Support', 'description' => 'Layanan dukungan layanan dan operasional.'],
-            ['name' => 'Business Service', 'description' => 'Pengelolaan layanan bisnis.'],
-            ['name' => 'Government Service', 'description' => 'Layanan untuk pemerintah.'],
-            ['name' => 'Performance, Risk, and Quality of Sales', 'description' => 'Manajemen performa dan risiko.'],
+        // 2. Create Divisions
+        $divisions = [
+            ['name' => 'Shared Service and General Support', 'code' => 'SSGS'],
+            ['name' => 'Business Service', 'code' => 'BS'],
+            ['name' => 'Government Service', 'code' => 'GS'],
+            ['name' => 'Performance, Risk, and Quality of Sales', 'code' => 'PRQS'],
         ];
-
-        foreach ($divisionsData as $divData) {
+        foreach ($divisions as $divData) {
             Division::updateOrCreate(['name' => $divData['name']], $divData);
         }
-
         $allDivisions = Division::all();
 
-        // 2. Buat 3 Akun MENTOR secara terstruktur
+        // 3. Create exactamente 4 Mentors (Quota 7)
         $mentors = [];
-        for ($i = 1; $i <= 3; $i++) {
-            $mentor = User::updateOrCreate(['email' => "mentor{$i}@telkom.co.id"], [
-                'name' => "Mentor {$i}",
+        for ($i = 1; $i <= 4; $i++) {
+            $mentor = User::create([
+                'name' => "Mentor $i",
+                'email' => "mentor$i@telkom.co.id",
                 'password' => Hash::make('password'),
                 'role' => 'mentor',
             ]);
-            MentorProfile::updateOrCreate(['user_id' => $mentor->id], [
-                'nik' => fake()->unique()->numerify('##########'),
-                'position' => 'Senior Specialist',
-                'quota' => 3,
+
+            MentorProfile::create([
+                'user_id' => $mentor->id,
+                'nik' => "NIK-M-00$i",
+                'position' => 'Senior Developer',
+                'quota' => 7,
             ]);
+
             $mentors[] = $mentor;
         }
 
-        // 3. Buat 9 Akun Mahasiswa/Intern (3 per Mentor)
-        for ($i = 1; $i <= 9; $i++) {
-            $internEmail = ($i === 1) ? 'ashclapping@gmail.com' : "intern{$i}@gmail.com";
+        // 4. Create Internships (40 Total)
 
-            $intern = User::updateOrCreate(['email' => $internEmail], [
-                'name' => "Intern {$i}",
+        // A. 10 Pending (mentor_id = null)
+        for ($i = 1; $i <= 10; $i++) {
+            $user = User::create([
+                'name' => "Pending Intern $i",
+                'email' => "pending$i@student.com",
                 'password' => Hash::make('password'),
                 'role' => 'student',
             ]);
-
-            StudentProfile::updateOrCreate(['user_id' => $intern->id], [
-                'university' => fake()->company(),
-                'major' => 'Informatics / Engineering',
-                'education_level' => fake()->randomElement(['D3', 'D4', 'S1']),
-                'nim' => fake()->unique()->numerify('##########'),
-                'phone' => fake()->phoneNumber(),
+            StudentProfile::create([
+                'user_id' => $user->id,
+                'university' => 'University A',
+                'major' => 'IT',
+                'nim' => "NIM-P-00$i"
             ]);
+            Internship::create([
+                'student_id' => $user->id,
+                'status' => 'pending',
+                'mentor_id' => null,
+                'division_id' => null,
+                'start_date' => now()->addDays(7),
+                'end_date' => now()->addMonths(3),
+            ]);
+        }
 
-            // Buat Internship Terkait
-            $internship = Internship::updateOrCreate(['student_id' => $intern->id], [
-                'mentor_id' => $mentors[($i - 1) % 3]->id,
+        // B. 5 Onboarding (mentor_id = null)
+        for ($i = 1; $i <= 5; $i++) {
+            $user = User::create([
+                'name' => "Onboarding Intern $i",
+                'email' => "onboarding$i@student.com",
+                'password' => Hash::make('password'),
+                'role' => 'student',
+            ]);
+            StudentProfile::create([
+                'user_id' => $user->id,
+                'university' => 'University B',
+                'major' => 'Design',
+                'nim' => "NIM-O-00$i"
+            ]);
+            Internship::create([
+                'student_id' => $user->id,
+                'status' => 'onboarding',
+                'mentor_id' => null,
                 'division_id' => $allDivisions->random()->id,
-                'status' => 'active',
-                'start_date' => now()->subMonths(1)->format('Y-m-d'),
-                'end_date' => now()->addMonths(2)->format('Y-m-d'),
-                'location' => 'Semarang',
+                'start_date' => now()->addDays(2),
+                'end_date' => now()->addMonths(3),
             ]);
+        }
 
-            // Generate riwayat Absensi & Logbook secara acak (15 hari terakhir)
-            for ($d = 0; $d < 15; $d++) {
-                $date = now()->subDays($d);
-                if (!$date->isWeekend()) {
-                    \App\Models\Attendance::updateOrCreate(
-                    ['internship_id' => $internship->id, 'date' => $date->format('Y-m-d')],
-                    [
-                        'status' => 'present',
-                        'check_in_time' => '08:00:00',
-                        'check_out_time' => '17:00:00',
-                        'check_in_lat' => -6.992,
-                        'check_in_long' => 110.422,
-                    ]
-                    );
+        // C. 20 Active (Exactly 5 per mentor, split 10 SMK / 10 Mahasiswa)
+        $activeTotal = 0;
+        foreach ($mentors as $mIndex => $mentor) {
+            for ($i = 1; $i <= 5; $i++) {
+                $activeTotal++;
+                $isSmk = $activeTotal <= 10;
 
-                    \App\Models\DailyLogbook::updateOrCreate(
-                    ['internship_id' => $internship->id, 'date' => $date->format('Y-m-d')],
-                    [
-                        'activity' => fake()->sentence(8),
-                        'status' => 'approved',
-                        'mentor_note' => 'Kerja bagus!',
-                    ]
-                    );
-                }
+                $user = User::create([
+                    'name' => "Active Intern $activeTotal (" . ($isSmk ? 'SMK' : 'Mahasiswa') . ")",
+                    'email' => "active$activeTotal@student.com",
+                    'password' => Hash::make('password'),
+                    'role' => 'student',
+                ]);
+
+                StudentProfile::create([
+                    'user_id' => $user->id,
+                    'university' => $isSmk ? 'SMK Telkom' : 'University C',
+                    'major' => $isSmk ? 'TKJ' : 'Network',
+                    'nim' => "NIM-A-00$activeTotal",
+                    'education_level' => $isSmk ? 'SMK' : 'S1',
+                    'student_type' => $isSmk ? 'siswa' : 'mahasiswa'
+                ]);
+
+                Internship::create([
+                    'student_id' => $user->id,
+                    'status' => 'active',
+                    'mentor_id' => $mentor->id,
+                    'division_id' => $allDivisions->random()->id,
+                    'start_date' => now()->subMonths(1),
+                    'end_date' => now()->addMonths(2),
+                ]);
             }
+        }
+
+        // D. 5 Finished (Randomly assign to mentors)
+        for ($i = 1; $i <= 5; $i++) {
+            $user = User::create([
+                'name' => "Finished Intern $i",
+                'email' => "finished$i@student.com",
+                'password' => Hash::make('password'),
+                'role' => 'student',
+            ]);
+            StudentProfile::create([
+                'user_id' => $user->id,
+                'university' => 'University D',
+                'major' => 'Finance',
+                'nim' => "NIM-F-00$i"
+            ]);
+            Internship::create([
+                'student_id' => $user->id,
+                'status' => 'finished',
+                'mentor_id' => $mentors[array_rand($mentors)]->id,
+                'division_id' => $allDivisions->random()->id,
+                'start_date' => now()->subMonths(4),
+                'end_date' => now()->subDays(5),
+            ]);
         }
     }
 }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('mentor_profiles', function (Blueprint $table) {
-            $table->integer('quota')->default(5)->after('position');
+            $table->integer('quota')->default(7)->after('position');
         });
     }
 

@@ -184,12 +184,33 @@ class AdminController extends Controller
         $studentType = $request->query('student_type'); // New filter parameter
         $search = $request->query('search'); // Search query parameter
 
+        // Base query for all active/pending users (excluding admins, rejected, finished)
+        $baseQuery = User::where('role', '!=', 'admin')
+            ->whereDoesntHave('internship', function ($query) {
+            $query->whereIn('status', ['rejected', 'finished']);
+        });
+
+        // Global counts for tabs (Before category filters or search)
+        $totalAll = $baseQuery->count();
+        $totalMentors = (clone $baseQuery)->where('role', 'mentor')->count();
+        $totalStudents = (clone $baseQuery)->where('role', 'student')->count();
+
+        // Sub-counts for students (Mahasiswa vs SMK)
+        $studentMahasiswaCount = (clone $baseQuery)->where('role', 'student')
+            ->whereHas('studentProfile', function ($q) {
+            $q->where('student_type', 'mahasiswa')->where('education_level', '!=', 'SMK');
+        })->count();
+
+        $studentSmkCount = (clone $baseQuery)->where('role', 'student')
+            ->whereHas('studentProfile', function ($q) {
+            $q->where('student_type', 'siswa')->orWhere('education_level', 'SMK');
+        })->count();
+
+        // Main filter and search query
         $users = User::with(['studentProfile', 'mentoredInternships' => function ($query) {
-            // Only load active or onboarding internships for display
             $query->whereIn('status', ['active', 'onboarding'])->with('student');
         }])
             ->when($search, function ($query, $search) {
-            // Search by name or email
             return $query->where(function ($q) use ($search) {
                     $q->where('name', 'LIKE', "%{$search}%")
                         ->orWhere('email', 'LIKE', "%{$search}%");
@@ -199,7 +220,6 @@ class AdminController extends Controller
             ->when($role, function ($query, $role) {
             return $query->where('role', $role);
         })
-            // Apply student type filter if role is student and filter is set
             ->when($role === 'student' && $studentType, function ($query) use ($studentType) {
             return $query->whereHas('studentProfile', function ($q) use ($studentType) {
                     if ($studentType === 'smk') {
@@ -211,14 +231,18 @@ class AdminController extends Controller
                 }
                 );
             })
-            ->where('role', '!=', 'admin') // Exclude admins from the management database
+            ->where('role', '!=', 'admin')
             ->whereDoesntHave('internship', function ($query) {
-            $query->where('status', 'rejected');
+            $query->whereIn('status', ['rejected', 'finished']);
         })
             ->latest()
-            ->paginate(10); // Pagination
+            ->paginate(10);
 
-        return view('admin.users.index', compact('users', 'role', 'studentType'));
+        return view('admin.users.index', compact(
+            'users', 'role', 'studentType',
+            'totalAll', 'totalMentors', 'totalStudents',
+            'studentMahasiswaCount', 'studentSmkCount'
+        ));
     }
 
     /**

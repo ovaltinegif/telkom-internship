@@ -34,12 +34,14 @@
                         Send Certificate
                     </button>
                     @endif
+                    @if($internship->status !== 'finished')
                     <button type="button" onclick="document.getElementById('overrideModal').classList.remove('hidden')" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 text-slate-700 dark:text-slate-300 hover:text-indigo-700 dark:hover:text-indigo-400 rounded-xl font-bold text-xs uppercase tracking-widest shadow-sm hover:shadow transition-all active:scale-95 duration-200 whitespace-nowrap">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
                             <path fill-rule="evenodd" d="M16.47 2.05a3.15 3.15 0 014.45 4.45l-9.8 9.8a3.75 3.75 0 01-1.66.98l-3.32.83a.75.75 0 01-.93-.93l.83-3.32a3.75 3.75 0 01.98-1.66l9.45-9.45zm2.33 1.06a1.65 1.65 0 00-2.33 0l-.82.82 2.33 2.33.82-.82a1.65 1.65 0 000-2.33zm-4.21 2.94L12.26 8.38l2.33 2.33 2.33-2.33-2.33-2.33zM5.25 5.25A2.25 2.25 0 003 7.5v11.25A2.25 2.25 0 005.25 21h11.25A2.25 2.25 0 0018.75 18.75v-5.25a.75.75 0 00-1.5 0v5.25a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V7.5a.75.75 0 01.75-.75h5.25a.75.75 0 000-1.5H5.25z" clip-rule="evenodd" />
                         </svg>
                         Edit Kehadiran
                     </button>
+                    @endif
                     <button type="button" onclick="window.history.back()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white dark:text-slate-100 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-slate-900/20 dark:shadow-none hover:shadow-slate-900/40 transition-all active:scale-95 duration-200 whitespace-nowrap">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
@@ -164,18 +166,6 @@
                             <h3 class="font-bold text-slate-800 dark:text-slate-100 transition-colors">Detail Pelaksanaan</h3>
                             <div class="flex items-center gap-3">
                                 @if($internship->status === 'finished')
-                                    <button type="button" 
-                                        @click="$dispatch('open-completion-modal', { 
-                                            id: {{ $internship->id }}, 
-                                            isSmk: {{ optional($profile)->education_level === 'SMK' ? 'true' : 'false' }}, 
-                                            name: '{{ addslashes($internship->student->name) }}' 
-                                        })"
-                                        class="mr-2 inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors group">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                                        </svg>
-                                        Unggah Dokumen
-                                    </button>
                                     <span class="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 text-[10px] px-3 py-1.5 rounded-lg font-black uppercase tracking-widest border border-indigo-200 dark:border-indigo-500/30 shadow-sm transition-colors">
                                         Status: Selesai
                                     </span>

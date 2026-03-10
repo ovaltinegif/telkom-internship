@@ -27,34 +27,50 @@
                             <a href="{{ route('admin.users.index') }}" 
                                class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center whitespace-nowrap {{ !request('role') ? 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-100 dark:border-red-500/20 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 border border-transparent' }}">
                                 All Users
-                                @if(!request('role'))
-                                    <span class="ml-2 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 py-0.5 px-2.5 rounded-full text-[10px] font-black shadow-sm dark:border dark:border-slate-700">{{ $users->total() }}</span>
-                                @endif
+                                <span class="ml-2 {{ !request('role') ? 'bg-white dark:bg-slate-800 text-red-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-500' }} dark:text-red-400 py-0.5 px-2.5 rounded-full text-[10px] font-black shadow-sm dark:border dark:border-slate-700">{{ $totalAll }}</span>
                             </a>
 
                             {{-- Intern --}}
                             <a href="{{ route('admin.users.index', ['role' => 'student']) }}" 
                                class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center whitespace-nowrap {{ request('role') == 'student' ? 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-100 dark:border-red-500/20 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 border border-transparent' }}">
                                 Intern
-                                @if(request('role') == 'student')
-                                    <span class="ml-2 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 py-0.5 px-2.5 rounded-full text-[10px] font-black shadow-sm dark:border dark:border-slate-700">{{ $users->total() }}</span>
-                                @endif
+                                <span class="ml-2 {{ request('role') == 'student' ? 'bg-white dark:bg-slate-800 text-red-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-500' }} dark:text-red-400 py-0.5 px-2.5 rounded-full text-[10px] font-black shadow-sm dark:border dark:border-slate-700">{{ $totalStudents }}</span>
                             </a>
 
                             {{-- Mentors --}}
                             <a href="{{ route('admin.users.index', ['role' => 'mentor']) }}" 
                                class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center whitespace-nowrap {{ request('role') == 'mentor' ? 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-100 dark:border-red-500/20 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 border border-transparent' }}">
                                 Mentors
-                                @if(request('role') == 'mentor')
-                                    <span class="ml-2 bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 py-0.5 px-2.5 rounded-full text-[10px] font-black shadow-sm dark:border dark:border-slate-700">{{ $users->total() }}</span>
-                                @endif
+                                <span class="ml-2 {{ request('role') == 'mentor' ? 'bg-white dark:bg-slate-800 text-red-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-500' }} dark:text-red-400 py-0.5 px-2.5 rounded-full text-[10px] font-black shadow-sm dark:border dark:border-slate-700">{{ $totalMentors }}</span>
                             </a>
                         </nav>
                         
                         <!-- Actions & Filters -->
-                        <div class="flex flex-col sm:flex-row items-center gap-3 w-full xl:w-auto">
+                        <div class="flex flex-col lg:flex-row items-center gap-4 w-full xl:w-auto">
+                            {{-- Sub Filter for Interns --}}
+                            @if(request('role') == 'student')
+                                <div class="inline-flex bg-slate-50 dark:bg-slate-950 rounded-xl shadow-inner border border-slate-200 dark:border-slate-800 p-1 shrink-0" role="group">
+                                    <a href="{{ route('admin.users.index', array_merge(request()->query(), ['student_type' => 'mahasiswa', 'page' => null])) }}"
+                                        class="px-4 py-2 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all flex items-center gap-2
+                                        {{ !request('student_type') || request('student_type') == 'mahasiswa' 
+                                            ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700' 
+                                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 border border-transparent' }}">
+                                            Mahasiswa
+                                            <span class="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 rounded text-[9px]">{{ $studentMahasiswaCount }}</span>
+                                    </a>
+                                    <a href="{{ route('admin.users.index', array_merge(request()->query(), ['student_type' => 'smk', 'page' => null])) }}" 
+                                        class="px-4 py-2 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all flex items-center gap-2
+                                        {{ request('student_type') == 'smk' 
+                                            ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700' 
+                                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 border border-transparent' }}">
+                                            SMK
+                                            <span class="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 rounded text-[9px]">{{ $studentSmkCount }}</span>
+                                    </a>
+                                </div>
+                            @endif
+
                             <!-- Search -->
-                            <form action="{{ route('admin.users.index') }}" method="GET" class="relative w-full sm:flex-1 xl:w-64" x-data x-ref="form">
+                            <form action="{{ route('admin.users.index') }}" method="GET" class="relative w-full sm:flex-1 xl:w-72" x-data x-ref="form">
                                 @if(request('role'))
                                     <input type="hidden" name="role" value="{{ request('role') }}">
                                 @endif
@@ -63,43 +79,22 @@
                                 @endif
                                 <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                 <input type="text" name="search" value="{{ request('search') }}" 
-                                    placeholder="Search by name, email..." 
+                                    placeholder="Search user..." 
                                     @input.debounce.500ms="$refs.form.submit()"
                                     x-init="$el.focus(); $el.setSelectionRange($el.value.length, $el.value.length);"
                                     class="pl-9 pr-4 py-2.5 w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500 outline-none transition-all placeholder-slate-400 font-medium text-slate-700 dark:text-slate-300">
                             </form>
-
                         </div>
                     </div>
 
-                    {{-- Sub Filter for Interns --}}
-                    @if(request('role') == 'student')
-                        <div class="mb-6 flex">
-                            <div class="inline-flex bg-slate-50 dark:bg-slate-950 rounded-xl shadow-inner border border-slate-200 dark:border-slate-800 p-1" role="group">
-                                <a href="{{ route('admin.users.index', array_merge(request()->query(), ['student_type' => 'mahasiswa', 'page' => null])) }}"
-                                    class="px-5 py-1.5 text-xs font-bold rounded-lg transition-all 
-                                    {{ !request('student_type') || request('student_type') == 'mahasiswa' 
-                                        ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700' 
-                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300' }}">
-                                        Mahasiswa
-                                    </a>
-                                    <a href="{{ route('admin.users.index', array_merge(request()->query(), ['student_type' => 'smk', 'page' => null])) }}" 
-                                    class="px-5 py-1.5 text-xs font-bold rounded-lg transition-all 
-                                    {{ request('student_type') == 'smk' 
-                                        ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-sm border border-slate-200 dark:border-slate-700' 
-                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300' }}">
-                                        SMK
-                                    </a>
-                                </div>
-                            </div>
-                        @endif
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-800">
                             <thead class="bg-slate-50/50 dark:bg-slate-950/50">
                                 <tr>
                                     <th scope="col" class="px-6 py-5 text-left text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest sm:rounded-tl-xl sm:rounded-bl-xl">User Detail</th>
-                                    <th scope="col" class="px-6 py-5 text-left text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Role</th>
-                                    <th scope="col" class="px-6 py-5 text-left text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest hidden sm:table-cell sm:rounded-tr-xl sm:rounded-br-xl">Registered</th>
+                                    <th scope="col" class="px-6 py-5 text-center text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Role</th>
+                                    <th scope="col" class="px-6 py-5 text-center text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest sm:rounded-tr-xl sm:rounded-br-xl">Registered</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100/80 dark:divide-slate-800/80">
@@ -149,7 +144,7 @@
                                             </div>
                                         </td>
                                         
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
                                             @php
                                                 $roleConfig = [
                                                     'admin' => ['bg' => 'bg-purple-50 dark:bg-purple-500/10', 'text' => 'text-purple-600 dark:text-purple-400', 'border' => 'border-purple-100 dark:border-purple-500/20', 'dot' => 'bg-purple-500'],
@@ -174,7 +169,7 @@
                                             </span>
                                         </td>
                                         
-                                        <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
+                                        <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell text-center">
                                             <div class="text-sm font-bold text-slate-600 dark:text-slate-300 transition-colors">{{ $user->created_at->format('d M Y') }}</div>
                                             <div class="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-0.5 block transition-colors">{{ $user->created_at->diffForHumans() }}</div>
                                         </td>

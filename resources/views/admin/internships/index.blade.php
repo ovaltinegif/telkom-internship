@@ -114,8 +114,8 @@
                                 <tr>
                                     <th scope="col" class="px-6 py-5 text-left text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest rounded-tl-xl rounded-bl-xl transition-colors">Intern</th>
                                     <th scope="col" class="px-6 py-5 text-center text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">Pendidikan</th>
-                                    <th scope="col" class="px-6 py-5 text-left text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">Divisi</th>
-                                    <th scope="col" class="px-6 py-5 text-left text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest hidden sm:table-cell transition-colors">Mentor</th>
+                                    <th scope="col" class="px-6 py-5 text-center text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">Divisi</th>
+                                    <th scope="col" class="px-6 py-5 text-center text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest hidden sm:table-cell transition-colors">Mentor</th>
                                     <th scope="col" class="px-6 py-5 text-center text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest transition-colors">
                                         @if($status === 'active')
                                             Sisa Durasi
